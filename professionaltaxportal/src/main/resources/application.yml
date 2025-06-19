@@ -1,0 +1,30 @@
+server:
+  port: 5000
+  address : 0.0.0.0
+
+spring:
+  application:
+    name: professional-tax-portal
+
+  datasource:
+    url: ${DATABSE_URL}
+    driver-class-name: org.postgresq.driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PosgresqlDialect
+        format_sql: true
+    show-sql: true
+
+  web:
+     cors:
+      allowed-origin: "*"
+      allowed-methods: "*"
+      allowed-header: "*"
+logging:
+  level:
+  com.gov.ptax: DEBUG
+  org.springframework.security: DEBUG      
