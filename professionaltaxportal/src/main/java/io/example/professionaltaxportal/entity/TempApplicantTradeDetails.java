@@ -21,7 +21,7 @@ public class TempApplicantTradeDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rsn;
 
-        @Column(name = "application_id", length = 15)
+    @Column(name = "application_id", length = 15)
     private String applicationId;
 
     @Column(name = "ptan", length = 10)
