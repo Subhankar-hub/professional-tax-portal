@@ -2,7 +2,7 @@ package io.example.professionaltaxportal.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
@@ -27,7 +27,7 @@ public class TempApplicantProfessionDetails {
     @Column(name = "ptan", length = 12)
     private String ptan;
 
-        @Column(name = "commencement_date")
+    @Column(name = "commencement_date")
     private LocalDate commencementDate;
 
     @Column(name = "period_of_standing", length = 50)
