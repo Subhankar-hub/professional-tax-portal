@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profession Tax Application - Tripura</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f2f2f2;
+    }
+
+    header {
+      background-color: #00a9e0;
+      padding: 20px;
+      color: white;
+      text-align: left;
+    }
+
+    header img {
+      height: 50px;
+      vertical-align: middle;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: green;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .captcha-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .captcha-group input {
+      width: 100px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #ffcc00;
+      border: none;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .captcha-group {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .captcha-group input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <head>
+  <style>
+    img {
+      float: left; /* or 'right' to place the image on the right */
+      margin-right: 10px; /* Add spacing between image and text */
+    }
+  </style>
+</head>
+<body>
+  <div style="display: flex; align-items: center; background-color: #00B2E1; padding: 10px;">
+  
+  <!-- You will insert your image here -->
+  <img src="emblem.png.png" alt="Logo" style="height: 80px; margin-right: 20px;">
+  
+  <!-- Text Section -->
+  <div style="color: white; font-family: Arial, sans-serif;">
+    <h2 style="margin: 0; font-size: 30px; color: white;">P₹ofession Tax</h2>
+    <p style="margin: 2px 0; font-size: 16px; color: Black;">Commissionerate of Taxes & Excise</p>
+    <p style="margin: 2px 0; font-size: 14px; color: Black;">Government of Tripura</p>
+  </div>
+
+</div>
+
+</body>
+</html>
+  </header>
+
+    <div class="form-group">
+      <label>Applying as:</label>
+      <div class="radio-group">
+        <label><input type="radio" name="applying" value="Individual" checked> Individual</label>
+        <label><input type="radio" name="applying" value="Others"> Others</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <h7 style ="color: #00a9e0;">Business Information</h7>
+      <label for="name">Name of the Establishment*</label>
+      <input type="text" id="name" placeholder="Applicant's Name" required />
+      <p style="color: #00a9e0;">Name (Individual/Business Entity) must watch with the name provided on your PAN/TAN card.</p>
+      <p style="color: #00a9e0;">If entering name of individual, it should not have any prefix like Sri/Smt/Mr/Miss/Dr etc..</p>
+    </div>
+
+    <div class="form-group">
+      <label for="pan">PAN or TAN*</label>
+      <input type="text" id="pan" placeholder="Enter PAN/TAN" required />
+      <p style="color: #00a9e0;">PAN/TAN issued to you.</p>
+    </div>
+
+    <div class="form-group">
+      <label for="mobile">Mobile Number*</label>
+      <input type="text" id="mobile" placeholder="Enter Mobile Number" pattern="[0-9]{10}" required />
+      <p style="color: #00a9e0;">Please write valid Mobile Number only without Country Code (+91).</p>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email*</label>
+      <input type="email" id="email" placeholder="Enter Email Address" required />
+      <p style="color: #00a9e0">Please provide a valid E-mail address.</p>
+    </div>
+
+    <div class="form-group">
+      <label>Prove that you are not a robot*</label>
+      <div class="captcha-group">
+        <span id="captcha"></span>
+        <input type="text" id="captchaInput" placeholder="Result" required />
+      </div>
+    </div>
+
+    <button onclick="validateCaptcha()">Next</button>
+  </div>
+
+  <script>
+    // Generate captcha
+    const num1 = Math.floor(Math.random() * 50) + 10;
+    const num2 = Math.floor(Math.random() * 50) + 10;
+    const captchaAnswer = num1 + num2;
+
+    document.getElementById('captcha').textContent = `${num1} + ${num2} =`;
+
+    function validateCaptcha() {
+      const userAnswer = parseInt(document.getElementById('captchaInput').value);
+      if (userAnswer === captchaAnswer) {
+        alert('Form submitted successfully!');
+      } else {
+        alert('Captcha incorrect. Please try again.');
+      }
+    }
+  </script>
+</body>
+</html>
