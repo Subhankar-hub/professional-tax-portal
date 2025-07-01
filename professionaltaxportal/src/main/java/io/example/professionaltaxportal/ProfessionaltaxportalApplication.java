@@ -9,5 +9,4 @@ public class ProfessionaltaxportalApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ProfessionaltaxportalApplication.class, args);
 	}
-
 }

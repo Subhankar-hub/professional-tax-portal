@@ -26,5 +26,6 @@ spring:
       allowed-header: "*"
 logging:
   level:
-  com.gov.ptax: DEBUG
-  org.springframework.security: DEBUG      
+    io.example.professionaltaxportal: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG 
