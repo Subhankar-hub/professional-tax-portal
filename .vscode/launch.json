@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ProfessionaltaxportalApplication<professionaltaxportal>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "io.example.professionaltaxportal.ProfessionaltaxportalApplication",
+            "projectName": "professionaltaxportal",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
