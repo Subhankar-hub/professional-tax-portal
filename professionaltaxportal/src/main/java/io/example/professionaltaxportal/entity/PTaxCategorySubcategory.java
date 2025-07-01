@@ -1,9 +1,9 @@
 package io.example.professionaltaxportal.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mtbl_ptax_category_subcategory", schema = "ptax")

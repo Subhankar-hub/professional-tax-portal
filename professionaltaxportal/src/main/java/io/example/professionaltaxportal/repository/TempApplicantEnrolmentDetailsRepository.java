@@ -1,4 +1,3 @@
-
 package io.example.professionaltaxportal.repository;
 
 import io.example.professionaltaxportal.entity.TempApplicantEnrolmentDetails;
@@ -12,25 +11,19 @@ import java.util.Optional;
 
 @Repository
 public interface TempApplicantEnrolmentDetailsRepository extends JpaRepository<TempApplicantEnrolmentDetails, Long> {
-    
+
     Optional<TempApplicantEnrolmentDetails> findByApplicationId(String applicationId);
-    
-    Optional<TempApplicantEnrolmentDetails> findByPtan(String ptan);
-    
-    List<TempApplicantEnrolmentDetails> findByMobile(String mobile);
-    
-    List<TempApplicantEnrolmentDetails> findByEmail(String email);
-    
-    List<TempApplicantEnrolmentDetails> findByPan(String pan);
-    
+
     List<TempApplicantEnrolmentDetails> findByStatus(Boolean status);
-    
-    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.jurisdictionCode = :jurisdictionCode")
-    List<TempApplicantEnrolmentDetails> findByJurisdictionCode(@Param("jurisdictionCode") String jurisdictionCode);
-    
-    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.districtLgdCode = :districtCode")
-    List<TempApplicantEnrolmentDetails> findByDistrictLgdCode(@Param("districtCode") Integer districtCode);
-    
-    @Query("SELECT COUNT(t) FROM TempApplicantEnrolmentDetails t WHERE t.status = true")
-    Long countActiveApplications();
+
+    List<TempApplicantEnrolmentDetails> findByDistrictLgdCode(Integer districtLgdCode);
+
+    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.email = :email")
+    Optional<TempApplicantEnrolmentDetails> findByEmail(@Param("email") String email);
+
+    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.mobile = :mobile")
+    Optional<TempApplicantEnrolmentDetails> findByMobile(@Param("mobile") String mobile);
+
+    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.pan = :pan")
+    List<TempApplicantEnrolmentDetails> findByPan(@Param("pan") String pan);
 }

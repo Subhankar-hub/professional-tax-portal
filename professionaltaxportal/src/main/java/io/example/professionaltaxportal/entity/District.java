@@ -1,18 +1,18 @@
+
 package io.example.professionaltaxportal.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name="mas_district", schema = "ptax")
+@Table(name = "mas_district", schema = "ptax")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class District {
-    
+
     @Id
     @Column(name = "district_lgd_code")
     private Integer districtLgdCode;
