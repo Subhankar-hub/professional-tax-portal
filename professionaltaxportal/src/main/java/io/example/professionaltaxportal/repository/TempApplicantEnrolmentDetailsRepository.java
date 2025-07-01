@@ -1,5 +1,6 @@
 package io.example.professionaltaxportal.repository;
-import io.example.professionaltaxportal.entity.TempApplicantEmploymentDetails;
+
+import io.example.professionaltaxportal.entity.TempApplicantEnrolmentDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,3 @@ public interface TempApplicantEnrolmentDetailsRepository extends JpaRepository<T
     
     boolean existsByMobile(String mobile);
 }
-
