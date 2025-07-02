@@ -1,7 +1,14 @@
-
-import React from "react";
+import React, { useState } from "react";
+import CaptchaComponent from "./CaptchaComponent";
+import OTPVerification from "./OTPVerification";
+import "./Establishment.css";
 
 export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
+  const [captchaValid, setCaptchaValid] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState('');
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     onUpdate({ [name]: value });
@@ -9,7 +16,7 @@ export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Basic validation
     if (!data.name || !data.fatherName || !data.mobile || !data.email || !data.pan) {
       alert("Please fill all required fields.");
@@ -34,13 +41,49 @@ export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
       return;
     }
 
+    if (!captchaValid) {
+      alert("Please complete captcha verification.");
+      return;
+    }
+    if (!otpVerified) {
+      alert("Please complete mobile/email verification.");
+      return;
+    }
+
     onNext();
+  };
+
+  const handleCaptchaChange = (isValid, value) => {
+    setCaptchaValid(isValid);
+    setCaptchaValue(value);
+  };
+
+  const handleVerificationComplete = (verified) => {
+    setOtpVerified(verified);
+    if (verified) {
+      // Keep the verification status even if user modifies other fields
+      console.log('OTP verification completed successfully');
+    }
+  };
+
+  const handleMobileEmailChange = (e) => {
+    const { name, value } = e.target;
+    onUpdate({ [name]: value });
+
+    // Show OTP verification when both mobile and email are filled, but don't reset if already verified
+    if ((name === 'mobile' || name === 'email') && data.mobile && data.email) {
+      setShowOTPVerification(true);
+      // Only reset OTP verification if the values actually changed significantly
+      if (!otpVerified) {
+        setOtpVerified(false);
+      }
+    }
   };
 
   return (
     <div className="container">
       <h2 className="step-title">First Step (Personal Details):</h2>
-      
+
       <form onSubmit={handleSubmit} className="form-section">
         <div className="row">
           <div className="col">
@@ -86,8 +129,8 @@ export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
             <input
               type="tel"
               name="mobile"
-              value={data.mobile}
-              onChange={handleChange}
+              value={data.mobile || ""}
+              onChange={handleMobileEmailChange}
               required
               pattern="[0-9]{10}"
               placeholder="Enter 10-digit mobile number"
@@ -101,8 +144,8 @@ export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
             <input
               type="email"
               name="email"
-              value={data.email}
-              onChange={handleChange}
+              value={data.email || ""}
+              onChange={handleMobileEmailChange}
               required
               placeholder="Enter email address"
             />
@@ -121,6 +164,19 @@ export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
             />
           </div>
         </div>
+
+        {showOTPVerification && data.mobile && data.email && (
+          <OTPVerification
+            mobile={data.mobile}
+            email={data.email}
+            onVerificationComplete={handleVerificationComplete}
+          />
+        )}
+
+        <CaptchaComponent
+          onCaptchaChange={handleCaptchaChange}
+          isValid={captchaValid}
+        />
 
         <div className="form-actions">
           <button type="submit" className="btn btn-primary">

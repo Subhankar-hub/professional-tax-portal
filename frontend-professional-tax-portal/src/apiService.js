@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8080/api/v1';
+const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 class ApiService {
   // Generic request method
