@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import "./Establishment.css";
 import ApiService from "./apiService";
@@ -117,11 +116,33 @@ export default function Step3Establishment({ data, onUpdate, onNext, onBack }) {
               disabled={!data.ptaxCategory}
             >
               <option value="">Select Subcategory</option>
-              {subcategories.map((subcategory) => (
-                <option key={subcategory.id} value={subcategory.id}>
-                  {subcategory.name}
-                </option>
-              ))}
+              {data.ptaxCategory === "1" && (
+                <>
+                  <option value="1">Individual Professional</option>
+                  <option value="2">Partnership Professional</option>
+                  <option value="3">Corporate Professional</option>
+                </>
+              )}
+              {data.ptaxCategory === "2" && (
+                <>
+                  <option value="1">Retail Trade</option>
+                  <option value="2">Wholesale Trade</option>
+                  <option value="3">Manufacturing</option>
+                </>
+              )}
+              {data.ptaxCategory === "3" && (
+                <>
+                  <option value="1">Regular Employment</option>
+                  <option value="2">Contract Employment</option>
+                  <option value="3">Consultant</option>
+                </>
+              )}
+              {data.ptaxCategory === "4" && (
+                <>
+                  <option value="1">Transport Services</option>
+                  <option value="2">Other Services</option>
+                </>
+              )}
             </select>
           </div>
         </div>

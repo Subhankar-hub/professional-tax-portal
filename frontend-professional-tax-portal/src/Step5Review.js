@@ -1,42 +1,39 @@
 import React, { useState } from "react";
 import ApiService from "./apiService";
-import "./Establishment.css";
 
 export default function Step5Review({ data, onBack, onEdit }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [applicationId, setApplicationId] = useState(null);
+  const [submitResult, setSubmitResult] = useState(null);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setIsSubmitting(true);
+    
     try {
-      const response = await ApiService.submitEnrolment(data);
-      if (response && response.applicationId) {
-        setApplicationId(response.applicationId);
-        alert(`Application submitted successfully! Your Application ID is: ${response.applicationId}`);
-      } else {
-        alert("Application submitted successfully!");
-      }
+      const result = await ApiService.submitEnrollment(data);
+      setSubmitResult({
+        success: true,
+        message: "Application submitted successfully!",
+        applicationId: result.applicationId
+      });
     } catch (error) {
-      console.error("Submission failed:", error);
-      alert("Failed to submit application. Please try again.");
+      setSubmitResult({
+        success: false,
+        message: "Failed to submit application. Please try again.",
+        error: error.message
+      });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  if (applicationId) {
+  if (submitResult && submitResult.success) {
     return (
       <div className="container">
         <div className="success-message">
-          <h2>✅ Application Submitted Successfully!</h2>
-          <div className="application-details">
-            <p><strong>Application ID:</strong> {applicationId}</p>
-            <p>Please save this Application ID for future reference.</p>
-            <p>You will receive further updates on your registered email address.</p>
-          </div>
-          <button className="btn btn-primary" onClick={() => window.location.reload()}>
-            Submit New Application
-          </button>
+          <h2>Application Submitted Successfully!</h2>
+          <p>Your application ID is: <strong>{submitResult.applicationId}</strong></p>
+          <p>Please save this ID for future reference.</p>
         </div>
       </div>
     );
@@ -44,70 +41,113 @@ export default function Step5Review({ data, onBack, onEdit }) {
 
   return (
     <div className="container">
-      <h2 className="step-title">Fifth Step (Review & Submit):</h2>
+      <h2 className="step-title">Fifth Step (Review and Submit):</h2>
       
       <div className="review-section">
-        <div className="review-card">
-          <h3>Personal Details <button className="btn-edit" onClick={() => onEdit(1)}>Edit</button></h3>
-          <div className="review-content">
-            <p><strong>Name:</strong> {data.name}</p>
-            <p><strong>Gender:</strong> {data.gender === 'M' ? 'Male' : 'Female'}</p>
-            <p><strong>Father's Name:</strong> {data.fatherName || 'Not provided'}</p>
-            <p><strong>PAN:</strong> {data.pan}</p>
-            <p><strong>Mobile:</strong> {data.mobile}</p>
-            <p><strong>Email:</strong> {data.email}</p>
+        <div className="review-group">
+          <h4>Personal Details:</h4>
+          <div className="review-item">
+            <span className="label">Name:</span>
+            <span className="value">{data.name}</span>
+            <button type="button" className="btn-edit" onClick={() => onEdit(1)}>Edit</button>
+          </div>
+          <div className="review-item">
+            <span className="label">Gender:</span>
+            <span className="value">{data.gender === 'M' ? 'Male' : data.gender === 'F' ? 'Female' : 'Other'}</span>
+          </div>
+          <div className="review-item">
+            <span className="label">Father's Name:</span>
+            <span className="value">{data.fatherName}</span>
+          </div>
+          <div className="review-item">
+            <span className="label">Mobile:</span>
+            <span className="value">{data.mobile}</span>
+          </div>
+          <div className="review-item">
+            <span className="label">Email:</span>
+            <span className="value">{data.email}</span>
+          </div>
+          <div className="review-item">
+            <span className="label">PAN:</span>
+            <span className="value">{data.pan}</span>
           </div>
         </div>
 
-        <div className="review-card">
-          <h3>Address Details <button className="btn-edit" onClick={() => onEdit(2)}>Edit</button></h3>
-          <div className="review-content">
-            <p><strong>Address:</strong> {data.addressText}</p>
-            <p><strong>District Code:</strong> {data.districtLgdCode}</p>
-            <p><strong>PIN Code:</strong> {data.pincode}</p>
-            {data.businessName && <p><strong>Business Name:</strong> {data.businessName}</p>}
+        <div className="review-group">
+          <h4>Address Details:</h4>
+          <div className="review-item">
+            <span className="label">Address:</span>
+            <span className="value">{data.addressText}</span>
+            <button type="button" className="btn-edit" onClick={() => onEdit(2)}>Edit</button>
           </div>
-        </div>
-
-        <div className="review-card">
-          <h3>Establishment Details <button className="btn-edit" onClick={() => onEdit(3)}>Edit</button></h3>
-          <div className="review-content">
-            <p><strong>Tax Category:</strong> {data.ptaxCategory}</p>
-            {data.ptaxSubcategory && <p><strong>Subcategory:</strong> {data.ptaxSubcategory}</p>}
-            <div className="establishments-review">
-              <h4>Establishments:</h4>
-              {data.establishments.map((est, index) => (
-                <div key={index} className="establishment-review">
-                  <p><strong>{index + 1}. {est.name}</strong></p>
-                  <p>{est.address}</p>
-                </div>
-              ))}
+          <div className="review-item">
+            <span className="label">District Code:</span>
+            <span className="value">{data.districtLgdCode}</span>
+          </div>
+          <div className="review-item">
+            <span className="label">Pincode:</span>
+            <span className="value">{data.pincode}</span>
+          </div>
+          {data.businessName && (
+            <div className="review-item">
+              <span className="label">Business Name:</span>
+              <span className="value">{data.businessName}</span>
             </div>
-          </div>
+          )}
         </div>
 
-        <div className="review-card">
-          <h3>Engagement Type <button className="btn-edit" onClick={() => onEdit(4)}>Edit</button></h3>
-          <div className="review-content">
-            <div className="engagement-review">
-              {data.engagedWithProfession && <span className="engagement-tag">Profession</span>}
-              {data.engagedWithTrade && <span className="engagement-tag">Trade</span>}
-              {data.engagedWithCalling && <span className="engagement-tag">Calling</span>}
-              {data.engagedWithEmployment && <span className="engagement-tag">Employment</span>}
+        <div className="review-group">
+          <h4>Establishment Details:</h4>
+          <button type="button" className="btn-edit" onClick={() => onEdit(3)}>Edit</button>
+          <div className="review-item">
+            <span className="label">PTax Category:</span>
+            <span className="value">{data.ptaxCategory}</span>
+          </div>
+          {data.ptaxSubcategory && (
+            <div className="review-item">
+              <span className="label">PTax Subcategory:</span>
+              <span className="value">{data.ptaxSubcategory}</span>
             </div>
+          )}
+          {data.establishments.map((est, index) => (
+            <div key={index} className="establishment-review">
+              <h5>Establishment {index + 1}:</h5>
+              <div className="review-item">
+                <span className="label">Name:</span>
+                <span className="value">{est.name}</span>
+              </div>
+              <div className="review-item">
+                <span className="label">Address:</span>
+                <span className="value">{est.address}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="review-group">
+          <h4>Engagement Details:</h4>
+          <button type="button" className="btn-edit" onClick={() => onEdit(4)}>Edit</button>
+          <div className="engagement-review">
+            {data.engagedWithProfession && <span className="engagement-tag">Profession</span>}
+            {data.engagedWithTrade && <span className="engagement-tag">Trade</span>}
+            {data.engagedWithCalling && <span className="engagement-tag">Calling</span>}
+            {data.engagedWithEmployment && <span className="engagement-tag">Employment</span>}
           </div>
         </div>
 
-        <div className="declaration">
-          <h4>Declaration:</h4>
-          <p>I hereby declare that the information provided above is true and correct to the best of my knowledge.</p>
-        </div>
+        {submitResult && !submitResult.success && (
+          <div className="error-message">
+            <p>{submitResult.message}</p>
+          </div>
+        )}
 
-        <div className="buttons">
-          <button type="button" className="btn btn-back" onClick={onBack}>Back</button>
+        <div className="form-actions">
+          <button type="button" className="btn btn-secondary" onClick={onBack}>
+            Previous Step
+          </button>
           <button 
             type="button" 
-            className="btn btn-submit" 
+            className="btn btn-primary btn-submit" 
             onClick={handleSubmit}
             disabled={isSubmitting}
           >

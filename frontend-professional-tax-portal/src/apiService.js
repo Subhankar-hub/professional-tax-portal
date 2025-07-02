@@ -1,5 +1,3 @@
-
-
 const API_BASE_URL = 'http://localhost:8080/api/v1';
 
 class ApiService {
@@ -16,11 +14,11 @@ class ApiService {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       return await response.json();
     } catch (error) {
       console.error('API request failed:', error);
@@ -77,27 +75,27 @@ class ApiService {
       mobile: enrolmentData.mobile,
       email: enrolmentData.email,
       pan: enrolmentData.pan,
-      
+
       // Address Details
       addressText: enrolmentData.addressText,
       districtLgdCode: parseInt(enrolmentData.districtLgdCode),
       pincode: enrolmentData.pincode,
-      
+
       // Business Details
       businessName: enrolmentData.businessName,
       jurisdictionCode: enrolmentData.jurisdictionCode,
       chargeCode: enrolmentData.chargeCode,
-      
+
       // Engagement Details
       engagedWithProfession: enrolmentData.engagedWithProfession,
       engagedWithTrade: enrolmentData.engagedWithTrade,
       engagedWithCalling: enrolmentData.engagedWithCalling,
       engagedWithEmployment: enrolmentData.engagedWithEmployment,
-      
+
       // Tax Category
       ptaxCategory: parseInt(enrolmentData.ptaxCategory),
       ptaxSubcategory: enrolmentData.ptaxSubcategory ? parseInt(enrolmentData.ptaxSubcategory) : null,
-      
+
       // Establishments
       establishment1Name: enrolmentData.establishments[0]?.name,
       establishment1Address: enrolmentData.establishments[0]?.address,
@@ -110,7 +108,7 @@ class ApiService {
       establishment5Name: enrolmentData.establishments[4]?.name,
       establishment5Address: enrolmentData.establishments[4]?.address,
     };
-    
+
     return this.post('/enrolment/submit', backendData);
   }
 
@@ -124,6 +122,10 @@ class ApiService {
 
   async searchEnrolmentByPan(pan) {
     return this.get(`/enrolment/search/pan/${pan}`);
+  }
+
+  async submitProfessionalDetails(data) {
+    return this.post('/professional-details', data);
   }
 }
 

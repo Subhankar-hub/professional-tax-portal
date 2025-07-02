@@ -1,11 +1,14 @@
-
 import React, { useState } from "react";
 import Step1PersonalDetails from "./Step1PersonalDetails";
 import Step2AddressDetails from "./Step2AddressDetails";
 import Step3Establishment from "./Step3Establishment";
+import Step4ProfessionalDetails from './Step4ProfessionalDetails';
 import Step4OtherDetails from "./Step4OtherDetails";
 import Step5Review from "./Step5Review";
+import ApiService from "./apiService";
+
 import "./App.css";
+import apiService from "./apiService";
 
 function App() {
   const [step, setStep] = useState(1);
@@ -80,7 +83,7 @@ function App() {
         );
       case 4:
         return (
-          <Step4OtherDetails
+          <Step4ProfessionalDetails
             data={formData}
             onUpdate={updateFormData}
             onNext={goNext}
@@ -88,6 +91,15 @@ function App() {
           />
         );
       case 5:
+        return (
+          <Step4OtherDetails
+            data={formData}
+            onUpdate={updateFormData}
+            onNext={goNext}
+            onBack={goBack}
+          />
+        );
+      case 6:
         return (
           <Step5Review
             data={formData}
@@ -107,7 +119,7 @@ function App() {
         
         {/* Step Progress Indicator */}
         <div className="step-progress">
-          {[1, 2, 3, 4, 5].map((stepNum) => (
+          {[1, 2, 3, 4, 5, 6].map((stepNum) => (
             <div
               key={stepNum}
               className={`step-indicator ${step === stepNum ? 'active' : ''} ${step > stepNum ? 'completed' : ''}`}
@@ -117,8 +129,9 @@ function App() {
                 {stepNum === 1 && "Personal"}
                 {stepNum === 2 && "Address"}
                 {stepNum === 3 && "Establishment"}
-                {stepNum === 4 && "Engagement"}
-                {stepNum === 5 && "Review"}
+                {stepNum === 4 && "Professional"}
+                {stepNum === 5 && "Engagement"}
+                {stepNum === 6 && "Review"}
               </div>
             </div>
           ))}

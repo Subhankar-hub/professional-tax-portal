@@ -1,10 +1,7 @@
-import React, { useState } from "react";
-import "./Establishment.css";
+
+import React from "react";
 
 export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
-  const [captcha, setCaptcha] = useState("");
-  const captchaAnswer = 75; // 10 + 65
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     onUpdate({ [name]: value });
@@ -12,24 +9,37 @@ export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (parseInt(captcha) !== captchaAnswer) {
-      alert("Captcha is incorrect. Please try again.");
+    
+    // Basic validation
+    if (!data.name || !data.fatherName || !data.mobile || !data.email || !data.pan) {
+      alert("Please fill all required fields.");
       return;
     }
-    
-    // Validate required fields
-    if (!data.name || !data.mobile || !data.email || !data.pan) {
-      alert("Please fill in all required fields.");
+
+    // Mobile validation
+    if (!/^\d{10}$/.test(data.mobile)) {
+      alert("Please enter a valid 10-digit mobile number.");
       return;
     }
-    
+
+    // Email validation
+    if (!/\S+@\S+\.\S+/.test(data.email)) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // PAN validation
+    if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(data.pan)) {
+      alert("Please enter a valid PAN number (format: ABCDE1234F).");
+      return;
+    }
+
     onNext();
   };
 
   return (
     <div className="container">
       <h2 className="step-title">First Step (Personal Details):</h2>
-      <h5 className="text-danger">Individual:</h5>
       
       <form onSubmit={handleSubmit} className="form-section">
         <div className="row">
@@ -46,83 +56,76 @@ export default function Step1PersonalDetails({ data, onUpdate, onNext }) {
           </div>
           <div className="col">
             <label>Gender*:</label>
-            <select name="gender" value={data.gender} onChange={handleChange} required>
+            <select
+              name="gender"
+              value={data.gender}
+              onChange={handleChange}
+              required
+            >
               <option value="M">Male</option>
               <option value="F">Female</option>
+              <option value="O">Other</option>
             </select>
           </div>
         </div>
 
         <div className="row">
           <div className="col">
-            <label>Father's Name:</label>
+            <label>Father's Name*:</label>
             <input
               type="text"
               name="fatherName"
               value={data.fatherName}
               onChange={handleChange}
+              required
               placeholder="Enter father's name"
             />
           </div>
           <div className="col">
-            <label>PAN/TAN*:</label>
-            <input
-              type="text"
-              name="pan"
-              value={data.pan}
-              onChange={handleChange}
-              required
-              placeholder="ABCDE1234F"
-              pattern="[A-Z]{5}[0-9]{4}[A-Z]"
-              title="Please enter a valid PAN number"
-            />
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="col">
-            <label>Mobile*:</label>
+            <label>Mobile Number*:</label>
             <input
               type="tel"
               name="mobile"
               value={data.mobile}
               onChange={handleChange}
               required
-              placeholder="9876543210"
               pattern="[0-9]{10}"
-              title="Please enter a valid 10-digit mobile number"
+              placeholder="Enter 10-digit mobile number"
             />
           </div>
+        </div>
+
+        <div className="row">
           <div className="col">
-            <label>Email*:</label>
+            <label>Email Address*:</label>
             <input
               type="email"
               name="email"
               value={data.email}
               onChange={handleChange}
               required
-              placeholder="test@gmail.com"
+              placeholder="Enter email address"
             />
-            <small className="text-muted">Please provide a valid email address</small>
           </div>
-        </div>
-
-        <div className="captcha-section">
-          <label>Prove that you are not a robot*:</label>
-          <div className="captcha-container">
-            <strong>10 + 65 = </strong>
+          <div className="col">
+            <label>PAN Number*:</label>
             <input
-              type="number"
-              value={captcha}
-              onChange={(e) => setCaptcha(e.target.value)}
+              type="text"
+              name="pan"
+              value={data.pan}
+              onChange={handleChange}
               required
-              placeholder="Enter answer"
+              pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
+              placeholder="ABCDE1234F"
+              style={{ textTransform: 'uppercase' }}
             />
           </div>
         </div>
 
-        <div className="buttons">
-          <button type="submit" className="btn btn-next">Next</button>
+        <div className="form-actions">
+          <button type="submit" className="btn btn-primary">
+            Next Step
+          </button>
         </div>
       </form>
     </div>

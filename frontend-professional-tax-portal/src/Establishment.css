@@ -390,6 +390,35 @@ input:focus, select:focus, textarea:focus {
   font-size: 16px;
 }
 
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.section-header {
+  margin: 25px 0 15px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.section-header h3 {
+  color: #333;
+  font-size: 1.1em;
+  margin: 0;
+  font-weight: 600;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 @media (max-width: 768px) {
   .row {
     flex-direction: column;
