@@ -9,6 +9,16 @@
             "projectName": "professionaltaxportal",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ProfessionaltaxportalApplication<professionaltaxportal (2)>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "io.example.professionaltaxportal.ProfessionaltaxportalApplication",
+            "projectName": "professionaltaxportal (2)",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
