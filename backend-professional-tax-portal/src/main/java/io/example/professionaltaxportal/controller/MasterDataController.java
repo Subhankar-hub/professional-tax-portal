@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/master-data")
+@RequestMapping("/api/master-data")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000", "http://0.0.0.0:3000", "https://*.replit.dev"})
 public class MasterDataController {

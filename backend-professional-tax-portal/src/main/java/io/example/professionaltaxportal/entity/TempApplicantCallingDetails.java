@@ -1,18 +1,17 @@
+
 package io.example.professionaltaxportal.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * Entity representing temporary applicant calling details.
- */
 @Entity
-@Table(name = "ttbl_temp_applicant_calling_details", schema = "ptax")
+@Table(name = "temp_applicant_calling_details")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +21,7 @@ public class TempApplicantCallingDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rsn;
 
-    @Column(name = "application_id", length = 15, nullable = false)
+    @Column(name = "application_id", length = 15)
     private String applicationId;
 
     @Column(name = "ptan", length = 10)
@@ -40,6 +39,9 @@ public class TempApplicantCallingDetails {
     @Column(name = "annual_gross_business", precision = 18, scale = 2)
     private BigDecimal annualGrossBusiness;
 
+    @Column(name = "annual_turn_over", precision = 18, scale = 2)
+    private BigDecimal annualTurnOver;
+
     @Column(name = "avg_workers_monthly")
     private Integer avgWorkersMonthly;
 
@@ -54,6 +56,24 @@ public class TempApplicantCallingDetails {
 
     @Column(name = "gst_number", length = 15)
     private String gstNumber;
+
+    @Column(name = "taxi_count")
+    private Integer taxiCount;
+
+    @Column(name = "three_wheeler_count")
+    private Integer threeWheelerCount;
+
+    @Column(name = "lmv_count")
+    private Integer lmvCount;
+
+    @Column(name = "good_vehicle_count")
+    private Integer goodVehicleCount;
+
+    @Column(name = "truck_count")
+    private Integer truckCount;
+
+    @Column(name = "bus_count")
+    private Integer busCount;
 
     @Column(name = "engaged_with_state_society")
     private Boolean engagedWithStateSociety;
@@ -82,4 +102,14 @@ public class TempApplicantCallingDetails {
 
     @Column(name = "status")
     private Boolean status;
+
+    @PrePersist
+    protected void onCreate() {
+        insertedOn = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedOn = LocalDateTime.now();
+    }
 }

@@ -1,18 +1,17 @@
+
 package io.example.professionaltaxportal.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-/**
- * Entity representing temporary applicant trade details.
- */
 @Entity
-@Table(name = "ttbl_temp_applicant_trade_details", schema = "ptax")
+@Table(name = "temp_applicant_trade_details")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,7 +21,7 @@ public class TempApplicantTradeDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rsn;
 
-    @Column(name = "application_id", length = 15, nullable = false)
+    @Column(name = "application_id", length = 15)
     private String applicationId;
 
     @Column(name = "ptan", length = 10)
@@ -103,4 +102,14 @@ public class TempApplicantTradeDetails {
 
     @Column(name = "status")
     private Boolean status;
+
+    @PrePersist
+    protected void onCreate() {
+        insertedOn = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedOn = LocalDateTime.now();
+    }
 }

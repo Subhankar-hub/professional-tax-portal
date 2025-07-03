@@ -1,9 +1,98 @@
+// // package io.example.professionaltaxportal.controller;
+
+// // import io.example.professionaltaxportal.dto.ApiResponse;
+// // import io.example.professionaltaxportal.dto.EnrolmentDetailsDTO;
+// // import io.example.professionaltaxportal.dto.EmploymentDetailsDTO;
+// // import io.example.professionaltaxportal.dto.EstablishmentTypeDTO;
+// // import io.example.professionaltaxportal.service.EnrolmentService;
+// // import lombok.RequiredArgsConstructor;
+// // import org.springframework.http.ResponseEntity;
+// // import org.springframework.web.bind.annotation.*;
+
+// // import jakarta.validation.Valid;
+
+// // @RestController
+// // @RequestMapping("/api/enrolment")
+// // @RequiredArgsConstructor
+// // @CrossOrigin(origins = "http://localhost:3000")
+// // public class EnrolmentController {
+
+// //     private final EnrolmentService enrolmentService;
+
+// //     @PostMapping("/personal-details")
+// //     public ResponseEntity<ApiResponse<String>> savePersonalDetails(@Valid @RequestBody EnrolmentDetailsDTO dto) {
+// //         ApiResponse<String> response = enrolmentService.saveEnrolmentDetails(dto);
+// //         return ResponseEntity.ok(response);
+// //     }
+
+// //     @PostMapping("/employment-details")
+// //     public ResponseEntity<ApiResponse<String>> saveEmploymentDetails(@Valid @RequestBody EmploymentDetailsDTO dto) {
+// //         ApiResponse<String> response = enrolmentService.saveEmploymentDetails(dto);
+// //         return ResponseEntity.ok(response);
+// //     }
+
+// //     @PostMapping("/establishment-type")
+// //     public ResponseEntity<ApiResponse<String>> saveEstablishmentType(@Valid @RequestBody EstablishmentTypeDTO dto) {
+// //         // This would need implementation in service layer
+// //         return ResponseEntity.ok(ApiResponse.success("Establishment type saved successfully", dto.getApplicationId()));
+// //     }
+
+// //     @GetMapping("/{applicationId}")
+// //     public ResponseEntity<ApiResponse<EnrolmentDetailsDTO>> getEnrolmentDetails(@PathVariable String applicationId) {
+// //         ApiResponse<EnrolmentDetailsDTO> response = enrolmentService.getEnrolmentDetails(applicationId);
+// //         return ResponseEntity.ok(response);
+// //     }
+
+// //     @PostMapping("/submit")
+// //     public ResponseEntity<ApiResponse<String>> submitEnrolment(@Valid @RequestBody EnrolmentDetailsDTO dto) {
+// //         ApiResponse<String> response = enrolmentService.saveEnrolmentDetails(dto);
+// //         return ResponseEntity.ok(response);
+// //     }
+
+// //     @PostMapping("/submit-application")
+// //     public ResponseEntity<ApiResponse<String>> submitApplication(@RequestParam String applicationId) {
+// //         // Implementation for final submission
+// //         return ResponseEntity.ok(ApiResponse.success("Application submitted successfully", "Application ID: " + applicationId));
+// //     }
+// // }
+
+
+// // package io.example.professionaltaxportal.controller;
+
+// // import io.example.professionaltaxportal.dto.ApiResponse;
+// // import io.example.professionaltaxportal.dto.EnrolmentRequestDTO;
+// // import io.example.professionaltaxportal.service.EnrolmentService;
+// // import lombok.RequiredArgsConstructor;
+// // import org.springframework.http.ResponseEntity;
+// // import org.springframework.web.bind.annotation.*;
+
+// // @RestController
+// // @RequestMapping("/api")
+// // @RequiredArgsConstructor
+// // @CrossOrigin(origins = {"http://localhost:3000", "http://0.0.0.0:3000", "https://*.replit.dev"})
+// // public class EnrolmentController {
+
+// //     private final EnrolmentService enrolmentService;
+
+// //     @PostMapping("/enrolment")
+// //     public ResponseEntity<ApiResponse<String>> submitEnrolment(@RequestBody EnrolmentRequestDTO request) {
+// //         ApiResponse<String> response = enrolmentService.processEnrolment(request);
+// //         return ResponseEntity.ok(response);
+// //     }
+
+// //     @GetMapping("/enrolment/{applicationId}")
+// //     public ResponseEntity<ApiResponse<EnrolmentRequestDTO>> getEnrolment(@PathVariable String applicationId) {
+// //         ApiResponse<EnrolmentRequestDTO> response = enrolmentService.getEnrolmentDetails(applicationId);
+// //         return ResponseEntity.ok(response);
+// //     }
+// // }
+
+
 // package io.example.professionaltaxportal.controller;
 
 // import io.example.professionaltaxportal.dto.ApiResponse;
 // import io.example.professionaltaxportal.dto.EnrolmentDetailsDTO;
 // import io.example.professionaltaxportal.dto.EmploymentDetailsDTO;
-// import io.example.professionaltaxportal.dto.EstablishmentTypeDTO;
 // import io.example.professionaltaxportal.service.EnrolmentService;
 // import lombok.RequiredArgsConstructor;
 // import org.springframework.http.ResponseEntity;
@@ -14,27 +103,21 @@
 // @RestController
 // @RequestMapping("/api/enrolment")
 // @RequiredArgsConstructor
-// @CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = {"http://localhost:3000", "http://0.0.0.0:3000", "https://*.replit.dev"})
 // public class EnrolmentController {
 
 //     private final EnrolmentService enrolmentService;
 
-//     @PostMapping("/personal-details")
-//     public ResponseEntity<ApiResponse<String>> savePersonalDetails(@Valid @RequestBody EnrolmentDetailsDTO dto) {
+//     @PostMapping("/save")
+//     public ResponseEntity<ApiResponse<String>> saveEnrolmentDetails(@Valid @RequestBody EnrolmentDetailsDTO dto) {
 //         ApiResponse<String> response = enrolmentService.saveEnrolmentDetails(dto);
 //         return ResponseEntity.ok(response);
 //     }
 
-//     @PostMapping("/employment-details")
+//     @PostMapping("/employment/save")
 //     public ResponseEntity<ApiResponse<String>> saveEmploymentDetails(@Valid @RequestBody EmploymentDetailsDTO dto) {
 //         ApiResponse<String> response = enrolmentService.saveEmploymentDetails(dto);
 //         return ResponseEntity.ok(response);
-//     }
-
-//     @PostMapping("/establishment-type")
-//     public ResponseEntity<ApiResponse<String>> saveEstablishmentType(@Valid @RequestBody EstablishmentTypeDTO dto) {
-//         // This would need implementation in service layer
-//         return ResponseEntity.ok(ApiResponse.success("Establishment type saved successfully", dto.getApplicationId()));
 //     }
 
 //     @GetMapping("/{applicationId}")
@@ -43,47 +126,10 @@
 //         return ResponseEntity.ok(response);
 //     }
 
-//     @PostMapping("/submit")
-//     public ResponseEntity<ApiResponse<String>> submitEnrolment(@Valid @RequestBody EnrolmentDetailsDTO dto) {
-//         ApiResponse<String> response = enrolmentService.saveEnrolmentDetails(dto);
-//         return ResponseEntity.ok(response);
-//     }
-
-//     @PostMapping("/submit-application")
-//     public ResponseEntity<ApiResponse<String>> submitApplication(@RequestParam String applicationId) {
-//         // Implementation for final submission
-//         return ResponseEntity.ok(ApiResponse.success("Application submitted successfully", "Application ID: " + applicationId));
-//     }
-// }
-
-
-// package io.example.professionaltaxportal.controller;
-
-// import io.example.professionaltaxportal.dto.ApiResponse;
-// import io.example.professionaltaxportal.dto.EnrolmentRequestDTO;
-// import io.example.professionaltaxportal.service.EnrolmentService;
-// import lombok.RequiredArgsConstructor;
-// import org.springframework.http.ResponseEntity;
-// import org.springframework.web.bind.annotation.*;
-
-// @RestController
-// @RequestMapping("/api")
-// @RequiredArgsConstructor
-// @CrossOrigin(origins = {"http://localhost:3000", "http://0.0.0.0:3000", "https://*.replit.dev"})
-// public class EnrolmentController {
-
-//     private final EnrolmentService enrolmentService;
-
-//     @PostMapping("/enrolment")
-//     public ResponseEntity<ApiResponse<String>> submitEnrolment(@RequestBody EnrolmentRequestDTO request) {
-//         ApiResponse<String> response = enrolmentService.processEnrolment(request);
-//         return ResponseEntity.ok(response);
-//     }
-
-//     @GetMapping("/enrolment/{applicationId}")
-//     public ResponseEntity<ApiResponse<EnrolmentRequestDTO>> getEnrolment(@PathVariable String applicationId) {
-//         ApiResponse<EnrolmentRequestDTO> response = enrolmentService.getEnrolmentDetails(applicationId);
-//         return ResponseEntity.ok(response);
+//     @PostMapping("/validate")
+//     public ResponseEntity<ApiResponse<String>> validateApplication(@RequestBody String applicationId) {
+//         // Add validation logic here
+//         return ResponseEntity.ok(ApiResponse.success("Application validated successfully", applicationId));
 //     }
 // }
 
@@ -91,14 +137,11 @@
 package io.example.professionaltaxportal.controller;
 
 import io.example.professionaltaxportal.dto.ApiResponse;
-import io.example.professionaltaxportal.dto.EnrolmentDetailsDTO;
-import io.example.professionaltaxportal.dto.EmploymentDetailsDTO;
+import io.example.professionaltaxportal.dto.EnrolmentSubmissionDTO;
 import io.example.professionaltaxportal.service.EnrolmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/enrolment")
@@ -108,27 +151,43 @@ public class EnrolmentController {
 
     private final EnrolmentService enrolmentService;
 
-    @PostMapping("/save")
-    public ResponseEntity<ApiResponse<String>> saveEnrolmentDetails(@Valid @RequestBody EnrolmentDetailsDTO dto) {
-        ApiResponse<String> response = enrolmentService.saveEnrolmentDetails(dto);
-        return ResponseEntity.ok(response);
+    @PostMapping("/submit")
+    public ResponseEntity<ApiResponse<String>> submitEnrolment(@RequestBody EnrolmentSubmissionDTO enrolmentData) {
+        try {
+            String result = enrolmentService.submitEnrolment(enrolmentData);
+            return ResponseEntity.ok(ApiResponse.success("Enrolment submitted successfully", result));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to submit enrolment: " + e.getMessage()));
+        }
     }
 
-    @PostMapping("/employment/save")
-    public ResponseEntity<ApiResponse<String>> saveEmploymentDetails(@Valid @RequestBody EmploymentDetailsDTO dto) {
-        ApiResponse<String> response = enrolmentService.saveEmploymentDetails(dto);
-        return ResponseEntity.ok(response);
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<Object>> getEnrolmentById(@PathVariable Long id) {
+        try {
+            Object result = enrolmentService.getEnrolmentById(id);
+            return ResponseEntity.ok(ApiResponse.success("Enrolment retrieved successfully", result));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to retrieve enrolment: " + e.getMessage()));
+        }
     }
 
-    @GetMapping("/{applicationId}")
-    public ResponseEntity<ApiResponse<EnrolmentDetailsDTO>> getEnrolmentDetails(@PathVariable String applicationId) {
-        ApiResponse<EnrolmentDetailsDTO> response = enrolmentService.getEnrolmentDetails(applicationId);
-        return ResponseEntity.ok(response);
+    @GetMapping("/application/{applicationId}")
+    public ResponseEntity<ApiResponse<Object>> getEnrolmentByApplicationId(@PathVariable String applicationId) {
+        try {
+            Object result = enrolmentService.getEnrolmentByApplicationId(applicationId);
+            return ResponseEntity.ok(ApiResponse.success("Enrolment retrieved successfully", result));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to retrieve enrolment: " + e.getMessage()));
+        }
     }
 
-    @PostMapping("/validate")
-    public ResponseEntity<ApiResponse<String>> validateApplication(@RequestBody String applicationId) {
-        // Add validation logic here
-        return ResponseEntity.ok(ApiResponse.success("Application validated successfully", applicationId));
+    @GetMapping("/search/pan/{pan}")
+    public ResponseEntity<ApiResponse<Object>> searchEnrolmentByPan(@PathVariable String pan) {
+        try {
+            Object result = enrolmentService.searchEnrolmentByPan(pan);
+            return ResponseEntity.ok(ApiResponse.success("Enrolment search completed", result));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to search enrolment: " + e.getMessage()));
+        }
     }
 }

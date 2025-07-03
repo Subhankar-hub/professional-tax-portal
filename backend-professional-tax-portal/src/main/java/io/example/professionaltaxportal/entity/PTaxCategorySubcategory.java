@@ -1,9 +1,43 @@
+// package io.example.professionaltaxportal.entity;
+
+// import lombok.Data;
+// import lombok.NoArgsConstructor;
+// import lombok.AllArgsConstructor;
+// import jakarta.persistence.*;
+
+// @Entity
+// @Table(name = "mtbl_ptax_category_subcategory", schema = "ptax")
+// @Data
+// @NoArgsConstructor
+// @AllArgsConstructor
+// public class PTaxCategorySubcategory {
+
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.IDENTITY)
+//     @Column(name = "record_rsn")
+//     private Long recordRsn;
+
+//     @Column(name = "cat_code")
+//     private Integer catCode;
+
+//     @Column(name = "cat_description", length = 150)
+//     private String catDescription;
+
+//     @Column(name = "subcat_code")
+//     private Integer subcatCode;
+
+//     @Column(name = "subcat_description", length = 150)
+//     private String subcatDescription;
+
+//     @Column(name = "is_visible")
+//     private Integer isVisible;
+// }
 package io.example.professionaltaxportal.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "mtbl_ptax_category_subcategory", schema = "ptax")
@@ -14,21 +48,20 @@ public class PTaxCategorySubcategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "record_rsn")
-    private Long recordRsn;
+    private Long id;
 
-    @Column(name = "cat_code")
-    private Integer catCode;
+    @Column(name = "category_code")
+    private Integer categoryCode;
 
-    @Column(name = "cat_description", length = 150)
-    private String catDescription;
+    @Column(name = "subcategory_code")
+    private Integer subcategoryCode;
 
-    @Column(name = "subcat_code")
-    private Integer subcatCode;
+    @Column(name = "subcategory_name", length = 100)
+    private String subcategoryName;
 
-    @Column(name = "subcat_description", length = 150)
-    private String subcatDescription;
+    @Column(name = "description", length = 500)
+    private String description;
 
-    @Column(name = "is_visible")
-    private Integer isVisible;
+    @Column(name = "status")
+    private Boolean status;
 }
