@@ -8,6 +8,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing temporary applicant employment details.
+ */
 @Entity
 @Table(name = "ttbl_temp_applicant_employment_details", schema = "ptax")
 @Data
@@ -19,7 +22,7 @@ public class TempApplicantEmploymentDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rsn;
 
-    @Column(name = "application_id", length = 15)
+    @Column(name = "application_id", length = 15, nullable = false)
     private String applicationId;
 
     @Column(name = "ptan", length = 10)
@@ -55,6 +58,7 @@ public class TempApplicantEmploymentDetails {
     @Column(name = "engaged_with_multiple_employer")
     private Boolean engagedWithMultipleEmployer;
 
+    // Additional employers when engaged with multiple
     @Column(name = "employer_name1", length = 150)
     private String employerName1;
 
@@ -82,6 +86,7 @@ public class TempApplicantEmploymentDetails {
     @Column(name = "monthly_salary3", precision = 18, scale = 2)
     private BigDecimal monthlySalary3;
 
+    // Audit fields
     @Column(name = "inserted_on")
     private LocalDateTime insertedOn;
 

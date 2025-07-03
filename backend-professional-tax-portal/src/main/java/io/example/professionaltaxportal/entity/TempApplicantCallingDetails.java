@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing temporary applicant calling details.
+ */
 @Entity
 @Table(name = "ttbl_temp_applicant_calling_details", schema = "ptax")
 @Data
@@ -20,7 +22,7 @@ public class TempApplicantCallingDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rsn;
 
-    @Column(name = "application_id", length = 15)
+    @Column(name = "application_id", length = 15, nullable = false)
     private String applicationId;
 
     @Column(name = "ptan", length = 10)
@@ -59,6 +61,7 @@ public class TempApplicantCallingDetails {
     @Column(name = "engaged_with_district_society")
     private Boolean engagedWithDistrictSociety;
 
+    // Audit fields
     @Column(name = "inserted_on")
     private LocalDateTime insertedOn;
 

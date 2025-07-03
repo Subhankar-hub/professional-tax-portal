@@ -14,16 +14,24 @@ public interface TempApplicantEnrolmentDetailsRepository extends JpaRepository<T
 
     Optional<TempApplicantEnrolmentDetails> findByApplicationId(String applicationId);
 
+    Optional<TempApplicantEnrolmentDetails> findByMobileNumber(String mobileNumber);
+
+    Optional<TempApplicantEnrolmentDetails> findByEmailId(String emailId);
+
+    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.applicationId = :applicationId")
+    Optional<TempApplicantEnrolmentDetails> findEnrolmentByApplicationId(@Param("applicationId") String applicationId);
+
+    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.mobileNumber = :mobile OR t.emailId = :email")
+    Optional<TempApplicantEnrolmentDetails> findByMobileOrEmail(@Param("mobile") String mobile, @Param("email") String email);
+
     List<TempApplicantEnrolmentDetails> findByStatus(Boolean status);
 
-    List<TempApplicantEnrolmentDetails> findByDistrictLgdCode(Integer districtLgdCode);
+    boolean existsByApplicationId(String applicationId);
 
-    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.email = :email")
-    Optional<TempApplicantEnrolmentDetails> findByEmail(@Param("email") String email);
+    boolean existsByMobileNumber(String mobileNumber);
 
-    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.mobile = :mobile")
-    Optional<TempApplicantEnrolmentDetails> findByMobile(@Param("mobile") String mobile);
+    boolean existsByEmailId(String emailId);
 
-    @Query("SELECT t FROM TempApplicantEnrolmentDetails t WHERE t.pan = :pan")
-    List<TempApplicantEnrolmentDetails> findByPan(@Param("pan") String pan);
+    @Query("DELETE FROM TempApplicantEnrolmentDetails t WHERE t.applicationId = :applicationId")
+    void deleteByApplicationId(@Param("applicationId") String applicationId);
 }
