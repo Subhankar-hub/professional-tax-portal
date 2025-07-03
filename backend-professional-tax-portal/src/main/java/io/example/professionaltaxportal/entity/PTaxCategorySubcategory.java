@@ -1,37 +1,3 @@
-// package io.example.professionaltaxportal.entity;
-
-// import lombok.Data;
-// import lombok.NoArgsConstructor;
-// import lombok.AllArgsConstructor;
-// import jakarta.persistence.*;
-
-// @Entity
-// @Table(name = "mtbl_ptax_category_subcategory", schema = "ptax")
-// @Data
-// @NoArgsConstructor
-// @AllArgsConstructor
-// public class PTaxCategorySubcategory {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     @Column(name = "record_rsn")
-//     private Long recordRsn;
-
-//     @Column(name = "cat_code")
-//     private Integer catCode;
-
-//     @Column(name = "cat_description", length = 150)
-//     private String catDescription;
-
-//     @Column(name = "subcat_code")
-//     private Integer subcatCode;
-
-//     @Column(name = "subcat_description", length = 150)
-//     private String subcatDescription;
-
-//     @Column(name = "is_visible")
-//     private Integer isVisible;
-// }
 package io.example.professionaltaxportal.entity;
 
 import jakarta.persistence.*;
@@ -40,28 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "mtbl_ptax_category_subcategory", schema = "ptax")
+@Table(name = "ptax_category_subcategories")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PTaxCategorySubcategory {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "category_code")
-    private Integer categoryCode;
-
-    @Column(name = "subcategory_code")
-    private Integer subcategoryCode;
-
-    @Column(name = "subcategory_name", length = 100)
+    
+    @Column(name = "category_id", nullable = false)
+    private Long categoryId;
+    
+    @Column(name = "subcategory_name", nullable = false)
     private String subcategoryName;
-
-    @Column(name = "description", length = 500)
-    private String description;
-
-    @Column(name = "status")
-    private Boolean status;
+    
+    @Column(name = "subcategory_description")
+    private String subcategoryDescription;
+    
+    @Column(name = "is_active")
+    private Boolean isActive = true;
 }

@@ -6,22 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "mtbl_charge", schema = "ptax")
+@Table(name = "charges")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Charge {
-
+    
     @Id
-    @Column(name = "code", length = 4)
-    private String code;
-
-    @Column(name = "charge", length = 255)
-    private String charge;
-
-    @Column(name = "area_code", length = 3)
-    private String areaCode;
-
-    @Column(name = "charge_sn")
-    private Integer chargeSn;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "charge_name", nullable = false)
+    private String chargeName;
+    
+    @Column(name = "charge_code")
+    private String chargeCode;
+    
+    @Column(name = "area_id")
+    private Long areaId;
+    
+    @Column(name = "status")
+    private Boolean status = true;
 }

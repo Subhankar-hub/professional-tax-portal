@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,100 +13,91 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TempApplicantProfessionDetails {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rsn;
-
-    @Column(name = "application_id", length = 15)
+    private Long id;
+    
+    @Column(name = "application_id", nullable = false)
     private String applicationId;
-
-    @Column(name = "ptan", length = 10)
-    private String ptan;
-
+    
     @Column(name = "commencement_date")
     private LocalDate commencementDate;
-
-    @Column(name = "period_of_standing", length = 50)
+    
+    @Column(name = "period_of_standing")
     private String periodOfStanding;
-
-    @Column(name = "pan", length = 10)
-    private String pan;
-
-    @Column(name = "annual_gross_business", precision = 18, scale = 2)
-    private BigDecimal annualGrossBusiness;
-
-    @Column(name = "annual_turn_over", precision = 18, scale = 2)
-    private BigDecimal annualTurnOver;
-
-    @Column(name = "avg_workers_monthly")
-    private Integer avgWorkersMonthly;
-
-    @Column(name = "avg_employees_monthly")
-    private Integer avgEmployeesMonthly;
-
-    @Column(name = "vat_number", length = 11)
+    
+    @Column(name = "pan_tan")
+    private String panTan;
+    
+    @Column(name = "annual_gross_business")
+    private Double annualGrossBusiness;
+    
+    @Column(name = "monthly_avg_workers")
+    private Integer monthlyAvgWorkers;
+    
+    @Column(name = "monthly_avg_employees")
+    private Integer monthlyAvgEmployees;
+    
+    // Tax registrations
+    @Column(name = "vat_registered")
+    private Boolean vatRegistered = false;
+    
+    @Column(name = "vat_number")
     private String vatNumber;
-
-    @Column(name = "cst_number", length = 11)
+    
+    @Column(name = "cst_registered")
+    private Boolean cstRegistered = false;
+    
+    @Column(name = "cst_number")
     private String cstNumber;
-
-    @Column(name = "gst_number", length = 15)
+    
+    @Column(name = "gst_registered")
+    private Boolean gstRegistered = false;
+    
+    @Column(name = "gst_number")
     private String gstNumber;
-
-    @Column(name = "taxi_count")
-    private Integer taxiCount;
-
-    @Column(name = "three_wheeler_count")
-    private Integer threeWheelerCount;
-
-    @Column(name = "lmv_count")
-    private Integer lmvCount;
-
-    @Column(name = "good_vehicle_count")
-    private Integer goodVehicleCount;
-
-    @Column(name = "truck_count")
-    private Integer truckCount;
-
-    @Column(name = "bus_count")
-    private Integer busCount;
-
-    @Column(name = "engaged_with_state_society")
-    private Boolean engagedWithStateSociety;
-
-    @Column(name = "engaged_with_district_society")
-    private Boolean engagedWithDistrictSociety;
-
-    // Audit fields
-    @Column(name = "inserted_on")
-    private LocalDateTime insertedOn;
-
-    @Column(name = "inserted_by", length = 50)
-    private String insertedBy;
-
-    @Column(name = "inserted_from_ipv4", length = 15)
-    private String insertedFromIpv4;
-
-    @Column(name = "updated_on")
-    private LocalDateTime updatedOn;
-
-    @Column(name = "updated_by", length = 50)
-    private String updatedBy;
-
-    @Column(name = "updated_from_ipv4", length = 15)
-    private String updatedFromIpv4;
-
-    @Column(name = "status")
-    private Boolean status;
-
+    
+    // Vehicle counts
+    @Column(name = "taxis")
+    private Integer taxis = 0;
+    
+    @Column(name = "three_wheelers")
+    private Integer threeWheelers = 0;
+    
+    @Column(name = "light_motor_vehicles")
+    private Integer lightMotorVehicles = 0;
+    
+    @Column(name = "good_vehicles")
+    private Integer goodVehicles = 0;
+    
+    @Column(name = "trucks")
+    private Integer trucks = 0;
+    
+    @Column(name = "buses")
+    private Integer buses = 0;
+    
+    // Co-operative Society
+    @Column(name = "state_level_society")
+    private Boolean stateLevelSociety = false;
+    
+    @Column(name = "district_level_society")
+    private Boolean districtLevelSociety = false;
+    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    
     @PrePersist
     protected void onCreate() {
-        insertedOn = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
-
+    
     @PreUpdate
     protected void onUpdate() {
-        updatedOn = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 }

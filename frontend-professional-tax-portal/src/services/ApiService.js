@@ -1,146 +1,170 @@
-
-const API_BASE_URL = 'http://0.0.0.0:5000/api';
+const API_BASE_URL = 'http://0.0.0.0:8080/api';
 
 class ApiService {
-  // Generic request method
-  async request(endpoint, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-      ...options,
-    };
+  
+  // Helper method to handle API responses
+  async handleResponse(response) {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
 
+  // Master data API calls
+  async getAllMasterData() {
     try {
-      const response = await fetch(url, config);
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      return await response.json();
+      const response = await fetch(`${API_BASE_URL}/master-data/all`);
+      const result = await this.handleResponse(response);
+      return result;
     } catch (error) {
-      console.error('API request failed:', error);
+      console.error('Error fetching master data:', error);
       throw error;
     }
   }
 
-  // GET request
-  async get(endpoint) {
-    return this.request(endpoint, { method: 'GET' });
-  }
-
-  // POST request
-  async post(endpoint, data) {
-    return this.request(endpoint, {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-  }
-
-  // PUT request
-  async put(endpoint, data) {
-    return this.request(endpoint, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
-  }
-
-  // DELETE request
-  async delete(endpoint) {
-    return this.request(endpoint, { method: 'DELETE' });
-  }
-
-  // Professional Tax specific endpoints
   async getDistricts() {
-    return this.get('/master-data/districts');
+    try {
+      const response = await fetch(`${API_BASE_URL}/master-data/districts`);
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error fetching districts:', error);
+      throw error;
+    }
   }
 
-  async getPTaxCategories() {
-    return this.get('/master-data/ptax-categories');
+  async getAreasByDistrict(districtId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/master-data/areas/${districtId}`);
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error fetching areas:', error);
+      throw error;
+    }
   }
 
-  async getPTaxSubcategories(categoryId) {
-    return this.get(`/master-data/ptax-subcategories/${categoryId}`);
+  async getChargesByArea(areaId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/master-data/charges/${areaId}`);
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error fetching charges:', error);
+      throw error;
+    }
   }
 
-  async submitEnrolment(formData) {
-    // Transform frontend data to match backend DTO
-    const backendData = {
-      // Personal Details
-      name: formData.name,
-      gender: formData.gender,
-      fatherName: formData.fatherName,
-      mobile: formData.mobile,
-      email: formData.email,
-      pan: formData.pan,
+  async getCategories() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/master-data/categories`);
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      throw error;
+    }
+  }
 
-      // Address Details
-      addressText: formData.establishmentAddress,
-      districtLgdCode: parseInt(formData.district),
-      pincode: formData.pincode,
+  async getSubcategoriesByCategory(categoryId) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/master-data/subcategories/${categoryId}`);
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+      throw error;
+    }
+  }
 
-      // Business Details
-      businessName: formData.establishmentName,
-      jurisdictionCode: formData.jurisdictionArea,
-      chargeCode: formData.charge,
+  async getPeriodOfStandingOptions() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/master-data/period-of-standing`);
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error fetching period of standing options:', error);
+      throw error;
+    }
+  }
 
-      // Engagement Details
-      engagedWithProfession: formData.engagedWith?.includes('Profession') || false,
-      engagedWithTrade: formData.engagedWith?.includes('Trade') || false,
-      engagedWithCalling: formData.engagedWith?.includes('Calling') || false,
-      engagedWithEmployment: formData.engagedWith?.includes('Employment') || false,
-
-      // Tax Category
-      ptaxCategory: parseInt(formData.category),
-      ptaxSubcategory: formData.subcategory ? parseInt(formData.subcategory) : null,
-
-      // Establishments
-      establishment1Name: formData.establishmentName,
-      establishment1Address: formData.establishmentAddress,
-      establishment2Name: formData.additionalEstablishments?.[0]?.name || null,
-      establishment2Address: formData.additionalEstablishments?.[0]?.address || null,
-      establishment3Name: formData.additionalEstablishments?.[1]?.name || null,
-      establishment3Address: formData.additionalEstablishments?.[1]?.address || null,
-      establishment4Name: formData.additionalEstablishments?.[2]?.name || null,
-      establishment4Address: formData.additionalEstablishments?.[2]?.address || null,
-      establishment5Name: formData.additionalEstablishments?.[3]?.name || null,
-      establishment5Address: formData.additionalEstablishments?.[3]?.address || null,
-
-      // Professional Details (if applicable)
-      commencementDate: formData.commencementDate,
-      periodOfStanding: formData.periodOfStanding,
-      annualGrossBusiness: formData.annualGrossBusiness ? parseFloat(formData.annualGrossBusiness) : null,
-      avgWorkersMonthly: formData.monthlyAvgWorkers ? parseInt(formData.monthlyAvgWorkers) : null,
-      avgEmployeesMonthly: formData.monthlyAvgEmployees ? parseInt(formData.monthlyAvgEmployees) : null,
-      vatNumber: formData.vatRegistered ? formData.vatNumber : null,
-      cstNumber: formData.cstRegistered ? formData.cstNumber : null,
-      gstNumber: formData.gstRegistered ? formData.gstNumber : null,
+  // Enrolment API calls
+  async submitEnrolment(enrolmentData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/enrolment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(enrolmentData)
+      });
       
-      // Vehicle counts
-      taxiCount: formData.taxis ? parseInt(formData.taxis) : 0,
-      threeWheelerCount: formData.threeWheelers ? parseInt(formData.threeWheelers) : 0,
-      lmvCount: formData.lightMotorVehicles ? parseInt(formData.lightMotorVehicles) : 0,
-      goodVehicleCount: formData.goodVehicles ? parseInt(formData.goodVehicles) : 0,
-      truckCount: formData.trucks ? parseInt(formData.trucks) : 0,
-      busCount: formData.buses ? parseInt(formData.buses) : 0,
-    };
-
-    return this.post('/enrolment/submit', backendData);
-  }
-
-  async getEnrolmentById(id) {
-    return this.get(`/enrolment/${id}`);
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error submitting enrolment:', error);
+      throw error;
+    }
   }
 
   async getEnrolmentByApplicationId(applicationId) {
-    return this.get(`/enrolment/application/${applicationId}`);
+    try {
+      const response = await fetch(`${API_BASE_URL}/enrolment/${applicationId}`);
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error fetching enrolment:', error);
+      throw error;
+    }
   }
 
-  async searchEnrolmentByPan(pan) {
-    return this.get(`/enrolment/search/pan/${pan}`);
+  // Captcha generation (mock implementation)
+  generateCaptcha() {
+    const num1 = Math.floor(Math.random() * 50) + 1;
+    const num2 = Math.floor(Math.random() * 50) + 1;
+    const operators = ['+', '-', '*'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+    
+    let result;
+    switch (operator) {
+      case '+':
+        result = num1 + num2;
+        break;
+      case '-':
+        result = num1 - num2;
+        break;
+      case '*':
+        result = num1 * num2;
+        break;
+      default:
+        result = num1 + num2;
+    }
+    
+    return {
+      question: `${num1}${operator}${num2}=`,
+      answer: result
+    };
+  }
+
+  // Validation helpers
+  validatePAN(pan) {
+    const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+    return panPattern.test(pan);
+  }
+
+  validateMobile(mobile) {
+    const mobilePattern = /^[6-9]\d{9}$/;
+    return mobilePattern.test(mobile);
+  }
+
+  validateEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  }
+
+  validatePincode(pincode) {
+    const pincodePattern = /^[1-9][0-9]{5}$/;
+    return pincodePattern.test(pincode);
   }
 }
 

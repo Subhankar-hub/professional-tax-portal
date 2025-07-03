@@ -1,28 +1,3 @@
-// package io.example.professionaltaxportal.entity;
-
-// import lombok.Data;
-// import lombok.NoArgsConstructor;
-// import lombok.AllArgsConstructor;
-// import jakarta.persistence.*;
-
-// @Entity
-// @Table(name = "mtbl_ptax_category", schema = "ptax")
-// @Data
-// @NoArgsConstructor
-// @AllArgsConstructor
-// public class PTaxCategory {
-
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     @Column(name = "cat_rsn")
-//     private Long catRsn;
-
-//     @Column(name = "cat_id")
-//     private Integer catId;
-
-//     @Column(name = "cat_description", length = 150)
-//     private String catDescription;
-// }
 package io.example.professionaltaxportal.entity;
 
 import jakarta.persistence.*;
@@ -31,22 +6,25 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "mtbl_ptax_category", schema = "ptax")
+@Table(name = "ptax_categories")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PTaxCategory {
 
     @Id
-    @Column(name = "category_code")
-    private Integer categoryCode;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "category_name", length = 100)
+    @Column(name = "cat_id", nullable = false)
+    private Integer catId;
+
+    @Column(name = "category_name", nullable = false)
     private String categoryName;
 
-    @Column(name = "description", length = 500)
-    private String description;
+    @Column(name = "category_description")
+    private String categoryDescription;
 
-    @Column(name = "status")
-    private Boolean status;
+    @Column(name = "is_active")
+    private Boolean isActive = true;
 }

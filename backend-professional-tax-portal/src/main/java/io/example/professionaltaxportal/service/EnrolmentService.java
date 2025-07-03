@@ -1,183 +1,242 @@
-// package io.example.professionaltaxportal.service;
-
-// import io.example.professionaltaxportal.dto.ApiResponse;
-// import io.example.professionaltaxportal.dto.EnrolmentDetailsDTO;
-// import io.example.professionaltaxportal.dto.EmploymentDetailsDTO;
-// import io.example.professionaltaxportal.entity.TempApplicantEnrolmentDetails;
-// import io.example.professionaltaxportal.entity.TempApplicantEmploymentDetails;
-// import io.example.professionaltaxportal.repository.TempApplicantEnrolmentDetailsRepository;
-// import io.example.professionaltaxportal.repository.TempApplicantEmploymentDetailsRepository;
-// import lombok.RequiredArgsConstructor;
-// import org.modelmapper.ModelMapper;
-// import org.springframework.stereotype.Service;
-// import org.springframework.transaction.annotation.Transactional;
-
-// import java.time.LocalDateTime;
-// import java.util.UUID;
-
-// @Service
-// @RequiredArgsConstructor
-// public class EnrolmentService {
-
-//     private final TempApplicantEnrolmentDetailsRepository enrolmentRepository;
-//     private final TempApplicantEmploymentDetailsRepository employmentRepository;
-//     private final ModelMapper modelMapper;
-
-//     @Transactional
-//     public ApiResponse<String> saveEnrolmentDetails(EnrolmentDetailsDTO dto) {
-//         try {
-//             // Check if email or mobile already exists
-//             if (dto.getEmail() != null && enrolmentRepository.findByEmailId(dto.getEmail()).isPresent()) {
-//                 return ApiResponse.error("Email already exists");
-//             }
-            
-//             if (dto.getMobile() != null && enrolmentRepository.findByMobileNumber(dto.getMobile()).isPresent()) {
-//                 return ApiResponse.error("Mobile number already exists");
-//             }
-
-//             // Generate application ID if not provided
-//             String applicationId = dto.getApplicationId();
-//             if (applicationId == null || applicationId.isEmpty()) {
-//                 applicationId = "APP" + System.currentTimeMillis();
-//             }
-
-//             // Create enrolment entity
-//             TempApplicantEnrolmentDetails enrolment = new TempApplicantEnrolmentDetails();
-//             enrolment.setApplicationId(applicationId);
-//             enrolment.setApplicationType(dto.getApplicationType());
-//             enrolment.setFirstName(dto.getFirstName());
-//             enrolment.setMiddleName(dto.getMiddleName());
-//             enrolment.setLastName(dto.getLastName());
-//             enrolment.setFatherName(dto.getFatherName());
-//             enrolment.setDateOfBirth(dto.getDateOfBirth());
-//             enrolment.setGender(dto.getGender());
-            
-//             // Set mobile and email based on application type
-//             if ("Individual".equals(dto.getApplicationType())) {
-//                 enrolment.setMobileNumber(dto.getMobile());
-//                 enrolment.setEmailId(dto.getEmail());
-//             } else {
-//                 enrolment.setMobileNumber(dto.getBusinessMobile());
-//                 enrolment.setEmailId(dto.getBusinessEmail());
-//                 enrolment.setBusinessName(dto.getBusinessName());
-//                 enrolment.setBusinessType(dto.getBusinessType());
-//                 enrolment.setContactPersonName(dto.getContactPersonName());
-//             }
-
-//             enrolment.setAddressLine1(dto.getAddressLine1());
-//             enrolment.setAddressLine2(dto.getAddressLine2());
-//             enrolment.setCity(dto.getCity());
-//             enrolment.setDistrict(dto.getDistrict());
-//             enrolment.setState(dto.getState());
-//             enrolment.setPincode(dto.getPincode());
-//             enrolment.setPtaxCategory(dto.getPtaxCategory());
-//             enrolment.setPtaxSubcategory(dto.getPtaxSubcategory());
-//             enrolment.setEngagedWithProfession(dto.getEngagedWithProfession());
-//             enrolment.setEngagedWithTrade(dto.getEngagedWithTrade());
-//             enrolment.setEngagedWithCalling(dto.getEngagedWithCalling());
-//             enrolment.setEngagedWithEmployment(dto.getEngagedWithEmployment());
-//             enrolment.setPanNumber(dto.getPanNumber());
-//             enrolment.setAadharNumber(dto.getAadharNumber());
-//             enrolment.setGstNumber(dto.getGstNumber());
-//             enrolment.setApplyingAsIndividual(dto.getApplyingAsIndividual());
-//             enrolment.setStatus(true);
-//             enrolment.setCreatedAt(LocalDateTime.now());
-
-//             enrolmentRepository.save(enrolment);
-
-//             return ApiResponse.success("Enrolment details saved successfully", applicationId, applicationId);
-
-//         } catch (Exception e) {
-//             return ApiResponse.error("Failed to save enrolment details: " + e.getMessage());
-//         }
-//     }
-
-//     @Transactional
-//     public ApiResponse<String> saveEmploymentDetails(EmploymentDetailsDTO dto) {
-//         try {
-//             // Check if application exists
-//             if (!enrolmentRepository.existsByApplicationId(dto.getApplicationId())) {
-//                 return ApiResponse.error("Application not found");
-//             }
-
-//             TempApplicantEmploymentDetails employment = modelMapper.map(dto, TempApplicantEmploymentDetails.class);
-//             employment.setStatus(true);
-//             employment.setInsertedOn(LocalDateTime.now());
-
-//             employmentRepository.save(employment);
-
-//             return ApiResponse.success("Employment details saved successfully", dto.getApplicationId());
-
-//         } catch (Exception e) {
-//             return ApiResponse.error("Failed to save employment details: " + e.getMessage());
-//         }
-//     }
-
-//     public ApiResponse<EnrolmentDetailsDTO> getEnrolmentDetails(String applicationId) {
-//         try {
-//             TempApplicantEnrolmentDetails enrolment = enrolmentRepository.findByApplicationId(applicationId)
-//                     .orElse(null);
-
-//             if (enrolment == null) {
-//                 return ApiResponse.error("Application not found");
-//             }
-
-//             EnrolmentDetailsDTO dto = modelMapper.map(enrolment, EnrolmentDetailsDTO.class);
-//             return ApiResponse.success("Enrolment details retrieved successfully", dto);
-
-//         } catch (Exception e) {
-//             return ApiResponse.error("Failed to retrieve enrolment details: " + e.getMessage());
-//         }
-//     }
-// }
-
-
-
 
 package io.example.professionaltaxportal.service;
 
+import io.example.professionaltaxportal.dto.ApiResponse;
 import io.example.professionaltaxportal.dto.EnrolmentSubmissionDTO;
+import io.example.professionaltaxportal.entity.*;
+import io.example.professionaltaxportal.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class EnrolmentService {
-
-    public String submitEnrolment(EnrolmentSubmissionDTO enrolmentData) {
-        // TODO: Implement actual enrolment submission logic
-        // For now, just return a success message with basic validation
-        
-        if (enrolmentData.getName() == null || enrolmentData.getName().trim().isEmpty()) {
+    
+    private final TempApplicantEnrolmentDetailsRepository enrolmentDetailsRepository;
+    private final TempApplicantProfessionalDetailsRepository professionalDetailsRepository;
+    private final TempApplicantTradeDetailsRepository tradeDetailsRepository;
+    private final TempApplicantCallingDetailsRepository callingDetailsRepository;
+    private final TempApplicantEmploymentDetailsRepository employmentDetailsRepository;
+    private final TempApplicantEmploymentEmployersRepository employmentEmployersRepository;
+    
+    @Transactional
+    public ApiResponse<String> submitEnrolment(EnrolmentSubmissionDTO enrolmentData) {
+        try {
+            // Validate required fields
+            validateEnrolmentData(enrolmentData);
+            
+            // Check if mobile number already exists
+            if (enrolmentDetailsRepository.existsByMobile(enrolmentData.getMobile())) {
+                return ApiResponse.error("Mobile number already registered");
+            }
+            
+            // Generate application ID
+            String applicationId = generateApplicationId();
+            
+            // Save main enrolment details
+            TempApplicantEnrolmentDetails enrolment = createEnrolmentDetails(enrolmentData, applicationId);
+            enrolmentDetailsRepository.save(enrolment);
+            
+            // Save specific engagement details
+            if (enrolmentData.getEngagedWithProfession()) {
+                saveProfessionDetails(enrolmentData, applicationId);
+            }
+            
+            if (enrolmentData.getEngagedWithTrade()) {
+                saveTradeDetails(enrolmentData, applicationId);
+            }
+            
+            if (enrolmentData.getEngagedWithCalling()) {
+                saveCallingDetails(enrolmentData, applicationId);
+            }
+            
+            if (enrolmentData.getEngagedWithEmployment()) {
+                saveEmploymentDetails(enrolmentData, applicationId);
+            }
+            
+            return ApiResponse.success("Enrolment submitted successfully", applicationId);
+            
+        } catch (Exception e) {
+            return ApiResponse.error("Failed to submit enrolment: " + e.getMessage());
+        }
+    }
+    
+    private void validateEnrolmentData(EnrolmentSubmissionDTO data) {
+        if (data.getName() == null || data.getName().trim().isEmpty()) {
             throw new IllegalArgumentException("Name is required");
         }
         
-        if (enrolmentData.getPan() == null || enrolmentData.getPan().trim().isEmpty()) {
+        if (data.getPan() == null || data.getPan().trim().isEmpty()) {
             throw new IllegalArgumentException("PAN is required");
         }
         
-        if (enrolmentData.getMobile() == null || enrolmentData.getMobile().trim().isEmpty()) {
+        if (data.getMobile() == null || data.getMobile().trim().isEmpty()) {
             throw new IllegalArgumentException("Mobile number is required");
         }
         
-        // Generate a dummy application ID
-        String applicationId = "PTAX" + System.currentTimeMillis();
+        if (data.getEmail() == null || data.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email is required");
+        }
         
-        return applicationId;
+        // Validate at least one engagement is selected
+        if (!data.getEngagedWithProfession() && !data.getEngagedWithTrade() 
+            && !data.getEngagedWithCalling() && !data.getEngagedWithEmployment()) {
+            throw new IllegalArgumentException("At least one engagement type must be selected");
+        }
     }
-
-    public Object getEnrolmentById(Long id) {
-        // TODO: Implement actual retrieval logic
-        throw new UnsupportedOperationException("Not implemented yet");
+    
+    private String generateApplicationId() {
+        return "PTAX" + System.currentTimeMillis() + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
     }
-
-    public Object getEnrolmentByApplicationId(String applicationId) {
-        // TODO: Implement actual retrieval logic
-        throw new UnsupportedOperationException("Not implemented yet");
+    
+    private TempApplicantEnrolmentDetails createEnrolmentDetails(EnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantEnrolmentDetails enrolment = new TempApplicantEnrolmentDetails();
+        enrolment.setApplicationId(applicationId);
+        enrolment.setApplicantType(data.getApplicantType());
+        enrolment.setName(data.getName());
+        enrolment.setGender(data.getGender());
+        enrolment.setFatherName(data.getFatherName());
+        enrolment.setPan(data.getPan());
+        enrolment.setMobile(data.getMobile());
+        enrolment.setEmail(data.getEmail());
+        enrolment.setEstablishmentName(data.getEstablishmentName());
+        enrolment.setJurisdictionArea(data.getJurisdictionArea());
+        enrolment.setCharge(data.getCharge());
+        enrolment.setDistrict(data.getDistrict());
+        enrolment.setPincode(data.getPincode());
+        enrolment.setEstablishmentAddress(data.getEstablishmentAddress());
+        enrolment.setCategory(data.getCategory());
+        enrolment.setSubcategory(data.getSubcategory());
+        enrolment.setEngagedWithProfession(data.getEngagedWithProfession());
+        enrolment.setEngagedWithTrade(data.getEngagedWithTrade());
+        enrolment.setEngagedWithCalling(data.getEngagedWithCalling());
+        enrolment.setEngagedWithEmployment(data.getEngagedWithEmployment());
+        enrolment.setCaptchaValue(data.getCaptchaValue());
+        enrolment.setCaptchaValid(true);
+        
+        return enrolment;
     }
-
-    public Object searchEnrolmentByPan(String pan) {
-        // TODO: Implement actual search logic
-        throw new UnsupportedOperationException("Not implemented yet");
+    
+    private void saveProfessionDetails(EnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantProfessionDetails profession = new TempApplicantProfessionDetails();
+        profession.setApplicationId(applicationId);
+        profession.setCommencementDate(data.getCommencementDate());
+        profession.setPeriodOfStanding(data.getPeriodOfStanding());
+        profession.setPanTan(data.getPanTan());
+        profession.setAnnualGrossBusiness(data.getAnnualGrossBusiness());
+        profession.setMonthlyAvgWorkers(data.getMonthlyAvgWorkers());
+        profession.setMonthlyAvgEmployees(data.getMonthlyAvgEmployees());
+        profession.setVatRegistered(data.getVatRegistered());
+        profession.setVatNumber(data.getVatNumber());
+        profession.setCstRegistered(data.getCstRegistered());
+        profession.setCstNumber(data.getCstNumber());
+        profession.setGstRegistered(data.getGstRegistered());
+        profession.setGstNumber(data.getGstNumber());
+        profession.setTaxis(data.getTaxis());
+        profession.setThreeWheelers(data.getThreeWheelers());
+        profession.setLightMotorVehicles(data.getLightMotorVehicles());
+        profession.setGoodVehicles(data.getGoodVehicles());
+        profession.setTrucks(data.getTrucks());
+        profession.setBuses(data.getBuses());
+        profession.setStateLevelSociety(data.getStateLevelSociety());
+        profession.setDistrictLevelSociety(data.getDistrictLevelSociety());
+        
+        professionalDetailsRepository.save(profession);
+    }
+    
+    private void saveTradeDetails(EnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantTradeDetails trade = new TempApplicantTradeDetails();
+        trade.setApplicationId(applicationId);
+        trade.setCommencementDate(data.getCommencementDate());
+        trade.setPeriodOfStanding(data.getPeriodOfStanding());
+        trade.setPanTan(data.getPanTan());
+        trade.setAnnualGrossBusiness(data.getAnnualGrossBusiness());
+        trade.setAnnualTurnover(data.getAnnualTurnover());
+        trade.setMonthlyAvgWorkers(data.getMonthlyAvgWorkers());
+        trade.setMonthlyAvgEmployees(data.getMonthlyAvgEmployees());
+        trade.setVatRegistered(data.getVatRegistered());
+        trade.setVatNumber(data.getVatNumber());
+        trade.setCstRegistered(data.getCstRegistered());
+        trade.setCstNumber(data.getCstNumber());
+        trade.setGstRegistered(data.getGstRegistered());
+        trade.setGstNumber(data.getGstNumber());
+        trade.setTaxis(data.getTaxis());
+        trade.setThreeWheelers(data.getThreeWheelers());
+        trade.setLightMotorVehicles(data.getLightMotorVehicles());
+        trade.setGoodVehicles(data.getGoodVehicles());
+        trade.setTrucks(data.getTrucks());
+        trade.setBuses(data.getBuses());
+        trade.setStateLevelSociety(data.getStateLevelSociety());
+        trade.setDistrictLevelSociety(data.getDistrictLevelSociety());
+        
+        tradeDetailsRepository.save(trade);
+    }
+    
+    private void saveCallingDetails(EnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantCallingDetails calling = new TempApplicantCallingDetails();
+        calling.setApplicationId(applicationId);
+        calling.setCommencementDate(data.getCommencementDate());
+        calling.setPeriodOfStanding(data.getPeriodOfStanding());
+        calling.setPanTan(data.getPanTan());
+        calling.setAnnualGrossBusiness(data.getAnnualGrossBusiness());
+        calling.setMonthlyAvgWorkers(data.getMonthlyAvgWorkers());
+        calling.setMonthlyAvgEmployees(data.getMonthlyAvgEmployees());
+        calling.setVatRegistered(data.getVatRegistered());
+        calling.setVatNumber(data.getVatNumber());
+        calling.setCstRegistered(data.getCstRegistered());
+        calling.setCstNumber(data.getCstNumber());
+        calling.setGstRegistered(data.getGstRegistered());
+        calling.setGstNumber(data.getGstNumber());
+        calling.setStateLevelSociety(data.getStateLevelSociety());
+        calling.setDistrictLevelSociety(data.getDistrictLevelSociety());
+        
+        callingDetailsRepository.save(calling);
+    }
+    
+    private void saveEmploymentDetails(EnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantEmploymentDetails employment = new TempApplicantEmploymentDetails();
+        employment.setApplicationId(applicationId);
+        employment.setCommencementDate(data.getCommencementDate());
+        employment.setPeriodOfStanding(data.getPeriodOfStanding());
+        employment.setPanTan(data.getPanTan());
+        employment.setVatRegistered(data.getVatRegistered());
+        employment.setVatNumber(data.getVatNumber());
+        employment.setCstRegistered(data.getCstRegistered());
+        employment.setCstNumber(data.getCstNumber());
+        employment.setGstRegistered(data.getGstRegistered());
+        employment.setGstNumber(data.getGstNumber());
+        employment.setEmployerName(data.getEmployerName());
+        employment.setEmployerAddress(data.getEmployerAddress());
+        employment.setMonthlySalary(data.getMonthlySalary());
+        employment.setMultipleEmployers(data.getMultipleEmployers());
+        
+        employmentDetailsRepository.save(employment);
+        
+        // Save additional employers if any
+        if (data.getAdditionalEmployers() != null && !data.getAdditionalEmployers().isEmpty()) {
+            data.getAdditionalEmployers().forEach(employer -> {
+                TempApplicantEmploymentEmployers empEmployer = new TempApplicantEmploymentEmployers();
+                empEmployer.setApplicationId(applicationId);
+                empEmployer.setEmployerName(employer.getName());
+                empEmployer.setEmployerAddress(employer.getAddress());
+                empEmployer.setMonthlySalary(employer.getMonthlySalary());
+                employmentEmployersRepository.save(empEmployer);
+            });
+        }
+    }
+    
+    public ApiResponse<Object> getEnrolmentByApplicationId(String applicationId) {
+        try {
+            var enrolment = enrolmentDetailsRepository.findByApplicationId(applicationId);
+            if (enrolment.isPresent()) {
+                return ApiResponse.success("Enrolment found", enrolment.get());
+            } else {
+                return ApiResponse.error("Enrolment not found");
+            }
+        } catch (Exception e) {
+            return ApiResponse.error("Error retrieving enrolment: " + e.getMessage());
+        }
     }
 }
