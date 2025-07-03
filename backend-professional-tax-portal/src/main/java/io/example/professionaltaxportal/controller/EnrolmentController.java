@@ -44,8 +44,14 @@ public class EnrolmentController {
     }
 
     @PostMapping("/submit")
+    public ResponseEntity<ApiResponse<String>> submitEnrolment(@Valid @RequestBody EnrolmentDetailsDTO dto) {
+        ApiResponse<String> response = enrolmentService.saveEnrolmentDetails(dto);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/submit-application")
     public ResponseEntity<ApiResponse<String>> submitApplication(@RequestParam String applicationId) {
         // Implementation for final submission
-        return ResponseEntity.ok(ApiResponse.success("Application submitted successfully", applicationId));
+        return ResponseEntity.ok(ApiResponse.success("Application submitted successfully", "Application ID: " + applicationId));
     }
 }

@@ -1,4 +1,3 @@
-
 package io.example.professionaltaxportal.controller;
 
 import io.example.professionaltaxportal.dto.ApiResponse;
@@ -13,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/master-data")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://0.0.0.0:3000", "https://*.replit.dev"})
 public class MasterDataController {
 
     private final MasterDataService masterDataService;
