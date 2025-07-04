@@ -8,5 +8,4 @@ import java.util.List;
 @Repository
 public interface PTaxCategoryRepository extends JpaRepository<PTaxCategory, Long> {
     List<PTaxCategory> findAllByOrderByCatIdAsc();
-    List<PTaxCategory> findByIsActiveTrue();
 }

@@ -7,6 +7,6 @@ import java.util.List;
 
 @Repository
 public interface PTaxCategorySubcategoryRepository extends JpaRepository<PTaxCategorySubcategory, Long> {
-    List<PTaxCategorySubcategory> findByCategoryIdOrderBySubcategoryNameAsc(Long categoryId);
-    List<PTaxCategorySubcategory> findByIsActiveTrue();
+    List<PTaxCategorySubcategory> findByCatCodeOrderBySubcatDescriptionAsc(Integer catCode);
+    List<PTaxCategorySubcategory> findByIsVisible(Integer isVisible);
 }

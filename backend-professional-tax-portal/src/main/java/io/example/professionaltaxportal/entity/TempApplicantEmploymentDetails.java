@@ -4,11 +4,12 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "temp_applicant_employment_details")
+@Table(name = "ttbl_temp_applicant_employment_details", schema = "ptax")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,67 +17,109 @@ public class TempApplicantEmploymentDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "rsn")
+    private Long rsn;
 
-    @Column(name = "application_id", nullable = false)
+    @Column(name = "application_id", length = 15)
     private String applicationId;
+
+    @Column(name = "ptan", length = 10)
+    private String ptan;
 
     @Column(name = "commencement_date")
     private LocalDate commencementDate;
 
-    @Column(name = "period_of_standing")
+    @Column(name = "period_of_standing", length = 50)
     private String periodOfStanding;
 
-    @Column(name = "pan_tan")
-    private String panTan;
+    @Column(name = "pan", length = 10)
+    private String pan;
 
-    // Tax registrations
-    @Column(name = "vat_registered")
-    private Boolean vatRegistered = false;
-
-    @Column(name = "vat_number")
+    @Column(name = "vat_number", length = 11)
     private String vatNumber;
 
-    @Column(name = "cst_registered")
-    private Boolean cstRegistered = false;
-
-    @Column(name = "cst_number")
+    @Column(name = "cst_number", length = 11)
     private String cstNumber;
 
-    @Column(name = "gst_registered")
-    private Boolean gstRegistered = false;
-
-    @Column(name = "gst_number")
+    @Column(name = "gst_number", length = 15)
     private String gstNumber;
 
     // Primary employer details
-    @Column(name = "employer_name")
+    @Column(name = "employer_name", length = 150)
     private String employerName;
 
-    @Column(name = "employer_address", columnDefinition = "TEXT")
+    @Column(name = "employer_address", length = 150)
     private String employerAddress;
 
-    @Column(name = "monthly_salary")
-    private Double monthlySalary;
+    @Column(name = "monthly_salary", precision = 18, scale = 2)
+    private BigDecimal monthlySalary;
 
-    // Multiple employers
-    @Column(name = "multiple_employers")
-    private Boolean multipleEmployers = false;
+    @Column(name = "engaged_with_multiple_employer")
+    private Boolean engagedWithMultipleEmployer;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    // Additional employer 1
+    @Column(name = "employer_name1", length = 150)
+    private String employerName1;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "employer_address1", length = 150)
+    private String employerAddress1;
+
+    @Column(name = "monthly_salary1", precision = 18, scale = 2)
+    private BigDecimal monthlySalary1;
+
+    // Additional employer 2
+    @Column(name = "employer_name2", length = 150)
+    private String employerName2;
+
+    @Column(name = "employer_address2", length = 150)
+    private String employerAddress2;
+
+    @Column(name = "monthly_salary2", precision = 18, scale = 2)
+    private BigDecimal monthlySalary2;
+
+    // Additional employer 3
+    @Column(name = "employer_name3", length = 150)
+    private String employerName3;
+
+    @Column(name = "employer_address3", length = 150)
+    private String employerAddress3;
+
+    @Column(name = "monthly_salary3", precision = 18, scale = 2)
+    private BigDecimal monthlySalary3;
+
+    @Column(name = "inserted_on")
+    private LocalDateTime insertedOn;
+
+    @Column(name = "inserted_by", length = 50)
+    private String insertedBy;
+
+    @Column(name = "inserted_from_ipv4", length = 15)
+    private String insertedFromIpv4;
+
+    @Column(name = "updated_on")
+    private LocalDateTime updatedOn;
+
+    @Column(name = "updated_by", length = 50)
+    private String updatedBy;
+
+    @Column(name = "updated_from_ipv4", length = 15)
+    private String updatedFromIpv4;
+
+    @Column(name = "status")
+    private Boolean status;
 
     @PrePersist
     protected void onCreate() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
+        if (insertedOn == null) {
+            insertedOn = LocalDateTime.now();
+        }
+        if (status == null) {
+            status = true;
+        }
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedOn = LocalDateTime.now();
     }
 }

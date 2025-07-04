@@ -6,25 +6,20 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
 @Entity
-@Table(name = "ptax_categories")
+@Table(name = "mtbl_ptax_category", schema = "ptax")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class PTaxCategory {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "cat_id", nullable = false)
+    @Column(name = "cat_rsn")
+    private Long catRsn;
+    
+    @Column(name = "cat_id")
     private Integer catId;
-
-    @Column(name = "category_name", nullable = false)
-    private String categoryName;
-
-    @Column(name = "category_description")
-    private String categoryDescription;
-
-    @Column(name = "is_active")
-    private Boolean isActive = true;
+    
+    @Column(name = "cat_description", length = 150)
+    private String catDescription;
 }

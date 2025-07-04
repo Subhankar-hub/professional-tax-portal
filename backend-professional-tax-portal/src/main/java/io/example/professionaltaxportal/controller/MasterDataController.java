@@ -36,20 +36,20 @@ public class MasterDataController {
         }
     }
 
-    @GetMapping("/areas/{districtId}")
-    public ResponseEntity<ApiResponse<Object>> getAreasByDistrict(@PathVariable Long districtId) {
+    @GetMapping("/areas/{districtCode}")
+    public ResponseEntity<ApiResponse<Object>> getAreasByDistrict(@PathVariable String districtCode) {
         try {
-            var areas = masterDataService.getAreasByDistrict(districtId);
+            var areas = masterDataService.getAreasByDistrict(districtCode);
             return ResponseEntity.ok(ApiResponse.success("Areas retrieved successfully", areas));
         } catch (Exception e) {
             return ResponseEntity.ok(ApiResponse.error("Error retrieving areas: " + e.getMessage()));
         }
     }
 
-    @GetMapping("/charges/{areaId}")
-    public ResponseEntity<ApiResponse<Object>> getChargesByArea(@PathVariable Long areaId) {
+    @GetMapping("/charges/{areaCode}")
+    public ResponseEntity<ApiResponse<Object>> getChargesByArea(@PathVariable String areaCode) {
         try {
-            var charges = masterDataService.getChargesByArea(areaId);
+            var charges = masterDataService.getChargesByArea(areaCode);
             return ResponseEntity.ok(ApiResponse.success("Charges retrieved successfully", charges));
         } catch (Exception e) {
             return ResponseEntity.ok(ApiResponse.error("Error retrieving charges: " + e.getMessage()));

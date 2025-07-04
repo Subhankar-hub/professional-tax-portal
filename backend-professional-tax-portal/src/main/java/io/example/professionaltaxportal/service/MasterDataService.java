@@ -62,20 +62,19 @@ public class MasterDataService {
     
     private District createDistrict(String code, String name, int lgdCode) {
         District district = new District();
-        district.setDistrictCode(code);
+        district.setDistrictLgdCode(lgdCode);
         district.setDistrictName(name);
-        district.setLgdCode(lgdCode);
-        district.setStateId(1);
-        district.setStatus(true);
+        district.setLocalCode(1);
         return district;
     }
 
-    public List<Area> getAreasByDistrict(Long districtId) {
-        return areaRepository.findByDistrictIdAndStatusTrueOrderByAreaNameAsc(districtId);
+    public List<Area> getAreasByDistrict(String districtCode) {
+        // For now, return all areas since they're not district-specific in ptax schema
+        return areaRepository.findAll();
     }
 
-    public List<io.example.professionaltaxportal.entity.Charge> getChargesByArea(Long areaId) {
-        return chargeRepository.findByAreaIdAndStatusTrueOrderByChargeNameAsc(areaId);
+    public List<io.example.professionaltaxportal.entity.Charge> getChargesByArea(String areaCode) {
+        return chargeRepository.findByAreaCodeOrderByChargeSn(areaCode);
     }
 
     public List<PTaxCategory> getCategories() {
@@ -119,29 +118,27 @@ public class MasterDataService {
     private PTaxCategory createCategory(int catId, String name, String description) {
         PTaxCategory category = new PTaxCategory();
         category.setCatId(catId);
-        category.setCategoryName(name);
-        category.setCategoryDescription(description);
-        category.setIsActive(true);
+        category.setCatDescription(description);
         return category;
     }
 
     public List<PTaxCategorySubcategory> getSubcategoriesByCategory(Long categoryId) {
-        List<PTaxCategorySubcategory> subcategories = pTaxCategorySubcategoryRepository.findByCategoryIdOrderBySubcategoryNameAsc(categoryId);
+        List<PTaxCategorySubcategory> subcategories = pTaxCategorySubcategoryRepository.findByCatCodeOrderBySubcatDescriptionAsc(categoryId.intValue());
         
         // If database is empty, provide fallback data
         if (subcategories.isEmpty()) {
             subcategories = getFallbackSubcategories(categoryId);
         } else {
-            // Remove duplicates by subcategoryName for the same categoryId
+            // Remove duplicates by subcatDescription for the same categoryId
             subcategories = subcategories.stream()
                 .collect(Collectors.toMap(
-                    PTaxCategorySubcategory::getSubcategoryName,
+                    PTaxCategorySubcategory::getSubcatDescription,
                     subcategory -> subcategory,
                     (existing, replacement) -> existing,
                     LinkedHashMap::new))
                 .values()
                 .stream()
-                .sorted(Comparator.comparing(PTaxCategorySubcategory::getSubcategoryName))
+                .sorted(Comparator.comparing(PTaxCategorySubcategory::getSubcatDescription))
                 .collect(Collectors.toList());
         }
         
@@ -193,10 +190,9 @@ public class MasterDataService {
     
     private PTaxCategorySubcategory createSubcategory(Long categoryId, String name, String description) {
         PTaxCategorySubcategory subcategory = new PTaxCategorySubcategory();
-        subcategory.setCategoryId(categoryId);
-        subcategory.setSubcategoryName(name);
-        subcategory.setSubcategoryDescription(description);
-        subcategory.setIsActive(true);
+        subcategory.setCatCode(categoryId.intValue());
+        subcategory.setSubcatDescription(description);
+        subcategory.setIsVisible(1);
         return subcategory;
     }
 

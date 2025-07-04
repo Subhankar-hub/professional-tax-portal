@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ChargeRepository extends JpaRepository<Charge, Long> {
-    List<Charge> findByAreaIdAndStatusTrueOrderByChargeNameAsc(Long areaId);
-    List<Charge> findByStatusTrueOrderByChargeNameAsc();
+public interface ChargeRepository extends JpaRepository<Charge, String> {
+    List<Charge> findByAreaCodeOrderByChargeSn(String areaCode);
+    List<Charge> findAllByOrderByChargeSn();
 }
