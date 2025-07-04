@@ -1,24 +1,22 @@
 {
-    "configurations": [
-        {
-            "type": "java",
-            "name": "Spring Boot-ProfessionaltaxportalApplication<professionaltaxportal>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "io.example.professionaltaxportal.ProfessionaltaxportalApplication",
-            "projectName": "professionaltaxportal",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "type": "java",
-            "name": "Spring Boot-ProfessionaltaxportalApplication<professionaltaxportal (2)>",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "mainClass": "io.example.professionaltaxportal.ProfessionaltaxportalApplication",
-            "projectName": "professionaltaxportal (2)",
-            "args": "",
-            "envFile": "${workspaceFolder}/.env"
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug (Launch) - Current File",
+      "request": "launch",
+      "mainClass": "io.example.professionaltaxportal.ProfessionaltaxportalApplication",
+      "projectName": "backend-professional-tax-portal"
+    },
+    {
+      "type": "java",
+      "name": "Spring Boot-ProfessionaltaxportalApplication<professionaltaxportal>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "io.example.professionaltaxportal.ProfessionaltaxportalApplication",
+      "projectName": "professionaltaxportal",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
 }

@@ -1,7 +1,7 @@
 const API_BASE_URL = 'http://0.0.0.0:8080/api';
 
 class ApiService {
-  
+
   // Helper method to handle API responses
   async handleResponse(response) {
     if (!response.ok) {
@@ -89,17 +89,47 @@ class ApiService {
   }
 
   // Enrolment API calls
-  async submitEnrolment(enrolmentData) {
+  async submitEnrolment(formData) {
     try {
+      // Transform the data to match backend expectations
+      const transformedData = {
+        ...formData,
+        // Map engagement array to individual boolean fields
+        engagedWithProfession: formData.engagedWith ? formData.engagedWith.includes('Profession') : false,
+        engagedWithTrade: formData.engagedWith ? formData.engagedWith.includes('Trade') : false,
+        engagedWithCalling: formData.engagedWith ? formData.engagedWith.includes('Calling') : false,
+        engagedWithEmployment: formData.engagedWith ? formData.engagedWith.includes('Employment') : false,
+        // Remove the original engagedWith array
+        engagedWith: undefined,
+        // Ensure captcha is properly set
+        captchaValue: formData.captchaValue || 'test123',
+        // Map field names to match backend DTO
+        establishmentName: formData.establishmentName || formData.name,
+        jurisdictionArea: formData.jurisdictionArea,
+        charge: formData.charge,
+        district: formData.district,
+        pincode: formData.pincode,
+        establishmentAddress: formData.establishmentAddress,
+        category: parseInt(formData.category),
+        subcategory: parseInt(formData.subcategory)
+      };
+
+      console.log('Transformed data being sent:', transformedData);
+
       const response = await fetch(`${API_BASE_URL}/enrolment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(enrolmentData)
+        body: JSON.stringify(transformedData),
       });
-      
-      const result = await this.handleResponse(response);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
       return result;
     } catch (error) {
       console.error('Error submitting enrolment:', error);
@@ -124,7 +154,7 @@ class ApiService {
     const num2 = Math.floor(Math.random() * 50) + 1;
     const operators = ['+', '-', '*'];
     const operator = operators[Math.floor(Math.random() * operators.length)];
-    
+
     let result;
     switch (operator) {
       case '+':
@@ -139,7 +169,7 @@ class ApiService {
       default:
         result = num1 + num2;
     }
-    
+
     return {
       question: `${num1}${operator}${num2}=`,
       answer: result

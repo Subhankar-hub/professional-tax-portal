@@ -1,4 +1,4 @@
-- Create districts table and insert sample data
+-- Create districts table and insert sample data
 CREATE TABLE IF NOT EXISTS districts (
     id BIGSERIAL PRIMARY KEY,
     district_code VARCHAR(10) UNIQUE NOT NULL,
@@ -15,7 +15,8 @@ VALUES
     ('DIS002', 'Mumbai', 395, 2, true),
     ('DIS003', 'Delhi', 110, 3, true),
     ('DIS004', 'Chennai', 600, 4, true),
-    ('DIS005', 'Bangalore', 560, 5, true)
+    ('DIS005', 'Bangalore', 560, 5, true),
+    ('241', 'Khowai', 241, 1, true)
 ON CONFLICT (district_code) DO NOTHING;
 
 -- Create other required tables

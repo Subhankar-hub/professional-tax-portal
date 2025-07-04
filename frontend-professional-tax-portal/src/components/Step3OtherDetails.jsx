@@ -4,6 +4,13 @@ import React, { useState } from 'react';
 const Step3OtherDetails = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
 
+  // Initialize engagement fields if not set
+  React.useEffect(() => {
+    if (!formData.engagedWith || formData.engagedWith.length === 0) {
+      updateFormData('engagedWith', []);
+    }
+  }, [formData, updateFormData]);
+
   const handleEngagementChange = (engagement) => {
     const currentEngagements = formData.engagedWith || [];
     const isCurrentlySelected = currentEngagements.includes(engagement);
