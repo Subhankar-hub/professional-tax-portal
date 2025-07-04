@@ -148,6 +148,62 @@ class ApiService {
     }
   }
 
+  // OTP API calls
+  async sendOTP(mobile, type = 'mobile') {
+    try {
+      const response = await fetch(`${API_BASE_URL}/otp/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mobile, type }),
+      });
+      
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      throw error;
+    }
+  }
+
+  async verifyOTP(mobile, otp, type = 'mobile') {
+    try {
+      const response = await fetch(`${API_BASE_URL}/otp/verify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ mobile, otp, type }),
+      });
+      
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      throw error;
+    }
+  }
+
+  // Temporary save for step-by-step form
+  async saveTemporaryEnrolment(formData) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/enrolment/temp-save`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      const result = await this.handleResponse(response);
+      return result;
+    } catch (error) {
+      console.error('Error saving temporary enrolment:', error);
+      throw error;
+    }
+  }
+
   // Captcha generation (mock implementation)
   generateCaptcha() {
     const num1 = Math.floor(Math.random() * 50) + 1;

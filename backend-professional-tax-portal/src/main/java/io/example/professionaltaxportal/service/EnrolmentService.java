@@ -239,4 +239,52 @@ public class EnrolmentService {
             return ApiResponse.error("Error retrieving enrolment: " + e.getMessage());
         }
     }
+    
+    @Transactional
+    public ApiResponse<String> saveTemporaryEnrolment(EnrolmentSubmissionDTO enrolmentData) {
+        try {
+            // Validate required fields for temporary save
+            if (enrolmentData.getName() == null || enrolmentData.getName().trim().isEmpty()) {
+                return ApiResponse.error("Name is required");
+            }
+            
+            if (enrolmentData.getMobile() == null || enrolmentData.getMobile().trim().isEmpty()) {
+                return ApiResponse.error("Mobile number is required");
+            }
+            
+            // Generate temporary application ID
+            String applicationId = "TEMP" + System.currentTimeMillis();
+            
+            // Create temporary enrolment record
+            TempApplicantEnrolmentDetails tempEnrolment = new TempApplicantEnrolmentDetails();
+            tempEnrolment.setApplicationId(applicationId);
+            tempEnrolment.setApplicantType(enrolmentData.getApplicantType());
+            tempEnrolment.setName(enrolmentData.getName());
+            tempEnrolment.setGender(enrolmentData.getGender());
+            tempEnrolment.setFatherName(enrolmentData.getFatherName());
+            tempEnrolment.setPan(enrolmentData.getPan());
+            tempEnrolment.setMobile(enrolmentData.getMobile());
+            tempEnrolment.setEmail(enrolmentData.getEmail());
+            tempEnrolment.setEstablishmentName(enrolmentData.getEstablishmentName());
+            tempEnrolment.setJurisdictionArea(enrolmentData.getJurisdictionArea());
+            tempEnrolment.setCharge(enrolmentData.getCharge());
+            tempEnrolment.setDistrict(enrolmentData.getDistrict());
+            tempEnrolment.setPincode(enrolmentData.getPincode());
+            tempEnrolment.setEstablishmentAddress(enrolmentData.getEstablishmentAddress());
+            tempEnrolment.setCategory(enrolmentData.getCategory());
+            tempEnrolment.setSubcategory(enrolmentData.getSubcategory());
+            tempEnrolment.setEngagedWithProfession(enrolmentData.getEngagedWithProfession());
+            tempEnrolment.setEngagedWithTrade(enrolmentData.getEngagedWithTrade());
+            tempEnrolment.setEngagedWithCalling(enrolmentData.getEngagedWithCalling());
+            tempEnrolment.setEngagedWithEmployment(enrolmentData.getEngagedWithEmployment());
+            tempEnrolment.setStatus(false); // Mark as temporary/incomplete
+            
+            enrolmentDetailsRepository.save(tempEnrolment);
+            
+            return ApiResponse.success("Application saved temporarily", applicationId);
+            
+        } catch (Exception e) {
+            return ApiResponse.error("Failed to save temporary application: " + e.getMessage());
+        }
+    }
 }

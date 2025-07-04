@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../services/ApiService';
 
-const Step2EstablishmentDetails = ({ formData, updateFormData, nextStep, prevStep }) => {
+const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
   const [districts, setDistricts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -22,7 +22,7 @@ const Step2EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
     try {
       const [districtResponse, categoryResponse] = await Promise.all([
         ApiService.getDistricts(),
-        ApiService.getPTaxCategories()
+        ApiService.getCategories()
       ]);
       
       // Handle API response structure
@@ -30,14 +30,14 @@ const Step2EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
       const categoryData = categoryResponse?.data || categoryResponse || [];
       
       setDistricts(districtData.length > 0 ? districtData : [
-        { lgdCode: 234, name: "Dhalai" },
-        { lgdCode: 235, name: "Gomati" },
-        { lgdCode: 236, name: "Khowai" },
-        { lgdCode: 237, name: "North Tripura" },
-        { lgdCode: 238, name: "Sepahijala" },
-        { lgdCode: 239, name: "South Tripura" },
-        { lgdCode: 240, name: "Unakoti" },
-        { lgdCode: 241, name: "West Tripura" }
+        { lgdCode: 269, name: "Dhalai" },
+        { lgdCode: 654, name: "Gomati" },
+        { lgdCode: 652, name: "Khowai" },
+        { lgdCode: 270, name: "North Tripura" },
+        { lgdCode: 653, name: "Sepahijala" },
+        { lgdCode: 271, name: "South Tripura" },
+        { lgdCode: 655, name: "Unakoti" },
+        { lgdCode: 272, name: "West Tripura" }
       ]);
       
       setCategories(categoryData.length > 0 ? categoryData : [
@@ -73,8 +73,9 @@ const Step2EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
 
   const loadSubcategories = async (categoryId) => {
     try {
-      const data = await ApiService.getPTaxSubcategories(categoryId);
-      setSubcategories(data || []);
+      const response = await ApiService.getSubcategoriesByCategory(categoryId);
+      const data = response?.data || response || [];
+      setSubcategories(data);
     } catch (error) {
       console.error('Failed to load subcategories:', error);
       // Fallback subcategories based on category
@@ -160,7 +161,7 @@ const Step2EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
   return (
     <div className="step-container">
       <form onSubmit={handleSubmit} className="step-form">
-        <h3 className="section-title">Establishment Information</h3>
+        <h3 className="section-title">Step 3: Establishment Information</h3>
         <p className="section-note">
           (Note: You may be engaged with any one or multiple among Profession/Trade/Calling/Employment, 
           but here you need to furnish the details of only one among Profession/Trade/Calling/Employment 
@@ -188,11 +189,14 @@ const Step2EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
               className={errors.jurisdictionArea ? 'error' : ''}
             >
               <option value="">Select Area</option>
-              <option value="Agartala">Agartala</option>
-              <option value="Dharmanagar">Dharmanagar</option>
-              <option value="Kailashahar">Kailashahar</option>
-              <option value="Udaipur">Udaipur</option>
-              <option value="Belonia">Belonia</option>
+              <option value="AGT">Agartala</option>
+              <option value="BSL">Bishalgarh</option>
+              <option value="UDP">Udaipur</option>
+              <option value="BLN">Belonia</option>
+              <option value="TLM">Teliamura</option>
+              <option value="AMB">Ambassa</option>
+              <option value="KLS">Kailasahar</option>
+              <option value="DMN">Dharmanagar</option>
             </select>
             {errors.jurisdictionArea && <span className="error-message">{errors.jurisdictionArea}</span>}
           </div>
@@ -205,9 +209,21 @@ const Step2EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
               className={errors.charge ? 'error' : ''}
             >
               <option value="">Select Charge</option>
-              <option value="Charge - I">Charge - I</option>
-              <option value="Charge - II">Charge - II</option>
-              <option value="Charge - III">Charge - III</option>
+              <option value="Ambassa">Ambassa</option>
+              <option value="Belonia">Belonia</option>
+              <option value="Bishalgarh">Bishalgarh</option>
+              <option value="Charge - I">Charge - I (Agartala)</option>
+              <option value="Charge - II">Charge - II (Agartala)</option>
+              <option value="Charge - III">Charge - III (Agartala)</option>
+              <option value="Charge - IV">Charge - IV (Agartala)</option>
+              <option value="Charge - V">Charge - V (Agartala)</option>
+              <option value="Charge - VI">Charge - VI (Agartala)</option>
+              <option value="Charge - VII">Charge - VII (Agartala)</option>
+              <option value="Charge - VIII">Charge - VIII (Agartala)</option>
+              <option value="Dharmanagar">Dharmanagar</option>
+              <option value="Kailasahar">Kailasahar</option>
+              <option value="Teliamura">Teliamura</option>
+              <option value="Udaipur">Udaipur</option>
             </select>
             {errors.charge && <span className="error-message">{errors.charge}</span>}
           </div>
@@ -343,4 +359,4 @@ const Step2EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
   );
 };
 
-export default Step2EstablishmentDetails;
+export default Step3EstablishmentDetails;

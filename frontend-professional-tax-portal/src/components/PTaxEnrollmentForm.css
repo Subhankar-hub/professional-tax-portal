@@ -7,53 +7,180 @@
 }
 
 .form-header {
-  background: linear-gradient(135deg, #1e90ff, #00bfff);
+  background: linear-gradient(135deg, #2c5aa0, #6ba6cd);
   color: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px 8px 0 0;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
   margin-bottom: 0;
+  min-height: 120px;
 }
 
-.government-logo img {
-  width: 60px;
-  height: 60px;
+.header-logos {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.government-logo img,
+.state-logo img {
+  width: 80px;
+  height: 80px;
   background: white;
   border-radius: 50%;
-  padding: 10px;
+  padding: 8px;
+  border: 2px solid #ffffff;
+}
+
+.header-text {
+  flex: 1;
 }
 
 .header-text h1 {
   margin: 0;
-  font-size: 2.5em;
+  font-size: 2.8em;
   font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
 }
 
 .header-text h2 {
-  margin: 5px 0;
-  font-size: 1.2em;
-  font-weight: normal;
+  margin: 8px 0;
+  font-size: 1.4em;
+  font-weight: 500;
 }
 
 .header-text h3 {
-  margin: 5px 0 0 0;
-  font-size: 1em;
+  margin: 5px 0;
+  font-size: 1.1em;
   font-weight: normal;
+  opacity: 0.9;
+}
+
+.header-text h4 {
+  margin: 8px 0 0 0;
+  font-size: 1.2em;
+  font-weight: 600;
+  color: #ffeb3b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .step-indicator {
   background: #f8f9fa;
-  padding: 15px 20px;
+  padding: 20px;
   border-left: 4px solid #007bff;
   margin-bottom: 20px;
+  border-radius: 0 8px 8px 0;
 }
 
 .step-header {
   color: #007bff;
   font-weight: bold;
   font-size: 1.1em;
+  margin-bottom: 15px;
+}
+
+.step-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 80px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: calc(100% + 5px);
+  width: calc(100% - 10px);
+  height: 2px;
+  background: #dee2e6;
+  z-index: 1;
+}
+
+.step-item.completed:not(:last-child)::after {
+  background: #28a745;
+}
+
+.step-item.active:not(:last-child)::after {
+  background: linear-gradient(to right, #28a745 50%, #dee2e6 50%);
+}
+
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  border: 3px solid;
+}
+
+.step-item.pending .step-circle {
+  background: #f8f9fa;
+  color: #6c757d;
+  border-color: #dee2e6;
+}
+
+.step-item.active .step-circle {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+  transform: scale(1.1);
+}
+
+.step-item.completed .step-circle {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
+
+.step-label {
+  font-size: 12px;
+  text-align: center;
+  color: #6c757d;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.step-item.active .step-label {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.step-item.completed .step-label {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.step-item.clickable:hover .step-circle {
+  transform: scale(1.05);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.step-item:not(.clickable) {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .step-container {

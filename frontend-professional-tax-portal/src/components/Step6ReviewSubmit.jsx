@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import CaptchaComponent from './CaptchaComponent';
 import ApiService from '../services/ApiService';
 
-const Step4ReviewSubmit = ({ formData, updateFormData, prevStep, goToStep }) => {
+const Step6ReviewSubmit = ({ formData, updateFormData, nextStep, prevStep, goToStep }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState(null);
   const [captchaValid, setCaptchaValid] = useState(false);
@@ -26,24 +26,14 @@ const Step4ReviewSubmit = ({ formData, updateFormData, prevStep, goToStep }) => 
       return;
     }
     
-    setIsSubmitting(true);
+    // Update form data with declaration and captcha status
+    updateFormData({
+      declarationAccepted: declarationAccepted,
+      captchaValid: captchaValid
+    });
     
-    try {
-      const result = await ApiService.submitEnrolment(formData);
-      setSubmitResult({
-        success: true,
-        message: 'Application submitted successfully!',
-        applicationId: result.applicationId
-      });
-    } catch (error) {
-      setSubmitResult({
-        success: false,
-        message: 'Failed to submit application. Please try again.',
-        error: error.message
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    // Proceed to final OTP verification
+    nextStep();
   };
 
   if (submitResult && submitResult.success) {
@@ -253,4 +243,4 @@ const Step4ReviewSubmit = ({ formData, updateFormData, prevStep, goToStep }) => 
   );
 };
 
-export default Step4ReviewSubmit;
+export default Step6ReviewSubmit;
