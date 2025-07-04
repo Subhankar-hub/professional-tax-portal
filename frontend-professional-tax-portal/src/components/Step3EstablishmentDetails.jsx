@@ -1,10 +1,46 @@
 
 import React, { useState, useEffect } from 'react';
 import ApiService from '../services/ApiService';
+import { 
+  validateFields, 
+  areRequiredFieldsFilled, 
+  formatPincode, 
+  customValidators 
+} from '../utils/validation';
 
 const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
+  
+  // Field definitions for validation
+  const fieldDefinitions = {
+    establishmentName: { type: 'text', required: true },
+    jurisdictionArea: { 
+      type: 'custom', 
+      required: true, 
+      customValidator: (value) => customValidators.selectRequired(value, 'jurisdiction area')
+    },
+    charge: { 
+      type: 'custom', 
+      required: true, 
+      customValidator: (value) => customValidators.selectRequired(value, 'charge')
+    },
+    district: { 
+      type: 'custom', 
+      required: true, 
+      customValidator: (value) => customValidators.selectRequired(value, 'district')
+    },
+    pincode: { type: 'pincode', required: true },
+    establishmentAddress: { type: 'text', required: true },
+    category: { 
+      type: 'custom', 
+      required: true, 
+      customValidator: (value) => customValidators.selectRequired(value, 'category')
+    }
+  };
   const [districts, setDistricts] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [charges, setCharges] = useState([]);
+  const [periodOptions, setPeriodOptions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
 
@@ -18,56 +54,149 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
     }
   }, [formData.category]);
 
+  useEffect(() => {
+    if (formData.district) {
+      loadAreasByDistrict(formData.district);
+    }
+  }, [formData.district]);
+
+  useEffect(() => {
+    if (formData.jurisdictionArea) {
+      loadChargesByArea(formData.jurisdictionArea);
+    }
+  }, [formData.jurisdictionArea]);
+
   const loadMasterData = async () => {
     try {
-      const [districtResponse, categoryResponse] = await Promise.all([
+      const [districtResponse, categoryResponse, periodResponse] = await Promise.all([
         ApiService.getDistricts(),
-        ApiService.getCategories()
+        ApiService.getCategories(),
+        ApiService.getPeriodOfStandingOptions()
       ]);
       
-      // Handle API response structure
-      const districtData = districtResponse?.data || districtResponse || [];
-      const categoryData = categoryResponse?.data || categoryResponse || [];
+      console.log('District response:', districtResponse);
+      console.log('Category response:', categoryResponse);
+      console.log('Period response:', periodResponse);
       
-      setDistricts(districtData.length > 0 ? districtData : [
-        { lgdCode: 269, name: "Dhalai" },
-        { lgdCode: 654, name: "Gomati" },
-        { lgdCode: 652, name: "Khowai" },
-        { lgdCode: 270, name: "North Tripura" },
-        { lgdCode: 653, name: "Sepahijala" },
-        { lgdCode: 271, name: "South Tripura" },
-        { lgdCode: 655, name: "Unakoti" },
-        { lgdCode: 272, name: "West Tripura" }
-      ]);
+      // Handle districts with fallback
+      if (districtResponse?.data && districtResponse.data.length > 0) {
+        const processedDistricts = districtResponse.data.map(district => ({
+          id: district.id,
+          lgdCode: district.lgdCode || district.districtLgdCode,
+          districtCode: district.districtCode,
+          name: district.districtName,
+          status: district.status
+        }));
+        setDistricts(processedDistricts);
+      } else {
+        // Use fallback data from ApiService
+        const fallbackDistricts = ApiService.getFallbackData('districts').map((district, index) => ({
+          id: index + 1,
+          lgdCode: district.lgdCode,
+          districtCode: district.districtCode,
+          name: district.districtName,
+          status: true
+        }));
+        setDistricts(fallbackDistricts);
+      }
       
-      setCategories(categoryData.length > 0 ? categoryData : [
-        { id: 1, name: "Legal Profession" },
-        { id: 2, name: "Medical Profession" },
-        { id: 3, name: "Engineering" },
-        { id: 4, name: "Trade" },
-        { id: 5, name: "Employment" }
-      ]);
+      // Handle categories with fallback
+      if (categoryResponse?.data && categoryResponse.data.length > 0) {
+        const uniqueCategories = [];
+        const seenCatIds = new Set();
+        
+        categoryResponse.data.forEach(category => {
+          if (!seenCatIds.has(category.catId)) {
+            seenCatIds.add(category.catId);
+            uniqueCategories.push({
+              id: category.id,
+              catId: category.catId,
+              name: category.categoryName,
+              description: category.categoryDescription,
+              isActive: category.isActive
+            });
+          }
+        });
+        
+        uniqueCategories.sort((a, b) => a.catId - b.catId);
+        setCategories(uniqueCategories);
+      } else {
+        // Use fallback data from ApiService
+        const fallbackCategories = ApiService.getFallbackData('categories').map((category, index) => ({
+          id: index + 1,
+          catId: category.catId,
+          name: category.categoryName,
+          description: category.categoryDescription,
+          isActive: true
+        }));
+        setCategories(fallbackCategories);
+      }
+
+      // Handle period of standing with fallback
+      if (periodResponse?.data && periodResponse.data.length > 0) {
+        setPeriodOptions(periodResponse.data);
+      } else {
+        // Use fallback data from ApiService
+        setPeriodOptions(ApiService.getFallbackData('period-of-standing'));
+      }
+      
     } catch (error) {
       console.error('Failed to load master data:', error);
-      // Set fallback data on error
-      setDistricts([
-        { lgdCode: 234, name: "Dhalai" },
-        { lgdCode: 235, name: "Gomati" },
-        { lgdCode: 236, name: "Khowai" },
-        { lgdCode: 237, name: "North Tripura" },
-        { lgdCode: 238, name: "Sepahijala" },
-        { lgdCode: 239, name: "South Tripura" },
-        { lgdCode: 240, name: "Unakoti" },
-        { lgdCode: 241, name: "West Tripura" }
-      ]);
+      // Set all fallback data on error
+      const fallbackDistricts = ApiService.getFallbackData('districts').map((district, index) => ({
+        id: index + 1,
+        lgdCode: district.lgdCode,
+        districtCode: district.districtCode,
+        name: district.districtName,
+        status: true
+      }));
+      setDistricts(fallbackDistricts);
       
-      setCategories([
-        { id: 1, name: "Legal Profession" },
-        { id: 2, name: "Medical Profession" },
-        { id: 3, name: "Engineering" },
-        { id: 4, name: "Trade" },
-        { id: 5, name: "Employment" }
-      ]);
+      const fallbackCategories = ApiService.getFallbackData('categories').map((category, index) => ({
+        id: index + 1,
+        catId: category.catId,
+        name: category.categoryName,
+        description: category.categoryDescription,
+        isActive: true
+      }));
+      setCategories(fallbackCategories);
+      
+      setPeriodOptions(ApiService.getFallbackData('period-of-standing'));
+    }
+  };
+
+  const loadAreasByDistrict = async (districtId) => {
+    try {
+      const response = await ApiService.getAreasByDistrict(districtId);
+      if (response?.data && response.data.length > 0) {
+        setAreas(response.data);
+      } else {
+        // Use fallback data from ApiService
+        setAreas(ApiService.getFallbackData('areas'));
+      }
+    } catch (error) {
+      console.error('Failed to load areas:', error);
+      setAreas(ApiService.getFallbackData('areas'));
+    }
+  };
+
+  const loadChargesByArea = async (areaCode) => {
+    try {
+      const response = await ApiService.getChargesByArea(areaCode);
+      if (response?.data && response.data.length > 0) {
+        setCharges(response.data);
+      } else {
+        // Use fallback data from ApiService, filtered by area
+        const allCharges = ApiService.getFallbackData('charges');
+        const filteredCharges = allCharges.filter(charge => charge.areaCode === areaCode);
+        setCharges(filteredCharges);
+      }
+    } catch (error) {
+      console.error('Failed to load charges:', error);
+      // Use fallback data from ApiService, filtered by area
+      const allCharges = ApiService.getFallbackData('charges');
+      const filteredCharges = allCharges.filter(charge => charge.areaCode === areaCode);
+      setCharges(filteredCharges);
     }
   };
 
@@ -92,7 +221,13 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
   };
 
   const handleInputChange = (field, value) => {
-    updateFormData({ [field]: value });
+    // Format specific field types
+    let formattedValue = value;
+    if (field === 'pincode') {
+      formattedValue = formatPincode(value);
+    }
+    
+    updateFormData({ [field]: formattedValue });
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
@@ -115,41 +250,13 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.establishmentName.trim()) {
-      newErrors.establishmentName = 'Establishment name is required';
-    }
-    
-    if (!formData.jurisdictionArea) {
-      newErrors.jurisdictionArea = 'Area of jurisdiction is required';
-    }
-    
-    if (!formData.charge) {
-      newErrors.charge = 'Charge is required';
-    }
-    
-    if (!formData.district) {
-      newErrors.district = 'District is required';
-    }
-    
-    if (!formData.pincode.trim()) {
-      newErrors.pincode = 'PIN code is required';
-    } else if (!/^[0-9]{6}$/.test(formData.pincode)) {
-      newErrors.pincode = 'Invalid PIN code format';
-    }
-    
-    if (!formData.establishmentAddress.trim()) {
-      newErrors.establishmentAddress = 'Establishment address is required';
-    }
-    
-    if (!formData.category) {
-      newErrors.category = 'Category is required';
-    }
-    
+    const newErrors = validateFields(fieldDefinitions, formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
+  // Check if all required fields are filled to enable/disable Next button
+  const isFormValid = areRequiredFieldsFilled(fieldDefinitions, formData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -185,18 +292,19 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
             <label>Area of Jurisdiction*</label>
             <select
               value={formData.jurisdictionArea}
-              onChange={(e) => handleInputChange('jurisdictionArea', e.target.value)}
+              onChange={(e) => {
+                handleInputChange('jurisdictionArea', e.target.value);
+                // Reset charge when area changes
+                handleInputChange('charge', '');
+              }}
               className={errors.jurisdictionArea ? 'error' : ''}
             >
-              <option value="">Select Area</option>
-              <option value="AGT">Agartala</option>
-              <option value="BSL">Bishalgarh</option>
-              <option value="UDP">Udaipur</option>
-              <option value="BLN">Belonia</option>
-              <option value="TLM">Teliamura</option>
-              <option value="AMB">Ambassa</option>
-              <option value="KLS">Kailasahar</option>
-              <option value="DMN">Dharmanagar</option>
+              <option value="">--Select Area--</option>
+              {areas.map(area => (
+                <option key={area.code} value={area.code}>
+                  {area.name}
+                </option>
+              ))}
             </select>
             {errors.jurisdictionArea && <span className="error-message">{errors.jurisdictionArea}</span>}
           </div>
@@ -207,23 +315,14 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
               value={formData.charge}
               onChange={(e) => handleInputChange('charge', e.target.value)}
               className={errors.charge ? 'error' : ''}
+              disabled={!formData.jurisdictionArea}
             >
-              <option value="">Select Charge</option>
-              <option value="Ambassa">Ambassa</option>
-              <option value="Belonia">Belonia</option>
-              <option value="Bishalgarh">Bishalgarh</option>
-              <option value="Charge - I">Charge - I (Agartala)</option>
-              <option value="Charge - II">Charge - II (Agartala)</option>
-              <option value="Charge - III">Charge - III (Agartala)</option>
-              <option value="Charge - IV">Charge - IV (Agartala)</option>
-              <option value="Charge - V">Charge - V (Agartala)</option>
-              <option value="Charge - VI">Charge - VI (Agartala)</option>
-              <option value="Charge - VII">Charge - VII (Agartala)</option>
-              <option value="Charge - VIII">Charge - VIII (Agartala)</option>
-              <option value="Dharmanagar">Dharmanagar</option>
-              <option value="Kailasahar">Kailasahar</option>
-              <option value="Teliamura">Teliamura</option>
-              <option value="Udaipur">Udaipur</option>
+              <option value="">--Select Charge--</option>
+              {charges.map(charge => (
+                <option key={charge.code} value={charge.code}>
+                  {charge.charge}
+                </option>
+              ))}
             </select>
             {errors.charge && <span className="error-message">{errors.charge}</span>}
           </div>
@@ -241,7 +340,7 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
               onChange={(e) => handleInputChange('district', e.target.value)}
               className={errors.district ? 'error' : ''}
             >
-              <option value="">Select District</option>
+              <option value="">--Select District--</option>
               {districts.map(district => (
                 <option key={district.lgdCode} value={district.lgdCode}>
                   {district.name}
@@ -316,12 +415,16 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
             <label>Category of Profession/Trade/Calling/Employment*</label>
             <select
               value={formData.category}
-              onChange={(e) => handleInputChange('category', e.target.value)}
+              onChange={(e) => {
+                handleInputChange('category', e.target.value);
+                // Reset subcategory when category changes
+                handleInputChange('subcategory', '');
+              }}
               className={errors.category ? 'error' : ''}
             >
-              <option value="">Select Category</option>
+              <option value="">--Select Category--</option>
               {categories.map(category => (
-                <option key={category.id} value={category.id}>
+                <option key={category.catId} value={category.catId}>
                   {category.name}
                 </option>
               ))}
@@ -336,7 +439,7 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
               onChange={(e) => handleInputChange('subcategory', e.target.value)}
               disabled={!formData.category}
             >
-              <option value="">Select Sub-Category</option>
+              <option value="">--Select Sub-Category--</option>
               {subcategories.map(subcategory => (
                 <option key={subcategory.id} value={subcategory.id}>
                   {subcategory.name}
@@ -350,7 +453,11 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
           <button type="button" onClick={prevStep} className="btn btn-secondary">
             Back
           </button>
-          <button type="submit" className="btn btn-primary">
+          <button 
+            type="submit" 
+            className="btn btn-primary"
+            disabled={!isFormValid}
+          >
             Next
           </button>
         </div>

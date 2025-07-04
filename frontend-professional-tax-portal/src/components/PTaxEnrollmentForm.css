@@ -453,6 +453,12 @@
 
 .captcha-input.valid {
   border-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+}
+
+.captcha-input.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
 }
 
 .captcha-refresh {
@@ -501,6 +507,14 @@
   background: #6c757d;
   color: white;
   cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn-secondary:disabled {
+  background: #6c757d;
+  color: #adb5bd;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 
 .btn-secondary {
@@ -630,24 +644,30 @@
 }
 
 .success-message {
-  text-align: center;
-  padding: 40px;
   background: #d4edda;
-  border: 1px solid #c3e6cb;
-  border-radius: 4px;
   color: #155724;
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid #c3e6cb;
+  margin: 10px 0;
 }
 
-.success-message h2 {
+/* Large success messages (for final confirmation) */
+.success-message.large {
+  text-align: center;
+  padding: 40px;
+}
+
+.success-message.large h2 {
   color: #155724;
   margin-bottom: 20px;
 }
 
-.success-message p {
+.success-message.large p {
   margin: 10px 0;
 }
 
-.success-message strong {
+.success-message.large strong {
   font-size: 1.2em;
 }
 
@@ -658,6 +678,42 @@
   border-radius: 4px;
   border: 1px solid #f5c6cb;
   margin: 20px 0;
+}
+
+/* Inline error messages for form fields */
+.form-group .error-message {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+
+/* Inline success messages */
+.form-group .success-message {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 5px 0 0 0;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+/* Input field styling for validation states */
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+}
+
+.form-group input.success,
+.form-group select.success,
+.form-group textarea.success {
+  border-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
 }
 
 /* Responsive Design */

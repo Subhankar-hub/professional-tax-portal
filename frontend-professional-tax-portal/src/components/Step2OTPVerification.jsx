@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../services/ApiService';
+import { formatOTP, customValidators } from '../utils/validation';
 
 const Step2OTPVerification = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [otp, setOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,12 +21,13 @@ const Step2OTPVerification = ({ formData, updateFormData, nextStep, prevStep }) 
   const sendOTP = async () => {
     setLoading(true);
     setError('');
+    setSuccess('');
     try {
       // In a real implementation, this would call the backend
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       setIsOtpSent(true);
       setCountdown(30);
-      alert('OTP sent to ' + formData.mobile);
+      setSuccess(`OTP sent to ${formData.mobile}`);
     } catch (err) {
       setError('Failed to send OTP. Please try again.');
     } finally {
@@ -35,20 +38,26 @@ const Step2OTPVerification = ({ formData, updateFormData, nextStep, prevStep }) 
   const verifyOTP = async () => {
     setLoading(true);
     setError('');
+    setSuccess('');
+    
+    // Validate OTP format first
+    const otpError = customValidators.otpLength(otp);
+    if (otpError) {
+      setError(otpError);
+      setLoading(false);
+      return;
+    }
+    
     try {
       // In a real implementation, this would verify with backend
       await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
       
       // For demo purposes, accept any 6-digit OTP
-      if (otp.length === 6) {
-        updateFormData({ 
-          mobileOtp: otp,
-          mobileOtpVerified: true 
-        });
-        nextStep();
-      } else {
-        setError('Please enter a valid 6-digit OTP');
-      }
+      updateFormData({ 
+        mobileOtp: otp,
+        mobileOtpVerified: true 
+      });
+      nextStep();
     } catch (err) {
       setError('Invalid OTP. Please try again.');
     } finally {
@@ -105,7 +114,7 @@ const Step2OTPVerification = ({ formData, updateFormData, nextStep, prevStep }) 
                 type="text"
                 id="otp"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                onChange={(e) => setOtp(formatOTP(e.target.value))}
                 placeholder="Enter 6-digit OTP"
                 className="form-control"
                 maxLength={6}
@@ -130,6 +139,12 @@ const Step2OTPVerification = ({ formData, updateFormData, nextStep, prevStep }) 
               </button>
             )}
 
+            {success && (
+              <div className="success-message">
+                <p>{success}</p>
+              </div>
+            )}
+            
             {error && (
               <div className="error-message">
                 <p>{error}</p>

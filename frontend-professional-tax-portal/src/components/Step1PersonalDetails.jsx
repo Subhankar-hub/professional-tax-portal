@@ -1,12 +1,42 @@
 
 import React, { useState, useEffect } from 'react';
 import CaptchaComponent from './CaptchaComponent';
+import { 
+  validateFields, 
+  areRequiredFieldsFilled, 
+  formatPAN, 
+  formatMobile, 
+  customValidators 
+} from '../utils/validation';
 
 const Step1PersonalDetails = ({ formData, updateFormData, nextStep }) => {
   const [errors, setErrors] = useState({});
+  
+  // Field definitions for validation
+  const fieldDefinitions = {
+    name: { type: 'name', required: true },
+    fatherName: { type: 'name', required: true },
+    pan: { type: 'pan', required: true },
+    mobile: { type: 'mobile', required: true },
+    email: { type: 'email', required: true },
+    captchaValid: { 
+      type: 'custom', 
+      required: true, 
+      customValidator: (value) => customValidators.captcha(value)
+    }
+  };
 
   const handleInputChange = (field, value) => {
-    updateFormData({ [field]: value });
+    // Format specific field types
+    let formattedValue = value;
+    if (field === 'pan') {
+      formattedValue = formatPAN(value);
+    } else if (field === 'mobile') {
+      formattedValue = formatMobile(value);
+    }
+    
+    updateFormData({ [field]: formattedValue });
+    
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -14,38 +44,7 @@ const Step1PersonalDetails = ({ formData, updateFormData, nextStep }) => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-    
-    if (!formData.fatherName.trim()) {
-      newErrors.fatherName = "Father's name is required";
-    }
-    
-    if (!formData.pan.trim()) {
-      newErrors.pan = 'PAN is required';
-    } else if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(formData.pan)) {
-      newErrors.pan = 'Invalid PAN format';
-    }
-    
-    if (!formData.mobile.trim()) {
-      newErrors.mobile = 'Mobile number is required';
-    } else if (!/^[0-9]{10}$/.test(formData.mobile)) {
-      newErrors.mobile = 'Invalid mobile number';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
-    }
-    
-    if (!formData.captchaValid) {
-      newErrors.captcha = 'Please solve the captcha';
-    }
-    
+    const newErrors = validateFields(fieldDefinitions, formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -59,7 +58,14 @@ const Step1PersonalDetails = ({ formData, updateFormData, nextStep }) => {
 
   const handleCaptchaChange = (isValid) => {
     updateFormData({ captchaValid: isValid });
+    // Clear captcha error when captcha is solved
+    if (isValid && errors.captchaValid) {
+      setErrors(prev => ({ ...prev, captchaValid: '' }));
+    }
   };
+  
+  // Check if all required fields are filled to enable/disable Next button
+  const isFormValid = areRequiredFieldsFilled(fieldDefinitions, formData);
 
   return (
     <div className="step-container">
@@ -115,6 +121,7 @@ const Step1PersonalDetails = ({ formData, updateFormData, nextStep }) => {
               value={formData.gender}
               onChange={(e) => handleInputChange('gender', e.target.value)}
             >
+              <option value="">--Select Gender--</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Other">Other</option>
@@ -141,7 +148,7 @@ const Step1PersonalDetails = ({ formData, updateFormData, nextStep }) => {
             <input
               type="text"
               value={formData.pan}
-              onChange={(e) => handleInputChange('pan', e.target.value.toUpperCase())}
+              onChange={(e) => handleInputChange('pan', e.target.value)}
               placeholder="AAAAA1111G"
               maxLength="10"
               className={errors.pan ? 'error' : ''}
@@ -187,12 +194,16 @@ const Step1PersonalDetails = ({ formData, updateFormData, nextStep }) => {
         <div className="captcha-section">
           <CaptchaComponent
             onCaptchaChange={handleCaptchaChange}
-            error={errors.captcha}
+            error={errors.captchaValid}
           />
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="btn btn-primary">
+          <button 
+            type="submit" 
+            className="btn btn-primary"
+            disabled={!isFormValid}
+          >
             Next
           </button>
         </div>

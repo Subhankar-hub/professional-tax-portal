@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../services/ApiService';
+import { 
+  areRequiredFieldsFilled, 
+  customValidators 
+} from '../utils/validation';
 
 const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [establishmentType, setEstablishmentType] = useState(formData.establishmentType || '');
@@ -7,56 +11,179 @@ const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }
   const [subcategories, setSubcategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(formData.category || '');
   const [selectedSubcategory, setSelectedSubcategory] = useState(formData.subcategory || '');
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  
+  // Field definitions for validation
+  const fieldDefinitions = {
+    establishmentType: { required: true },
+    category: { required: true },
+    subcategory: { required: true }
+  };
 
   useEffect(() => {
-    fetchCategories();
+    let isMounted = true;
+
+    const loadCategories = async () => {
+      try {
+        const response = await ApiService.getCategories();
+        if (isMounted) {
+          if (response && response.success && response.data) {
+            // Remove duplicates by catId and sort
+            const uniqueCategories = [];
+            const seenCatIds = new Set();
+            
+            response.data.forEach(category => {
+              if (!seenCatIds.has(category.catId)) {
+                seenCatIds.add(category.catId);
+                uniqueCategories.push({
+                  catId: category.catId,
+                  categoryName: category.categoryName,
+                  categoryDescription: category.categoryDescription,
+                  isActive: category.isActive
+                });
+              }
+            });
+            
+            uniqueCategories.sort((a, b) => a.catId - b.catId);
+            setCategories(uniqueCategories);
+          } else {
+            // Fallback categories
+            setCategories([
+              { catId: 1, categoryName: "Legal Profession", categoryDescription: "Legal Profession" },
+              { catId: 2, categoryName: "Medical Profession", categoryDescription: "Medical Profession" },
+              { catId: 3, categoryName: "Consultants", categoryDescription: "Consultants" },
+              { catId: 11, categoryName: "Dealer, Person, Tax Payer, Traders", categoryDescription: "Dealer, Person, Tax Payer, Traders" },
+              { catId: 21, categoryName: "Salary & Wage Earner", categoryDescription: "Salary & Wage Earner" }
+            ]);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        if (isMounted) {
+          // Set fallback categories on error
+          setCategories([
+            { catId: 1, categoryName: "Legal Profession", categoryDescription: "Legal Profession" },
+            { catId: 2, categoryName: "Medical Profession", categoryDescription: "Medical Profession" },
+            { catId: 3, categoryName: "Consultants", categoryDescription: "Consultants" },
+            { catId: 11, categoryName: "Dealer, Person, Tax Payer, Traders", categoryDescription: "Dealer, Person, Tax Payer, Traders" },
+            { catId: 21, categoryName: "Salary & Wage Earner", categoryDescription: "Salary & Wage Earner" }
+          ]);
+        }
+      }
+    };
+
+    loadCategories();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   useEffect(() => {
-    if (selectedCategory) {
-      fetchSubcategories(selectedCategory);
-    }
+    let isMounted = true;
+
+    const loadSubcategories = async () => {
+      if (selectedCategory) {
+        try {
+          const categoryId = parseInt(selectedCategory, 10);
+          const response = await ApiService.getSubcategoriesByCategory(categoryId);
+          
+          if (isMounted) {
+            if (response && response.success && response.data) {
+              const processedSubcategories = response.data.map(sub => ({
+                id: sub.id,
+                categoryId: sub.categoryId,
+                subcategoryName: sub.subcategoryName,
+                subcategoryDescription: sub.subcategoryDescription,
+                isActive: sub.isActive
+              }));
+              setSubcategories(processedSubcategories);
+            } else {
+              setSubcategories([]);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching subcategories:', error);
+          if (isMounted) {
+            setSubcategories([]);
+          }
+        }
+      } else {
+        if (isMounted) {
+          setSubcategories([]);
+        }
+      }
+    };
+
+    loadSubcategories();
+
+    return () => {
+      isMounted = false;
+    };
   }, [selectedCategory]);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await ApiService.getCategories();
-      if (response.success) {
-        setCategories(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
-
-  const fetchSubcategories = async (categoryId) => {
-    try {
-      const response = await ApiService.getSubcategoriesByCategory(categoryId);
-      if (response.success) {
-        setSubcategories(response.data);
-      }
-    } catch (error) {
-      console.error('Error fetching subcategories:', error);
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    if (!establishmentType || !selectedCategory || !selectedSubcategory) {
-      alert('Please select all required fields');
-      return;
-    }
-
-    updateFormData({
+    // Check if all required fields are filled
+    const formDataForValidation = {
       establishmentType,
       category: selectedCategory,
       subcategory: selectedSubcategory
-    });
+    };
     
-    nextStep();
+    if (!areRequiredFieldsFilled(fieldDefinitions, formDataForValidation)) {
+      setError('All fields are required');
+      return;
+    }
+
+    // Clear any previous error
+    setError('');
+
+    // Convert category and subcategory to numbers to ensure they're not empty strings
+    const categoryId = parseInt(selectedCategory, 10);
+    const subcategoryId = parseInt(selectedSubcategory, 10);
+    
+    // Debug logging to verify state object contains category/subcategory IDs as numbers
+    console.log('Step 4 - Form submission data:', {
+      establishmentType,
+      category: categoryId,
+      subcategory: subcategoryId,
+      categoryType: typeof categoryId,
+      subcategoryType: typeof subcategoryId,
+      categoryIsNumber: !isNaN(categoryId),
+      subcategoryIsNumber: !isNaN(subcategoryId)
+    });
+
+    // Validate that the parsed values are valid numbers
+    if (isNaN(categoryId) || isNaN(subcategoryId)) {
+      setError('Invalid category or subcategory selection');
+      return;
+    }
+
+    const updatedData = {
+      establishmentType,
+      category: categoryId,
+      subcategory: subcategoryId
+    };
+
+    console.log('Step 4 - Updating form data with:', updatedData);
+    updateFormData(updatedData);
+    
+    // Add a small delay to ensure state updates before navigation
+    setTimeout(() => {
+      console.log('Step 4 - Calling nextStep()');
+      nextStep();
+    }, 100);
   };
+  
+  // Check if all required fields are filled to enable/disable Next button
+  const formDataForValidation = {
+    establishmentType,
+    category: selectedCategory,
+    subcategory: selectedSubcategory
+  };
+  const isFormValid = areRequiredFieldsFilled(fieldDefinitions, formDataForValidation);
 
   const establishmentTypes = [
     { value: 'Profession', label: 'Profession', description: 'Professional services like doctors, lawyers, consultants, etc.' },
@@ -71,6 +198,12 @@ const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }
         <h3>Step 4: Choose Establishment Type</h3>
         <p>Select the type of establishment/activity you are engaged in</p>
       </div>
+
+      {error && (
+        <div className="alert alert-danger" role="alert">
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="step-form">
         <div className="form-section">
@@ -110,10 +243,10 @@ const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }
               className="form-control"
               required
             >
-              <option value="">Select Category</option>
+              <option value="">--Select Category--</option>
               {categories.map((category) => (
                 <option key={category.catId} value={category.catId}>
-                  {category.catDescription}
+                  {category.categoryName}
                 </option>
               ))}
             </select>
@@ -129,10 +262,10 @@ const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }
                 className="form-control"
                 required
               >
-                <option value="">Select Sub Category</option>
+                <option value="">--Select Sub Category--</option>
                 {subcategories.map((subcategory) => (
-                  <option key={subcategory.subcatCode} value={subcategory.subcatCode}>
-                    {subcategory.subcatDescription}
+                  <option key={subcategory.id} value={subcategory.id}>
+                    {subcategory.subcategoryName}
                   </option>
                 ))}
               </select>
@@ -151,7 +284,7 @@ const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }
           <button 
             type="submit"
             className="btn btn-primary"
-            disabled={!establishmentType || !selectedCategory || !selectedSubcategory}
+            disabled={!isFormValid}
           >
             Next
           </button>

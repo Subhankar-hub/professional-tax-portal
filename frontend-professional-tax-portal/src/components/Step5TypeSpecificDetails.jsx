@@ -1,10 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import ApiService from '../services/ApiService';
+import { 
+  validateFields, 
+  areRequiredFieldsFilled, 
+  formatAmount 
+} from '../utils/validation';
 
 const Step5TypeSpecificDetails = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [periodOptions, setPeriodOptions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  
+  // Field definitions for validation based on establishment type
+  const getFieldDefinitions = () => {
+    const baseFields = {
+      commencementDate: { type: 'text', required: true },
+      periodOfStanding: { type: 'text', required: true }
+    };
+    
+    if (formData.establishmentType === 'Employment') {
+      return {
+        ...baseFields,
+        employerName: { type: 'text', required: true },
+        employerAddress: { type: 'text', required: true },
+        monthlySalary: { type: 'amount', required: true }
+      };
+    }
+    
+    if (formData.establishmentType === 'Trade') {
+      return {
+        ...baseFields,
+        annualGrossBusiness: { type: 'amount', required: true },
+        annualTurnover: { type: 'amount', required: true }
+      };
+    }
+    
+    if (['Profession', 'Calling'].includes(formData.establishmentType)) {
+      return {
+        ...baseFields,
+        annualGrossBusiness: { type: 'amount', required: true }
+      };
+    }
+    
+    return baseFields;
+  };
+  
+  // Debug logging to verify form data received from Step 4
+  useEffect(() => {
+    console.log('Step 5 - Component mounted/updated with formData:', {
+      establishmentType: formData.establishmentType,
+      category: formData.category,
+      subcategory: formData.subcategory,
+      categoryType: typeof formData.category,
+      subcategoryType: typeof formData.subcategory,
+      categoryIsNumber: typeof formData.category === 'number',
+      subcategoryIsNumber: typeof formData.subcategory === 'number'
+    });
+  }, [formData.establishmentType, formData.category, formData.subcategory]);
 
   useEffect(() => {
     fetchPeriodOptions();
@@ -13,61 +65,28 @@ const Step5TypeSpecificDetails = ({ formData, updateFormData, nextStep, prevStep
   const fetchPeriodOptions = async () => {
     try {
       const response = await ApiService.getPeriodOfStandingOptions();
-      if (response.success) {
+      if (response?.data && response.data.length > 0) {
         setPeriodOptions(response.data);
+      } else {
+        // Use fallback data from ApiService
+        setPeriodOptions(ApiService.getFallbackData('period-of-standing'));
       }
     } catch (error) {
       console.error('Error fetching period options:', error);
-      // Fallback options
-      setPeriodOptions([
-        'Less than 1 year',
-        '1-2 years',
-        '2-5 years',
-        '5-10 years',
-        'More than 10 years'
-      ]);
+      // Use fallback data from ApiService
+      setPeriodOptions(ApiService.getFallbackData('period-of-standing'));
     }
   };
 
   const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.commencementDate) {
-      newErrors.commencementDate = 'Commencement date is required';
-    }
-    
-    if (!formData.periodOfStanding) {
-      newErrors.periodOfStanding = 'Period of standing is required';
-    }
-
-    // Type-specific validations
-    if (formData.establishmentType === 'Employment') {
-      if (!formData.employerName) {
-        newErrors.employerName = 'Employer name is required';
-      }
-      if (!formData.employerAddress) {
-        newErrors.employerAddress = 'Employer address is required';
-      }
-      if (!formData.monthlySalary) {
-        newErrors.monthlySalary = 'Monthly salary is required';
-      }
-    }
-
-    if (formData.establishmentType === 'Trade') {
-      if (!formData.annualTurnover) {
-        newErrors.annualTurnover = 'Annual turnover is required';
-      }
-    }
-
-    if (['Profession', 'Trade', 'Calling'].includes(formData.establishmentType)) {
-      if (!formData.annualGrossBusiness) {
-        newErrors.annualGrossBusiness = 'Annual gross business is required';
-      }
-    }
-
+    const fieldDefinitions = getFieldDefinitions();
+    const newErrors = validateFields(fieldDefinitions, formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+  
+  // Check if all required fields are filled to enable/disable Next button
+  const isFormValid = areRequiredFieldsFilled(getFieldDefinitions(), formData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -78,7 +97,13 @@ const Step5TypeSpecificDetails = ({ formData, updateFormData, nextStep, prevStep
   };
 
   const handleInputChange = (field, value) => {
-    updateFormData({ [field]: value });
+    // Format specific field types
+    let formattedValue = value;
+    if (['annualGrossBusiness', 'annualTurnover', 'monthlySalary'].includes(field)) {
+      formattedValue = formatAmount(value);
+    }
+    
+    updateFormData({ [field]: formattedValue });
     // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
@@ -109,7 +134,7 @@ const Step5TypeSpecificDetails = ({ formData, updateFormData, nextStep, prevStep
           className={`form-control ${errors.periodOfStanding ? 'error' : ''}`}
           required
         >
-          <option value="">Select Period</option>
+          <option value="">--Select Period--</option>
           {periodOptions.map((period, index) => (
             <option key={index} value={period}>
               {period}
@@ -376,7 +401,7 @@ const Step5TypeSpecificDetails = ({ formData, updateFormData, nextStep, prevStep
           <button 
             type="submit"
             className="btn btn-primary"
-            disabled={loading}
+            disabled={loading || !isFormValid}
           >
             {loading ? 'Processing...' : 'Next'}
           </button>

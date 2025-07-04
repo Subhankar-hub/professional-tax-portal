@@ -2,27 +2,51 @@
 import React, { useState } from 'react';
 import CaptchaComponent from './CaptchaComponent';
 import ApiService from '../services/ApiService';
+import { customValidators } from '../utils/validation';
 
 const Step6ReviewSubmit = ({ formData, updateFormData, nextStep, prevStep, goToStep }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState(null);
   const [captchaValid, setCaptchaValid] = useState(false);
   const [declarationAccepted, setDeclarationAccepted] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const handleCaptchaChange = (isValid) => {
     setCaptchaValid(isValid);
+    // Clear captcha error when captcha is solved
+    if (isValid && errors.captcha) {
+      setErrors(prev => ({ ...prev, captcha: '' }));
+    }
+  };
+  
+  const handleDeclarationChange = (isAccepted) => {
+    setDeclarationAccepted(isAccepted);
+    // Clear declaration error when declaration is accepted
+    if (isAccepted && errors.declaration) {
+      setErrors(prev => ({ ...prev, declaration: '' }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!declarationAccepted) {
-      alert('Please accept the declaration before submitting.');
-      return;
+    const newErrors = {};
+    
+    // Validate declaration and captcha
+    const declarationError = customValidators.declaration(declarationAccepted);
+    if (declarationError) {
+      newErrors.declaration = declarationError;
     }
     
-    if (!captchaValid) {
-      alert('Please solve the captcha.');
+    const captchaError = customValidators.captcha(captchaValid);
+    if (captchaError) {
+      newErrors.captcha = captchaError;
+    }
+    
+    setErrors(newErrors);
+    
+    // If there are errors, don't proceed
+    if (Object.keys(newErrors).length > 0) {
       return;
     }
     
@@ -204,14 +228,16 @@ const Step6ReviewSubmit = ({ formData, updateFormData, nextStep, prevStep, goToS
           <input
             type="checkbox"
             checked={declarationAccepted}
-            onChange={(e) => setDeclarationAccepted(e.target.checked)}
+            onChange={(e) => handleDeclarationChange(e.target.checked)}
           />
           I hereby declare that the details furnished above are true and correct to the best of my knowledge and belief and I undertake to inform you of any changes therein, immediately. In case any of the above information is found to be false or untrue or misleading or misrepresenting, I am aware that I may be held liable for it.
         </label>
+        {errors.declaration && <span className="error-message">{errors.declaration}</span>}
       </div>
 
       <div className="captcha-section">
         <CaptchaComponent onCaptchaChange={handleCaptchaChange} />
+        {errors.captcha && <span className="error-message">{errors.captcha}</span>}
       </div>
 
       {submitResult && !submitResult.success && (

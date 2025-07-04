@@ -6,6 +6,7 @@ const Step7FinalOTPVerification = ({ formData, updateFormData, nextStep, prevSte
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -19,12 +20,13 @@ const Step7FinalOTPVerification = ({ formData, updateFormData, nextStep, prevSte
   const sendFinalOTP = async () => {
     setLoading(true);
     setError('');
+    setSuccess('');
     try {
       const response = await ApiService.sendOTP(formData.mobile, 'final');
       if (response.success) {
         setIsOtpSent(true);
         setCountdown(30);
-        alert('Final OTP sent to ' + formData.mobile);
+        setSuccess(`Final OTP sent to ${formData.mobile}`);
       } else {
         setError(response.message || 'Failed to send OTP');
       }
@@ -146,6 +148,12 @@ const Step7FinalOTPVerification = ({ formData, updateFormData, nextStep, prevSte
               </button>
             )}
 
+            {success && (
+              <div className="success-message">
+                <p>{success}</p>
+              </div>
+            )}
+            
             {error && (
               <div className="error-message">
                 <p>{error}</p>

@@ -89,13 +89,28 @@ const PTaxEnrollmentForm = () => {
   });
 
   const updateFormData = (newData) => {
-    setFormData(prev => ({ ...prev, ...newData }));
+    console.log('PTaxEnrollmentForm - updateFormData called with:', newData);
+    setFormData(prev => {
+      const updatedFormData = { ...prev, ...newData };
+      console.log('PTaxEnrollmentForm - Updated form data:', {
+        currentStep,
+        category: updatedFormData.category,
+        subcategory: updatedFormData.subcategory,
+        categoryType: typeof updatedFormData.category,
+        subcategoryType: typeof updatedFormData.subcategory,
+        establishmentType: updatedFormData.establishmentType
+      });
+      return updatedFormData;
+    });
   };
 
   const nextStep = () => {
+    console.log('PTaxEnrollmentForm - nextStep called, current step:', currentStep);
     const newStep = Math.min(currentStep + 1, 8);
+    console.log('PTaxEnrollmentForm - Moving to step:', newStep);
     setCurrentStep(newStep);
     setMaxStepReached(Math.max(maxStepReached, newStep));
+    console.log('PTaxEnrollmentForm - Step navigation completed');
   };
 
   const prevStep = () => {

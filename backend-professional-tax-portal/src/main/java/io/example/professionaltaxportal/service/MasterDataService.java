@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -81,6 +84,18 @@ public class MasterDataService {
         // If database is empty, provide fallback data
         if (categories.isEmpty()) {
             categories = getFallbackCategories();
+        } else {
+            // Remove duplicates by catId and keep the first occurrence
+            categories = categories.stream()
+                .collect(Collectors.toMap(
+                    PTaxCategory::getCatId,
+                    category -> category,
+                    (existing, replacement) -> existing,
+                    LinkedHashMap::new))
+                .values()
+                .stream()
+                .sorted(Comparator.comparing(PTaxCategory::getCatId))
+                .collect(Collectors.toList());
         }
         
         return categories;
@@ -116,6 +131,18 @@ public class MasterDataService {
         // If database is empty, provide fallback data
         if (subcategories.isEmpty()) {
             subcategories = getFallbackSubcategories(categoryId);
+        } else {
+            // Remove duplicates by subcategoryName for the same categoryId
+            subcategories = subcategories.stream()
+                .collect(Collectors.toMap(
+                    PTaxCategorySubcategory::getSubcategoryName,
+                    subcategory -> subcategory,
+                    (existing, replacement) -> existing,
+                    LinkedHashMap::new))
+                .values()
+                .stream()
+                .sorted(Comparator.comparing(PTaxCategorySubcategory::getSubcategoryName))
+                .collect(Collectors.toList());
         }
         
         return subcategories;
