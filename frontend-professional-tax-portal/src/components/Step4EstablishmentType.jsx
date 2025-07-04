@@ -25,7 +25,9 @@ const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }
 
     const loadCategories = async () => {
       try {
+        console.log('Step 4 - Loading categories...');
         const response = await ApiService.getCategories();
+        console.log('Step 4 - Categories API response:', response);
         if (isMounted) {
           if (response && response.success && response.data) {
             // Remove duplicates by catId and sort
@@ -37,14 +39,15 @@ const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }
                 seenCatIds.add(category.catId);
                 uniqueCategories.push({
                   catId: category.catId,
-                  categoryName: category.categoryName,
-                  categoryDescription: category.categoryDescription,
-                  isActive: category.isActive
+                  categoryName: category.catDescription || category.categoryName,
+                  categoryDescription: category.catDescription || category.categoryDescription,
+                  isActive: category.isActive || true
                 });
               }
             });
             
             uniqueCategories.sort((a, b) => a.catId - b.catId);
+            console.log('Step 4 - Setting categories:', uniqueCategories);
             setCategories(uniqueCategories);
           } else {
             // Fallback categories
@@ -86,17 +89,20 @@ const Step4EstablishmentType = ({ formData, updateFormData, nextStep, prevStep }
       if (selectedCategory) {
         try {
           const categoryId = parseInt(selectedCategory, 10);
+          console.log('Step 4 - Loading subcategories for category:', categoryId);
           const response = await ApiService.getSubcategoriesByCategory(categoryId);
+          console.log('Step 4 - Subcategories API response:', response);
           
           if (isMounted) {
             if (response && response.success && response.data) {
               const processedSubcategories = response.data.map(sub => ({
-                id: sub.id,
-                categoryId: sub.categoryId,
-                subcategoryName: sub.subcategoryName,
-                subcategoryDescription: sub.subcategoryDescription,
-                isActive: sub.isActive
+                id: sub.recordRsn || sub.id,
+                categoryId: sub.catCode || sub.categoryId,
+                subcategoryName: sub.subcatDescription || sub.subcategoryName,
+                subcategoryDescription: sub.subcatDescription || sub.subcategoryDescription,
+                isActive: sub.isVisible || sub.isActive || true
               }));
+              console.log('Step 4 - Setting subcategories:', processedSubcategories);
               setSubcategories(processedSubcategories);
             } else {
               setSubcategories([]);

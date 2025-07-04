@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Step 4 API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .response { background: #f5f5f5; padding: 10px; white-space: pre-wrap; }
+        button { margin: 10px 5px; padding: 10px 15px; }
+    </style>
+</head>
+<body>
+    <h1>Debug Step 4 API Responses</h1>
+    
+    <div class="section">
+        <h2>Categories API Test</h2>
+        <button onclick="testCategories()">Test Categories API</button>
+        <div id="categories-response" class="response"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Subcategories API Test</h2>
+        <button onclick="testSubcategories(1)">Test Subcategories for Category 1</button>
+        <button onclick="testSubcategories(2)">Test Subcategories for Category 2</button>
+        <div id="subcategories-response" class="response"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Processed Data (like Step 4 component)</h2>
+        <button onclick="processData()">Process Data Like Step 4</button>
+        <div id="processed-response" class="response"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        
+        async function testCategories() {
+            try {
+                const response = await fetch(`${API_BASE}/master-data/categories`);
+                const data = await response.json();
+                document.getElementById('categories-response').textContent = 
+                    `Success: ${data.success}\nData Count: ${data.data ? data.data.length : 0}\n\nFirst 3 items:\n${JSON.stringify(data.data ? data.data.slice(0, 3) : [], null, 2)}`;
+            } catch (error) {
+                document.getElementById('categories-response').textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        async function testSubcategories(categoryId) {
+            try {
+                const response = await fetch(`${API_BASE}/master-data/subcategories/${categoryId}`);
+                const data = await response.json();
+                document.getElementById('subcategories-response').textContent = 
+                    `Category ${categoryId}:\nSuccess: ${data.success}\nData Count: ${data.data ? data.data.length : 0}\n\nData:\n${JSON.stringify(data.data || [], null, 2)}`;
+            } catch (error) {
+                document.getElementById('subcategories-response').textContent = `Error: ${error.message}`;
+            }
+        }
+        
+        async function processData() {
+            try {
+                // Simulate Step 4 data processing
+                const categoriesResponse = await fetch(`${API_BASE}/master-data/categories`);
+                const categoriesData = await categoriesResponse.json();
+                
+                let processedCategories = [];
+                if (categoriesData && categoriesData.success && categoriesData.data) {
+                    const uniqueCategories = [];
+                    const seenCatIds = new Set();
+                    
+                    categoriesData.data.forEach(category => {
+                        if (!seenCatIds.has(category.catId)) {
+                            seenCatIds.add(category.catId);
+                            uniqueCategories.push({
+                                catId: category.catId,
+                                categoryName: category.catDescription || category.categoryName,
+                                categoryDescription: category.catDescription || category.categoryDescription,
+                                isActive: category.isActive || true
+                            });
+                        }
+                    });
+                    
+                    uniqueCategories.sort((a, b) => a.catId - b.catId);
+                    processedCategories = uniqueCategories;
+                }
+                
+                // Test subcategories for first category
+                let processedSubcategories = [];
+                if (processedCategories.length > 0) {
+                    const firstCategoryId = processedCategories[0].catId;
+                    const subcategoriesResponse = await fetch(`${API_BASE}/master-data/subcategories/${firstCategoryId}`);
+                    const subcategoriesData = await subcategoriesResponse.json();
+                    
+                    if (subcategoriesData && subcategoriesData.success && subcategoriesData.data) {
+                        processedSubcategories = subcategoriesData.data.map(sub => ({
+                            id: sub.recordRsn || sub.id,
+                            categoryId: sub.catCode || sub.categoryId,
+                            subcategoryName: sub.subcatDescription || sub.subcategoryName,
+                            subcategoryDescription: sub.subcatDescription || sub.subcategoryDescription,
+                            isActive: sub.isVisible || sub.isActive || true
+                        }));
+                    }
+                }
+                
+                const result = {
+                    categories: processedCategories,
+                    subcategories: processedSubcategories,
+                    categoriesCount: processedCategories.length,
+                    subcategoriesCount: processedSubcategories.length
+                };
+                
+                document.getElementById('processed-response').textContent = JSON.stringify(result, null, 2);
+            } catch (error) {
+                document.getElementById('processed-response').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -40,7 +40,6 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
   const [districts, setDistricts] = useState([]);
   const [areas, setAreas] = useState([]);
   const [charges, setCharges] = useState([]);
-  const [periodOptions, setPeriodOptions] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
 
@@ -81,11 +80,12 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
       // Handle districts with fallback
       if (districtResponse?.data && districtResponse.data.length > 0) {
         const processedDistricts = districtResponse.data.map(district => ({
-          id: district.id,
-          lgdCode: district.lgdCode || district.districtLgdCode,
+          id: district.districtLgdCode || district.id,
+          lgdCode: district.districtLgdCode || district.lgdCode,
           districtCode: district.districtCode,
           name: district.districtName,
-          status: district.status
+          status: district.status || true,
+          localCode: district.localCode
         }));
         setDistricts(processedDistricts);
       } else {
@@ -109,11 +109,11 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
           if (!seenCatIds.has(category.catId)) {
             seenCatIds.add(category.catId);
             uniqueCategories.push({
-              id: category.id,
+              id: category.catRsn || category.id,
               catId: category.catId,
-              name: category.categoryName,
-              description: category.categoryDescription,
-              isActive: category.isActive
+              name: category.catDescription || category.categoryName,
+              description: category.catDescription || category.categoryDescription,
+              isActive: true
             });
           }
         });
@@ -132,13 +132,8 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
         setCategories(fallbackCategories);
       }
 
-      // Handle period of standing with fallback
-      if (periodResponse?.data && periodResponse.data.length > 0) {
-        setPeriodOptions(periodResponse.data);
-      } else {
-        // Use fallback data from ApiService
-        setPeriodOptions(ApiService.getFallbackData('period-of-standing'));
-      }
+      // Period of standing is handled in other components
+      console.log('Period options loaded:', periodResponse?.data || ApiService.getFallbackData('period-of-standing'));
       
     } catch (error) {
       console.error('Failed to load master data:', error);
@@ -160,8 +155,6 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
         isActive: true
       }));
       setCategories(fallbackCategories);
-      
-      setPeriodOptions(ApiService.getFallbackData('period-of-standing'));
     }
   };
 
@@ -169,7 +162,13 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
     try {
       const response = await ApiService.getAreasByDistrict(districtId);
       if (response?.data && response.data.length > 0) {
-        setAreas(response.data);
+        // Map areas to expected format
+        const mappedAreas = response.data.map(area => ({
+          code: area.code,
+          name: area.nameEn || area.name,
+          nameBn: area.nameBn
+        }));
+        setAreas(mappedAreas);
       } else {
         // Use fallback data from ApiService
         setAreas(ApiService.getFallbackData('areas'));
@@ -184,7 +183,14 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
     try {
       const response = await ApiService.getChargesByArea(areaCode);
       if (response?.data && response.data.length > 0) {
-        setCharges(response.data);
+        // Map charges to expected format
+        const mappedCharges = response.data.map(charge => ({
+          code: charge.code,
+          charge: charge.charge,
+          areaCode: charge.areaCode,
+          chargeSn: charge.chargeSn
+        }));
+        setCharges(mappedCharges);
       } else {
         // Use fallback data from ApiService, filtered by area
         const allCharges = ApiService.getFallbackData('charges');
@@ -204,7 +210,17 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
     try {
       const response = await ApiService.getSubcategoriesByCategory(categoryId);
       const data = response?.data || response || [];
-      setSubcategories(data);
+      
+      // Map subcategories to expected format
+      const mappedSubcategories = data.map(subcategory => ({
+        id: subcategory.recordRsn || subcategory.id,
+        subcatCode: subcategory.subcatCode,
+        name: subcategory.subcatDescription || subcategory.name,
+        description: subcategory.subcatDescription || subcategory.description,
+        isVisible: subcategory.isVisible
+      }));
+      
+      setSubcategories(mappedSubcategories);
     } catch (error) {
       console.error('Failed to load subcategories:', error);
       // Fallback subcategories based on category

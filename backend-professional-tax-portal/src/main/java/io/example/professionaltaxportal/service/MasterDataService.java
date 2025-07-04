@@ -69,12 +69,77 @@ public class MasterDataService {
     }
 
     public List<Area> getAreasByDistrict(String districtCode) {
-        // For now, return all areas since they're not district-specific in ptax schema
-        return areaRepository.findAll();
+        // Return all areas since they're not district-specific in ptax schema
+        List<Area> areas = areaRepository.findAll();
+        // Provide fallback data if empty
+        if (areas.isEmpty()) {
+            areas = getFallbackAreas();
+        }
+        return areas;
+    }
+    
+    private List<Area> getFallbackAreas() {
+        return List.of(
+            createArea("AGT", "Agartala"),
+            createArea("BSL", "Bishalgarh"),
+            createArea("UDP", "Udaipur"),
+            createArea("BLN", "Belonia"),
+            createArea("TLM", "Teliamura"),
+            createArea("AMB", "Ambassa"),
+            createArea("KLS", "Kailasahar"),
+            createArea("DMN", "Dharmanagar")
+        );
+    }
+    
+    private Area createArea(String code, String name) {
+        Area area = new Area();
+        area.setCode(code);
+        area.setNameEn(name);
+        return area;
     }
 
     public List<io.example.professionaltaxportal.entity.Charge> getChargesByArea(String areaCode) {
-        return chargeRepository.findByAreaCodeOrderByChargeSn(areaCode);
+        List<io.example.professionaltaxportal.entity.Charge> charges = chargeRepository.findByAreaCodeOrderByChargeSn(areaCode);
+        
+        // If database is empty, provide fallback data
+        if (charges.isEmpty()) {
+            charges = getFallbackChargesByArea(areaCode);
+        }
+        
+        return charges;
+    }
+    
+    private List<io.example.professionaltaxportal.entity.Charge> getFallbackChargesByArea(String areaCode) {
+        List<io.example.professionaltaxportal.entity.Charge> allCharges = List.of(
+            createCharge("AMBA", "Ambassa", "AMB", 1),
+            createCharge("BELO", "Belonia", "BLN", 2),
+            createCharge("BISH", "Bishalgarh", "BSL", 3),
+            createCharge("CH01", "Charge - I", "AGT", 4),
+            createCharge("CH02", "Charge - II", "AGT", 5),
+            createCharge("CH03", "Charge - III", "AGT", 6),
+            createCharge("CH04", "Charge - IV", "AGT", 7),
+            createCharge("CH05", "Charge - V", "AGT", 8),
+            createCharge("CH06", "Charge - VI", "AGT", 9),
+            createCharge("CH07", "Charge - VII", "AGT", 10),
+            createCharge("CH08", "Charge - VIII", "AGT", 11),
+            createCharge("DHAR", "Dharmanagar", "DMN", 12),
+            createCharge("KAIL", "Kailashahar", "KLS", 13),
+            createCharge("TELI", "Teliamura", "TLM", 14),
+            createCharge("UDAI", "Udaipur", "UDP", 15)
+        );
+        
+        return allCharges.stream()
+            .filter(charge -> charge.getAreaCode().equals(areaCode))
+            .collect(Collectors.toList());
+    }
+    
+    private io.example.professionaltaxportal.entity.Charge createCharge(String code, String name, String areaCode, int sn) {
+        io.example.professionaltaxportal.entity.Charge charge = new io.example.professionaltaxportal.entity.Charge();
+        charge.setCode(code);
+        charge.setCharge(name);
+        charge.setAreaCode(areaCode);
+        charge.setChargeSn(sn);
+        return charge;
     }
 
     public List<PTaxCategory> getCategories() {
