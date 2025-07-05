@@ -1,4 +1,19 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
+// Dynamically determine API base URL
+const getApiBaseUrl = () => {
+  if (process.env.REACT_APP_API_BASE_URL) {
+    return process.env.REACT_APP_API_BASE_URL;
+  }
+  
+  // If in production (Vercel), use relative URL
+  if (process.env.REACT_APP_ENVIRONMENT === 'production' && typeof window !== 'undefined') {
+    return `${window.location.origin}/api`;
+  }
+  
+  // Default to localhost for development
+  return 'http://localhost:8080/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 class ApiService {
   constructor() {

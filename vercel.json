@@ -1,53 +1,28 @@
 {
   "version": 2,
-  "name": "professional-tax-portal",
-  "builds": [
+  "buildCommand": "cd frontend-professional-tax-portal && CI=false npm run build",
+  "outputDirectory": "frontend-professional-tax-portal/build",
+  "installCommand": "npm install && cd frontend-professional-tax-portal && npm install",
+  "rewrites": [
     {
-      "src": "frontend-professional-tax-portal/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     },
     {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/static/(.*)",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/frontend-professional-tax-portal/$1"
-    }
-  ],
-  "env": {
-    "FAST2SMS_API_KEY": "@fast2sms_api_key",
-    "DATABASE_URL": "@database_url",
-    "REACT_APP_API_BASE_URL": "https://professional-tax-portal.vercel.app/api",
-    "REACT_APP_ENVIRONMENT": "production"
-  },
-  "build": {
-    "env": {
-      "REACT_APP_API_BASE_URL": "https://professional-tax-portal.vercel.app/api",
-      "REACT_APP_ENVIRONMENT": "production"
-    }
-  },
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "headers": [
+    {
+      "source": "/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
     {
       "source": "/api/(.*)",
       "headers": [
@@ -62,23 +37,6 @@
         {
           "key": "Access-Control-Allow-Headers",
           "value": "Content-Type, Authorization"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
         }
       ]
     }
