@@ -48,8 +48,11 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
   }, []);
 
   useEffect(() => {
-    if (formData.category) {
+if (formData.category) {
       loadSubcategories(formData.category);
+    } else {
+      // Load default category subcategories to populate the dropdown
+      loadSubcategories(1); // Default category id
     }
   }, [formData.category]);
 
@@ -65,17 +68,21 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
     }
   }, [formData.jurisdictionArea]);
 
-  const loadMasterData = async () => {
+const loadMasterData = async () => {
     try {
-      const [districtResponse, categoryResponse, periodResponse] = await Promise.all([
+      const [districtResponse, categoryResponse, chargeResponse, areaResponse, subcategoryResponse] = await Promise.all([
         ApiService.getDistricts(),
         ApiService.getCategories(),
-        ApiService.getPeriodOfStandingOptions()
+        ApiService.getCharges(),
+        ApiService.getAreas(),
+        ApiService.getSubcategoriesByCategory(formData.category || 1) // Default to category 1 if not set
       ]);
       
       console.log('District response:', districtResponse);
       console.log('Category response:', categoryResponse);
-      console.log('Period response:', periodResponse);
+      console.log('Area response:', areaResponse);
+      console.log('Charge response:', chargeResponse);
+      console.log('Subcategory response:', subcategoryResponse);
       
       // Handle districts with fallback
       if (districtResponse?.data && districtResponse.data.length > 0) {
@@ -132,8 +139,47 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
         setCategories(fallbackCategories);
       }
 
-      // Period of standing is handled in other components
-      console.log('Period options loaded:', periodResponse?.data || ApiService.getFallbackData('period-of-standing'));
+      // Handle areas with fallback
+      if (areaResponse?.data && areaResponse.data.length > 0) {
+        const processedAreas = areaResponse.data.map(area => ({
+          code: area.code,
+          name: area.nameEn || area.name,
+          nameBn: area.nameBn
+        }));
+        setAreas(processedAreas);
+      } else {
+        // Use fallback data from ApiService
+        setAreas(ApiService.getFallbackData('areas'));
+      }
+
+      // Handle charges with fallback
+      if (chargeResponse?.data && chargeResponse.data.length > 0) {
+        const processedCharges = chargeResponse.data.map(charge => ({
+          code: charge.code,
+          charge: charge.charge,
+          areaCode: charge.areaCode,
+          chargeSn: charge.chargeSn
+        }));
+        setCharges(processedCharges);
+      } else {
+        // Use fallback data from ApiService
+        setCharges(ApiService.getFallbackData('charges'));
+      }
+
+      // Handle subcategories with fallback
+      if (subcategoryResponse?.data && subcategoryResponse.data.length > 0) {
+        const processedSubcategories = subcategoryResponse.data.map(subcategory => ({
+          id: subcategory.recordRsn || subcategory.id,
+          subcatCode: subcategory.subcatCode,
+          name: subcategory.subcatDescription || subcategory.name,
+          description: subcategory.subcatDescription || subcategory.description,
+          isVisible: subcategory.isVisible
+        }));
+        setSubcategories(processedSubcategories);
+      } else {
+        // Use fallback data from ApiService
+        setSubcategories(ApiService.getFallbackData('subcategories'));
+      }
       
     } catch (error) {
       console.error('Failed to load master data:', error);
@@ -155,6 +201,15 @@ const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevSte
         isActive: true
       }));
       setCategories(fallbackCategories);
+      
+      // Set fallback areas
+      setAreas(ApiService.getFallbackData('areas'));
+      
+      // Set fallback charges
+      setCharges(ApiService.getFallbackData('charges'));
+      
+      // Set fallback subcategories
+      setSubcategories(ApiService.getFallbackData('subcategories'));
     }
   };
 

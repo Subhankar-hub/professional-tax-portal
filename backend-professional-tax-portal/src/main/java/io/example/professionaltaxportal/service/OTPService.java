@@ -4,12 +4,9 @@ import io.example.professionaltaxportal.dto.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,6 +15,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 @Slf4j
 public class OTPService {
+    
+    private final Fast2SMSService fast2SMSService;
+    
+    @Value("${app.otp.development-mode:true}")
+    private boolean developmentMode;
     
     // In-memory storage for demo purposes
     // In production, use Redis or database
@@ -61,9 +63,18 @@ public class OTPService {
             // Store OTP
             otpStorage.put(mobile, new OTPData(otp, expiryTime));
             
-            // In production, integrate with SMS service provider
-            // For demo, log the OTP
-            log.info("OTP {} sent to mobile {}", otp, mobile);
+            // Integrate with SMS service provider
+            boolean smsSent = true;
+            if (!developmentMode) {
+                smsSent = fast2SMSService.sendOtp(mobile, otp);
+                if (!smsSent) {
+                    log.error("Failed to send OTP via SMS service provider");
+                    return ApiResponse.error("Failed to send OTP. Please try again.");
+                }
+                log.info("OTP successfully sent to mobile {}", mobile);
+            } else {
+                log.info("Development mode: OTP {} generated for mobile {} (not sent via SMS)", otp, mobile);
+            }
             
             return ApiResponse.success("OTP sent successfully", "OTP sent to " + maskMobile(mobile));
             

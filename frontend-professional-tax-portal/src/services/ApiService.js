@@ -68,7 +68,56 @@ class ApiService {
         { code: 'TELI', charge: 'Teliamura', areaCode: 'TLM', chargeSn: 14 },
         { code: 'UDAI', charge: 'Udaipur', areaCode: 'UDP', chargeSn: 15 }
       ],
-      subcategories: [],
+      subcategories: [
+        // Legal Profession subcategories
+        { id: 1, catCode: 1, subcatCode: 1, name: 'Practitioners', description: 'Practitioners', isVisible: 1 },
+        { id: 2, catCode: 1, subcatCode: 2, name: 'Solicitors', description: 'Solicitors', isVisible: 1 },
+        { id: 3, catCode: 1, subcatCode: 3, name: 'Notaries Public', description: 'Notaries Public', isVisible: 1 },
+        { id: 4, catCode: 1, subcatCode: 4, name: 'Others', description: 'Others', isVisible: 1 },
+        // Medical Profession subcategories
+        { id: 5, catCode: 2, subcatCode: 1, name: 'Dentists', description: 'Dentists', isVisible: 1 },
+        { id: 6, catCode: 2, subcatCode: 2, name: 'Pathologists', description: 'Pathologists', isVisible: 1 },
+        { id: 7, catCode: 2, subcatCode: 3, name: 'Cardiologist', description: 'Cardiologist', isVisible: 1 },
+        { id: 8, catCode: 2, subcatCode: 4, name: 'Dermatologist', description: 'Dermatologist', isVisible: 1 },
+        { id: 9, catCode: 2, subcatCode: 5, name: 'Endocrinologist', description: 'Endocrinologist', isVisible: 1 },
+        { id: 10, catCode: 2, subcatCode: 6, name: 'Epidemiologist', description: 'Epidemiologist', isVisible: 1 },
+        { id: 11, catCode: 2, subcatCode: 7, name: 'Gynecologist', description: 'Gynecologist', isVisible: 1 },
+        { id: 12, catCode: 2, subcatCode: 8, name: 'Neurologist', description: 'Neurologist', isVisible: 1 },
+        { id: 13, catCode: 2, subcatCode: 9, name: 'Neurosurgeon', description: 'Neurosurgeon', isVisible: 1 },
+        { id: 14, catCode: 2, subcatCode: 10, name: 'Obstetrician', description: 'Obstetrician', isVisible: 1 },
+        { id: 15, catCode: 2, subcatCode: 11, name: 'Orthopedic Surgeon', description: 'Orthopedic Surgeon', isVisible: 1 },
+        { id: 16, catCode: 2, subcatCode: 12, name: 'ENT Specialist', description: 'ENT Specialist', isVisible: 1 },
+        { id: 17, catCode: 2, subcatCode: 13, name: 'Pediatrician', description: 'Pediatrician', isVisible: 1 },
+        { id: 18, catCode: 2, subcatCode: 14, name: 'Physiologist', description: 'Physiologist', isVisible: 1 },
+        { id: 19, catCode: 2, subcatCode: 15, name: 'Plastic Surgeon', description: 'Plastic Surgeon', isVisible: 1 },
+        { id: 20, catCode: 2, subcatCode: 16, name: 'Psychiatrist', description: 'Psychiatrist', isVisible: 1 },
+        { id: 21, catCode: 2, subcatCode: 17, name: 'Radiologist', description: 'Radiologist', isVisible: 1 },
+        { id: 22, catCode: 2, subcatCode: 18, name: 'Urologist', description: 'Urologist', isVisible: 1 },
+        { id: 23, catCode: 2, subcatCode: 19, name: 'Surgeon', description: 'Surgeon', isVisible: 1 },
+        { id: 24, catCode: 2, subcatCode: 20, name: 'Oncologist', description: 'Oncologist', isVisible: 1 },
+        { id: 25, catCode: 2, subcatCode: 21, name: 'Paramedical', description: 'Paramedical', isVisible: 1 },
+        { id: 26, catCode: 2, subcatCode: 22, name: 'Others', description: 'Others', isVisible: 1 },
+        // Consultants subcategories
+        { id: 27, catCode: 3, subcatCode: 1, name: 'Medical Consultants', description: 'Medical Consultants', isVisible: 1 },
+        { id: 28, catCode: 3, subcatCode: 2, name: 'Management Consultants', description: 'Management Consultants', isVisible: 1 },
+        { id: 29, catCode: 3, subcatCode: 3, name: 'R.C.C. Consultants', description: 'R.C.C. Consultants', isVisible: 1 },
+        { id: 30, catCode: 3, subcatCode: 4, name: 'Software Consultant', description: 'Software Consultant', isVisible: 1 },
+        { id: 31, catCode: 3, subcatCode: 5, name: 'Chartered Accountant', description: 'Chartered Accountant', isVisible: 1 },
+        { id: 32, catCode: 3, subcatCode: 6, name: 'Cost Accountants', description: 'Cost Accountants', isVisible: 1 },
+        { id: 33, catCode: 3, subcatCode: 7, name: 'Actuaries', description: 'Actuaries', isVisible: 1 },
+        { id: 34, catCode: 3, subcatCode: 8, name: 'Market Research Analyst', description: 'Market Research Analyst', isVisible: 1 },
+        { id: 35, catCode: 3, subcatCode: 9, name: 'Other Consultants', description: 'Other Consultants', isVisible: 1 },
+        // Engineering Profession subcategories
+        { id: 36, catCode: 4, subcatCode: 1, name: 'Mechanical Engineer', description: 'Mechanical Engineer', isVisible: 1 },
+        { id: 37, catCode: 4, subcatCode: 2, name: 'Chemical Engineer', description: 'Chemical Engineer', isVisible: 1 },
+        { id: 38, catCode: 4, subcatCode: 3, name: 'Software Engineer', description: 'Software Engineer', isVisible: 1 },
+        { id: 39, catCode: 4, subcatCode: 4, name: 'Civil Engineer', description: 'Civil Engineer', isVisible: 1 },
+        { id: 40, catCode: 4, subcatCode: 5, name: 'Electrical Engineer', description: 'Electrical Engineer', isVisible: 1 },
+        { id: 41, catCode: 4, subcatCode: 6, name: 'Electronics Engineer', description: 'Electronics Engineer', isVisible: 1 },
+        { id: 42, catCode: 4, subcatCode: 7, name: 'Telcom Engineer', description: 'Telcom Engineer', isVisible: 1 },
+        { id: 43, catCode: 4, subcatCode: 8, name: 'Architects', description: 'Architects', isVisible: 1 },
+        { id: 44, catCode: 4, subcatCode: 9, name: 'Other Engineers', description: 'Other Engineers', isVisible: 1 }
+      ],
       all: {
         districts: [],
         categories: [],
@@ -280,6 +329,38 @@ class ApiService {
       return result;
     } catch (error) {
       return this.handleApiError(error, 'period-of-standing', 'period of standing options');
+    }
+  }
+
+  async getAreas() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/master-data/areas`);
+      const result = await this.handleResponse(response);
+      
+      // Check if data is empty
+      if (!result.data || (Array.isArray(result.data) && result.data.length === 0)) {
+        return this.handleApiError(new Error('Empty data received'), 'areas', 'areas');
+      }
+      
+      return result;
+    } catch (error) {
+      return this.handleApiError(error, 'areas', 'areas');
+    }
+  }
+
+  async getCharges() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/master-data/charges`);
+      const result = await this.handleResponse(response);
+      
+      // Check if data is empty
+      if (!result.data || (Array.isArray(result.data) && result.data.length === 0)) {
+        return this.handleApiError(new Error('Empty data received'), 'charges', 'charges');
+      }
+      
+      return result;
+    } catch (error) {
+      return this.handleApiError(error, 'charges', 'charges');
     }
   }
 

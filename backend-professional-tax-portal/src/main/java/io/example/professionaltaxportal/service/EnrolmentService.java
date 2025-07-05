@@ -89,7 +89,11 @@ public class EnrolmentService {
     }
     
     private String generateApplicationId() {
-        return "PTAX" + System.currentTimeMillis() + UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+        // Generate a 15-character application ID: PTAX + 11 characters
+        long timestamp = System.currentTimeMillis();
+        String shortTimestamp = String.valueOf(timestamp).substring(6); // Last 7 digits
+        String randomPart = UUID.randomUUID().toString().substring(0, 4).toUpperCase();
+        return "PTAX" + shortTimestamp + randomPart; // 4 + 7 + 4 = 15 characters
     }
     
     private TempApplicantEnrolmentDetails createEnrolmentDetails(EnrolmentSubmissionDTO data, String applicationId) {
@@ -251,8 +255,10 @@ public class EnrolmentService {
                 return ApiResponse.error("Mobile number is required");
             }
             
-            // Generate temporary application ID
-            String applicationId = "TEMP" + System.currentTimeMillis();
+            // Generate temporary application ID (15 characters max)
+            long timestamp = System.currentTimeMillis();
+            String shortTimestamp = String.valueOf(timestamp).substring(6); // Last 7 digits
+            String applicationId = "TEMP" + shortTimestamp; // 4 + 7 = 11 characters
             
             // Create temporary enrolment record
             TempApplicantEnrolmentDetails tempEnrolment = new TempApplicantEnrolmentDetails();

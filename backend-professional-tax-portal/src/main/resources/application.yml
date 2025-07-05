@@ -49,3 +49,8 @@ fast2sms:
     expiry-minutes: 5
     max-attempts: 3
     length: 6
+
+# Application Configuration
+app:
+  otp:
+    development-mode: true

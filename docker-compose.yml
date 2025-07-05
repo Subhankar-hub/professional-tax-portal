@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: ptax_postgres
+    environment:
+      POSTGRES_DB: professional_tax_db
+      POSTGRES_USER: ptax_user
+      POSTGRES_PASSWORD: ptax_password
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./setup_database.sql:/docker-entrypoint-initdb.d/01-setup.sql
+      - ./update_database_schema.sql:/docker-entrypoint-initdb.d/02-schema.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - ptax_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ptax_user -d professional_tax_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Spring Boot Backend
+  backend:
+    build: 
+      context: ./backend-professional-tax-portal
+      dockerfile: Dockerfile
+    container_name: ptax_backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=production
+      - DATABASE_URL=jdbc:postgresql://db:5432/professional_tax_db
+      - DATABASE_USERNAME=ptax_user
+      - DATABASE_PASSWORD=ptax_password
+      - FAST2SMS_API_KEY=${FAST2SMS_API_KEY:-qkb4hFHaKsSod8RX6pvMYPwc90ExltA5nVUWIfeizBu17QCGDyemc5QuFyR7zkOxAIglo6KqjU0EDtHh}
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,https://frontend-professional-tax-portal.vercel.app
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - ptax_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # React Frontend (for local development)
+  frontend:
+    build:
+      context: ./frontend-professional-tax-portal
+      dockerfile: Dockerfile
+    container_name: ptax_frontend
+    environment:
+      - REACT_APP_API_BASE_URL=http://localhost:8080/api
+      - REACT_APP_ENVIRONMENT=production
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - ptax_network
+    restart: unless-stopped
+
+  # Redis for OTP storage (optional)
+  redis:
+    image: redis:6.2-alpine
+    container_name: ptax_redis
+    command: redis-server --appendonly yes --requirepass ptax_redis_password
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - ptax_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  ptax_network:
+    driver: bridge
