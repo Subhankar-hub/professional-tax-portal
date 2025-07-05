@@ -1,0 +1,36 @@
+{
+  "name": "professional-tax-portal",
+  "version": "1.0.0",
+  "description": "Professional Tax Portal with Fast2SMS OTP integration",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build:frontend",
+    "build:frontend": "cd frontend-professional-tax-portal && npm ci && npm run build",
+    "start": "node server.js",
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.7",
+    "vercel": "^44.2.12"
+  },
+  "devDependencies": {
+    "@vercel/node": "^2.15.10"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/professional-tax-portal.git"
+  },
+  "keywords": [
+    "professional-tax",
+    "vercel",
+    "serverless",
+    "fast2sms",
+    "otp"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
