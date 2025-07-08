@@ -169,14 +169,13 @@ const Step6ReviewSubmit = ({ formData, updateFormData, nextStep, prevStep, goToS
           <div className="review-content">
             <div className="engagement-tags">
               <strong>Engaged With:</strong>
-              {formData.engagedWith?.map((engagement, index) => (
-                <span key={index} className="engagement-tag">
-                  {engagement}
-                </span>
-              ))}
+              {formData.engagedWithProfession && <span className="engagement-tag">Profession</span>}
+              {formData.engagedWithTrade && <span className="engagement-tag">Trade</span>}
+              {formData.engagedWithCalling && <span className="engagement-tag">Calling</span>}
+              {formData.engagedWithEmployment && <span className="engagement-tag">Employment</span>}
             </div>
             
-            {formData.engagedWith?.includes('Employment') && (
+            {formData.engagedWithEmployment && (
               <div className="employment-details">
                 <h5>Employment Details</h5>
                 <div className="review-row">

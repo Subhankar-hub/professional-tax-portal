@@ -51,7 +51,7 @@ public class TempApplicantEnrolmentDetails {
     @Column(name = "address_text", length = 100)
     private String addressText;
 
-    @Column(name = "subdisctrict_lgd_code")
+    @Column(name = "subdistrict_lgd_code")
     private Integer subdistrictLgdCode;
 
     @Column(name = "district_lgd_code")

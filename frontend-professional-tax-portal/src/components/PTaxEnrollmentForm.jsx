@@ -70,9 +70,15 @@ const PTaxEnrollmentForm = () => {
     multipleEmployers: false,
     additionalEmployers: [],
     
-    // Society engagement
+// Society engagement
     stateLevelSociety: false,
     districtLevelSociety: false,
+    
+    // Engagement type flags
+    engagedWithProfession: false,
+    engagedWithTrade: false,
+    engagedWithCalling: false,
+    engagedWithEmployment: false,
     
     // Step 6: Review and Submit with Captcha
     captchaValue: '',

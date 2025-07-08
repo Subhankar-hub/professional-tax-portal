@@ -255,14 +255,26 @@ public class EnrolmentService {
                 return ApiResponse.error("Mobile number is required");
             }
             
-            // Generate temporary application ID (15 characters max)
-            long timestamp = System.currentTimeMillis();
-            String shortTimestamp = String.valueOf(timestamp).substring(6); // Last 7 digits
-            String applicationId = "TEMP" + shortTimestamp; // 4 + 7 = 11 characters
+            // Check if enrolment already exists for this mobile
+            var existingEnrolment = enrolmentDetailsRepository.findByMobile(enrolmentData.getMobile());
+            String applicationId;
+            TempApplicantEnrolmentDetails tempEnrolment;
             
-            // Create temporary enrolment record
-            TempApplicantEnrolmentDetails tempEnrolment = new TempApplicantEnrolmentDetails();
-            tempEnrolment.setApplicationId(applicationId);
+            if (existingEnrolment.isPresent() && existingEnrolment.get().getApplicationId().startsWith("TEMP")) {
+                // Update existing temporary record
+                tempEnrolment = existingEnrolment.get();
+                applicationId = tempEnrolment.getApplicationId();
+            } else {
+                // Generate temporary application ID (15 characters max)
+                long timestamp = System.currentTimeMillis();
+                String shortTimestamp = String.valueOf(timestamp).substring(6); // Last 7 digits
+                applicationId = "TEMP" + shortTimestamp; // 4 + 7 = 11 characters
+                
+                tempEnrolment = new TempApplicantEnrolmentDetails();
+                tempEnrolment.setApplicationId(applicationId);
+            }
+            
+            // Update enrolment record with latest data
             tempEnrolment.setApplyingAsIndividual("Individual".equals(enrolmentData.getApplicantType()));
             tempEnrolment.setName(enrolmentData.getName());
             tempEnrolment.setGender(enrolmentData.getGender());
@@ -286,10 +298,43 @@ public class EnrolmentService {
             
             enrolmentDetailsRepository.save(tempEnrolment);
             
+            // Save specific engagement details if provided
+            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithProfession()) && hasValidProfessionData(enrolmentData)) {
+                saveProfessionDetails(enrolmentData, applicationId);
+            }
+            
+            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithTrade()) && hasValidTradeData(enrolmentData)) {
+                saveTradeDetails(enrolmentData, applicationId);
+            }
+            
+            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithCalling()) && hasValidCallingData(enrolmentData)) {
+                saveCallingDetails(enrolmentData, applicationId);
+            }
+            
+            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithEmployment()) && hasValidEmploymentData(enrolmentData)) {
+                saveEmploymentDetails(enrolmentData, applicationId);
+            }
+            
             return ApiResponse.success("Application saved temporarily", applicationId);
             
         } catch (Exception e) {
             return ApiResponse.error("Failed to save temporary application: " + e.getMessage());
         }
+    }
+    
+    private boolean hasValidProfessionData(EnrolmentSubmissionDTO data) {
+        return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getAnnualGrossBusiness() != null;
+    }
+    
+    private boolean hasValidTradeData(EnrolmentSubmissionDTO data) {
+        return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getAnnualGrossBusiness() != null || data.getAnnualTurnover() != null;
+    }
+    
+    private boolean hasValidCallingData(EnrolmentSubmissionDTO data) {
+        return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getAnnualGrossBusiness() != null;
+    }
+    
+    private boolean hasValidEmploymentData(EnrolmentSubmissionDTO data) {
+        return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getEmployerName() != null || data.getEmployerAddress() != null || data.getMonthlySalary() != null;
     }
 }

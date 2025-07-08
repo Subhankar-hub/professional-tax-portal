@@ -10,6 +10,7 @@ import {
 
 const Step3EstablishmentDetails = ({ formData, updateFormData, nextStep, prevStep }) => {
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   
   // Field definitions for validation
   const fieldDefinitions = {
@@ -329,13 +330,25 @@ const loadMasterData = async () => {
   // Check if all required fields are filled to enable/disable Next button
   const isFormValid = areRequiredFieldsFilled(fieldDefinitions, formData);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (validateForm()) {
-      nextStep();
+      setLoading(true);
+      
+      try {
+        // Save temporary data to database
+        await ApiService.saveTemporaryEnrolment(formData);
+        nextStep();
+      } catch (error) {
+        console.error('Failed to save temporary data:', error);
+        // Still proceed to next step even if save fails
+        nextStep();
+      } finally {
+        setLoading(false);
+      }
     }
   };
-
   return (
     <div className="step-container">
       <form onSubmit={handleSubmit} className="step-form">

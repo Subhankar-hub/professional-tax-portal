@@ -1,0 +1,115 @@
+nohup: ignoring input
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< io.example:professionaltaxportal >------------------
+[INFO] Building professionaltaxportal 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.2.1:run (default-cli) > test-compile @ professionaltaxportal >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ professionaltaxportal ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ professionaltaxportal ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ professionaltaxportal ---
+[INFO] skip non existing resourceDirectory /home/smith/Documents/projectprofessionaltax/backend-professional-tax-portal/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.11.0:testCompile (default-testCompile) @ professionaltaxportal ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< spring-boot:3.2.1:run (default-cli) < test-compile @ professionaltaxportal <<<
+[INFO] 
+[INFO] 
+[INFO] --- spring-boot:3.2.1:run (default-cli) @ professionaltaxportal ---
+[INFO] Attaching agents: []
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v3.2.1)
+
+2025-07-08T17:17:12.145+05:30  INFO 77393 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Starting ProfessionaltaxportalApplication using Java 17.0.15 with PID 77393 (/home/smith/Documents/projectprofessionaltax/backend-professional-tax-portal/target/classes started by smith in /home/smith/Documents/projectprofessionaltax/backend-professional-tax-portal)
+2025-07-08T17:17:12.146+05:30 DEBUG 77393 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-07-08T17:17:12.146+05:30  INFO 77393 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-08T17:17:12.806+05:30  INFO 77393 --- [professionaltaxportal] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-08T17:17:12.868+05:30  INFO 77393 --- [professionaltaxportal] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 56 ms. Found 11 JPA repository interfaces.
+2025-07-08T17:17:13.423+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-07-08T17:17:13.431+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-07-08T17:17:13.432+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-07-08T17:17:13.471+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-07-08T17:17:13.472+05:30  INFO 77393 --- [professionaltaxportal] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1293 ms
+2025-07-08T17:17:13.625+05:30 DEBUG 77393 --- [professionaltaxportal] [           main] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
+2025-07-08T17:17:13.727+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-08T17:17:13.761+05:30  INFO 77393 --- [professionaltaxportal] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-07-08T17:17:13.782+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-08T17:17:13.923+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-08T17:17:13.939+05:30  INFO 77393 --- [professionaltaxportal] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-08T17:17:14.137+05:30  INFO 77393 --- [professionaltaxportal] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@67e4928c
+2025-07-08T17:17:14.138+05:30  INFO 77393 --- [professionaltaxportal] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-08T17:17:14.159+05:30  WARN 77393 --- [professionaltaxportal] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-08T17:17:15.011+05:30  INFO 77393 --- [professionaltaxportal] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-08T17:17:15.724+05:30  WARN 77393 --- [professionaltaxportal] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-08T17:17:15.840+05:30 DEBUG 77393 --- [professionaltaxportal] [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : 15 mappings in 'requestMappingHandlerMapping'
+2025-07-08T17:17:15.990+05:30 DEBUG 77393 --- [professionaltaxportal] [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-07-08T17:17:16.038+05:30 DEBUG 77393 --- [professionaltaxportal] [           main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-07-08T17:17:16.075+05:30 DEBUG 77393 --- [professionaltaxportal] [           main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-07-08T17:17:16.385+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2025-07-08T17:17:16.448+05:30  INFO 77393 --- [professionaltaxportal] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-07-08T17:17:16.465+05:30  INFO 77393 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Started ProfessionaltaxportalApplication in 4.613 seconds (process running for 4.815)
+2025-07-08T17:18:15.319+05:30  INFO 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-08T17:18:15.320+05:30  INFO 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-07-08T17:18:15.320+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-07-08T17:18:15.320+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2025-07-08T17:18:15.320+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2025-07-08T17:18:15.321+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@13835bdc
+2025-07-08T17:18:15.322+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@119de68f
+2025-07-08T17:18:15.323+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-07-08T17:18:15.323+05:30  INFO 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-07-08T17:18:15.339+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/actuator/health", parameters={}
+2025-07-08T17:18:15.355+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] m.m.a.RequestResponseBodyMethodProcessor : Read "application/octet-stream" to []
+2025-07-08T17:18:15.371+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/vnd.spring-boot.actuator.v3+json', given [*/*] and supported [application/vnd.spring-boot.actuator.v3+json, application/vnd.spring-boot.actuator.v2+json, application/json]
+2025-07-08T17:18:15.400+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [org.springframework.boot.actuate.health.SystemHealth@1fe80ba7]
+2025-07-08T17:18:15.412+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-08T17:18:29.733+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : POST "/api/otp/send", parameters={}
+2025-07-08T17:18:29.735+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.EnrolmentController#sendOTP(OTPRequestDTO)
+2025-07-08T17:18:29.772+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-2] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [OTPRequestDTO(mobile=9876543210, type=final)]
+2025-07-08T17:18:29.799+05:30  INFO 77393 --- [professionaltaxportal] [0.0-8080-exec-2] i.e.p.service.OTPService                 : Development mode: OTP 123456 generated for mobile 9876543210 (type: final) (not sent via SMS)
+2025-07-08T17:18:29.802+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-08T17:18:29.805+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=OTP sent successfully, data=OTP sent to 987654****, applicationId= (truncated)...]
+2025-07-08T17:18:29.806+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-08T17:19:57.952+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-4] o.s.web.servlet.DispatcherServlet        : POST "/api/otp/verify", parameters={}
+2025-07-08T17:19:57.952+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.EnrolmentController#verifyOTP(OTPVerificationDTO)
+2025-07-08T17:19:57.955+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-4] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [OTPVerificationDTO(mobile=8413986184, otp=123456, type=final)]
+2025-07-08T17:19:57.959+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-08T17:19:57.960+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=false, message=No OTP found for this mobile number. Please request a new OTP., d (truncated)...]
+2025-07-08T17:19:57.961+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-08T17:22:19.472+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.web.servlet.DispatcherServlet        : POST "/api/otp/verify", parameters={}
+2025-07-08T17:22:19.473+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.EnrolmentController#verifyOTP(OTPVerificationDTO)
+2025-07-08T17:22:19.474+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-5] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [OTPVerificationDTO(mobile=8413986184, otp=123456, type=final)]
+2025-07-08T17:22:19.474+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-08T17:22:19.475+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=false, message=No OTP found for this mobile number. Please request a new OTP., d (truncated)...]
+2025-07-08T17:22:19.476+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-08T17:22:52.288+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-6] o.s.web.servlet.DispatcherServlet        : POST "/api/otp/send", parameters={}
+2025-07-08T17:22:52.289+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.EnrolmentController#sendOTP(OTPRequestDTO)
+2025-07-08T17:22:52.290+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-6] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [OTPRequestDTO(mobile=8413986184, type=final)]
+2025-07-08T17:22:52.290+05:30  INFO 77393 --- [professionaltaxportal] [0.0-8080-exec-6] i.e.p.service.OTPService                 : Development mode: OTP 123456 generated for mobile 8413986184 (type: final) (not sent via SMS)
+2025-07-08T17:22:52.291+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-08T17:22:52.291+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=OTP sent successfully, data=OTP sent to 841398****, applicationId= (truncated)...]
+2025-07-08T17:22:52.292+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-08T17:22:53.311+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-8] o.s.web.servlet.DispatcherServlet        : POST "/api/otp/verify", parameters={}
+2025-07-08T17:22:53.311+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-8] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.EnrolmentController#verifyOTP(OTPVerificationDTO)
+2025-07-08T17:22:53.312+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-8] m.m.a.RequestResponseBodyMethodProcessor : Read "application/json;charset=UTF-8" to [OTPVerificationDTO(mobile=8413986184, otp=123456, type=final)]
+2025-07-08T17:22:53.313+05:30  INFO 77393 --- [professionaltaxportal] [0.0-8080-exec-8] i.e.p.service.OTPService                 : OTP verification successful for mobile 8413986184 (type: final)
+2025-07-08T17:22:53.314+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-08T17:22:53.314+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-8] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=OTP verified successfully, data=8413986184, applicationId=null)]
+2025-07-08T17:22:53.315+05:30 DEBUG 77393 --- [professionaltaxportal] [0.0-8080-exec-8] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-08T17:26:15.254+05:30  INFO 77393 --- [professionaltaxportal] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-07-08T17:26:15.256+05:30  INFO 77393 --- [professionaltaxportal] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-07-08T17:26:15.259+05:30  INFO 77393 --- [professionaltaxportal] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

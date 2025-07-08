@@ -88,11 +88,39 @@ const Step5TypeSpecificDetails = ({ formData, updateFormData, nextStep, prevStep
   // Check if all required fields are filled to enable/disable Next button
   const isFormValid = areRequiredFieldsFilled(getFieldDefinitions(), formData);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      nextStep();
+      setLoading(true);
+      
+      // Set engagement flags based on establishment type
+      const engagementFlags = {
+        engagedWithProfession: formData.establishmentType === 'Profession',
+        engagedWithTrade: formData.establishmentType === 'Trade',
+        engagedWithCalling: formData.establishmentType === 'Calling',
+        engagedWithEmployment: formData.establishmentType === 'Employment'
+      };
+      
+      // Combine all current form data with engagement flags
+      const dataToSave = {
+        ...formData,
+        ...engagementFlags
+      };
+      
+      try {
+        // Save temporary data to database
+        await ApiService.saveTemporaryEnrolment(dataToSave);
+        updateFormData(engagementFlags);
+        nextStep();
+      } catch (error) {
+        console.error('Failed to save temporary data:', error);
+        // Still proceed to next step even if save fails
+        updateFormData(engagementFlags);
+        nextStep();
+      } finally {
+        setLoading(false);
+      }
     }
   };
 

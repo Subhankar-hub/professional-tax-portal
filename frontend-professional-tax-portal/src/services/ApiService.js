@@ -385,11 +385,19 @@ class ApiService {
       // Transform the data to match backend expectations
       const transformedData = {
         ...formData,
-        // Map engagement array to individual boolean fields
-        engagedWithProfession: formData.engagedWith ? formData.engagedWith.includes('Profession') : false,
-        engagedWithTrade: formData.engagedWith ? formData.engagedWith.includes('Trade') : false,
-        engagedWithCalling: formData.engagedWith ? formData.engagedWith.includes('Calling') : false,
-        engagedWithEmployment: formData.engagedWith ? formData.engagedWith.includes('Employment') : false,
+        // Map engagement flags - use the existing flags or fallback to array mapping
+        engagedWithProfession: formData.engagedWithProfession !== undefined ? 
+          formData.engagedWithProfession : 
+          (formData.engagedWith ? formData.engagedWith.includes('Profession') : false),
+        engagedWithTrade: formData.engagedWithTrade !== undefined ? 
+          formData.engagedWithTrade : 
+          (formData.engagedWith ? formData.engagedWith.includes('Trade') : false),
+        engagedWithCalling: formData.engagedWithCalling !== undefined ? 
+          formData.engagedWithCalling : 
+          (formData.engagedWith ? formData.engagedWith.includes('Calling') : false),
+        engagedWithEmployment: formData.engagedWithEmployment !== undefined ? 
+          formData.engagedWithEmployment : 
+          (formData.engagedWith ? formData.engagedWith.includes('Employment') : false),
         // Remove the original engagedWith array
         engagedWith: undefined,
         // Ensure captcha is properly set

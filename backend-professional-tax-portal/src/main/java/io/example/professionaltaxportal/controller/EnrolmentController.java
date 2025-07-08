@@ -22,13 +22,13 @@ public class EnrolmentController {
 
     @PostMapping("/otp/send")
     public ResponseEntity<ApiResponse<String>> sendOTP(@Valid @RequestBody OTPRequestDTO request) {
-        ApiResponse<String> response = otpService.sendOTP(request.getMobile());
+        ApiResponse<String> response = otpService.sendOTP(request.getMobile(), request.getType());
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/otp/verify")
     public ResponseEntity<ApiResponse<String>> verifyOTP(@Valid @RequestBody OTPVerificationDTO request) {
-        ApiResponse<String> response = otpService.verifyOTP(request.getMobile(), request.getOtp());
+        ApiResponse<String> response = otpService.verifyOTP(request.getMobile(), request.getOtp(), request.getType());
         return ResponseEntity.ok(response);
     }
 

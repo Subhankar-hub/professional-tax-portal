@@ -1,16 +1,4 @@
 {
     "java.configuration.updateBuildConfiguration": "interactive",
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "server": "localhost",
-            "port": 5432,
-            "driver": "PostgreSQL",
-            "name": "ptax",
-            "group": "ptaxdb",
-            "database": "professional_tax_db",
-            "username": "ptax_user",
-            "password": "ptax_password"
-        }
-    ]
+    "sqltools.connections": []
 }

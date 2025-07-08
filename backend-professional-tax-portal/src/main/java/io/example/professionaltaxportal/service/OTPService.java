@@ -53,15 +53,27 @@ public class OTPService {
     }
     
     public ApiResponse<String> sendOTP(String mobile) {
+        return sendOTP(mobile, "mobile");
+    }
+    
+    public ApiResponse<String> sendOTP(String mobile, String type) {
         try {
-            // Generate 6-digit OTP
-            String otp = String.format("%06d", new Random().nextInt(999999));
+            // Generate 6-digit OTP (for development mode, use fixed OTP for testing)
+            String otp;
+            if (developmentMode) {
+                otp = "123456"; // Fixed OTP for development
+            } else {
+                otp = String.format("%06d", new Random().nextInt(999999));
+            }
             
             // Set expiry time to 5 minutes from now
             LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(5);
             
+            // Create storage key with type to differentiate mobile and final OTPs
+            String storageKey = mobile + "_" + (type != null ? type : "mobile");
+            
             // Store OTP
-            otpStorage.put(mobile, new OTPData(otp, expiryTime));
+            otpStorage.put(storageKey, new OTPData(otp, expiryTime));
             
             // Integrate with SMS service provider
             boolean smsSent = true;
@@ -71,49 +83,55 @@ public class OTPService {
                     log.error("Failed to send OTP via SMS service provider");
                     return ApiResponse.error("Failed to send OTP. Please try again.");
                 }
-                log.info("OTP successfully sent to mobile {}", mobile);
+                log.info("OTP successfully sent to mobile {} for type {}", mobile, type);
             } else {
-                log.info("Development mode: OTP {} generated for mobile {} (not sent via SMS)", otp, mobile);
+                log.info("Development mode: OTP {} generated for mobile {} (type: {}) (not sent via SMS)", otp, mobile, type);
             }
             
             return ApiResponse.success("OTP sent successfully", "OTP sent to " + maskMobile(mobile));
             
         } catch (Exception e) {
-            log.error("Error sending OTP to {}: {}", mobile, e.getMessage());
+            log.error("Error sending OTP to {} (type {}): {}", mobile, type, e.getMessage());
             return ApiResponse.error("Failed to send OTP. Please try again.");
         }
     }
     
     public ApiResponse<String> verifyOTP(String mobile, String inputOtp) {
+        return verifyOTP(mobile, inputOtp, "mobile");
+    }
+    
+    public ApiResponse<String> verifyOTP(String mobile, String inputOtp, String type) {
         try {
-            OTPData otpData = otpStorage.get(mobile);
+            // Create storage key with type to match the key used during sendOTP
+            String storageKey = mobile + "_" + (type != null ? type : "mobile");
+            OTPData otpData = otpStorage.get(storageKey);
             
             if (otpData == null) {
                 return ApiResponse.error("No OTP found for this mobile number. Please request a new OTP.");
             }
             
             if (otpData.isExpired()) {
-                otpStorage.remove(mobile);
+                otpStorage.remove(storageKey);
                 return ApiResponse.error("OTP has expired. Please request a new OTP.");
             }
             
             otpData.incrementAttempts();
             
             if (otpData.getAttempts() > 3) {
-                otpStorage.remove(mobile);
+                otpStorage.remove(storageKey);
                 return ApiResponse.error("Too many failed attempts. Please request a new OTP.");
             }
             
             if (otpData.isValid(inputOtp)) {
-                otpStorage.remove(mobile); // Remove OTP after successful verification
-                log.info("OTP verification successful for mobile {}", mobile);
+                otpStorage.remove(storageKey); // Remove OTP after successful verification
+                log.info("OTP verification successful for mobile {} (type: {})", mobile, type);
                 return ApiResponse.success("OTP verified successfully", mobile);
             } else {
                 return ApiResponse.error("Invalid OTP. Please try again.");
             }
             
         } catch (Exception e) {
-            log.error("Error verifying OTP for {}: {}", mobile, e.getMessage());
+            log.error("Error verifying OTP for {} (type {}): {}", mobile, type, e.getMessage());
             return ApiResponse.error("Failed to verify OTP. Please try again.");
         }
     }
