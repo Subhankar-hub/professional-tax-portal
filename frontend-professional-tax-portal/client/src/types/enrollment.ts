@@ -31,6 +31,20 @@ export interface EnrollmentState {
     engagedWithCalling: boolean;
     engagedWithEmployment: boolean;
   };
+  establishmentType: {
+    engagementTypes: string[];
+  };
+  detailedInfo: {
+    dateOfCommencement?: string;
+    periodOfStanding?: string;
+    registeredUnderVAT?: string;
+    registeredUnderCST?: string;
+    registeredUnderGST?: string;
+    employerName?: string;
+    employerAddress?: string;
+    applicantSalary?: string;
+    simultaneousEmployment?: boolean;
+  };
   professionalDetails?: {
     commencementDate?: string;
     periodOfStanding?: string;

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useEnrollment } from "@/hooks/useEnrollment";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -54,18 +54,18 @@ export default function EnrollmentPage() {
     actions.nextStep();
   };
 
-  const handleSendOtp = async (data: { mobile: string; type: 'mobile' | 'final' }) => {
+  const handleSendOtp = useCallback(async (data: { mobile: string; type: 'mobile' | 'final' }) => {
     await mutations.sendOtp.mutateAsync(data);
-  };
+  }, [mutations.sendOtp]);
 
-  const handleVerifyOtp = async (data: { mobile: string; otp: string; type: 'mobile' | 'final' }) => {
+  const handleVerifyOtp = useCallback(async (data: { mobile: string; otp: string; type: 'mobile' | 'final' }) => {
     try {
       const response = await mutations.verifyOtp.mutateAsync(data);
       return response?.success || false;
     } catch (error) {
       return false;
     }
-  };
+  }, [mutations.verifyOtp]);
 
   // Step 3: Establishment Information
   const handleEstablishmentInfoNext = (data: EstablishmentInfo) => {
@@ -209,7 +209,7 @@ export default function EnrollmentPage() {
       case 7:
         return (
           <FinalOTPStep
-            mobile={enrollmentState.personalInfo.mobile}
+            mobileNumber={enrollmentState.personalInfo.mobile}
             onNext={handleFinalOTPNext}
             onSendOtp={handleSendOtp}
             onVerifyOtp={handleVerifyOtp}

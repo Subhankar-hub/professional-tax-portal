@@ -99,7 +99,7 @@ export const otpVerifications = pgTable("otp_verifications", {
   id: serial("id").primaryKey(),
   mobileNumber: text("mobile_number").notNull(),
   otp: text("otp").notNull(),
-  type: text("type").notNull(), // 'enrollment', 'final_submission'
+  type: text("type").notNull(), // 'mobile', 'final'
   isUsed: boolean("is_used").default(false),
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow(),

@@ -11,7 +11,7 @@ import type { OtpVerification } from "@/types/enrollment";
 interface FinalOTPStepProps {
   mobileNumber: string;
   onNext: () => void;
-  onSendOtp: (data: { mobileNumber: string; type: 'enrollment' | 'final_submission' }) => void;
+  onSendOtp: (data: { mobile: string; type: 'mobile' | 'final' }) => void;
   onVerifyOtp: (data: OtpVerification) => Promise<boolean>;
   isVerifying: boolean;
   isSending: boolean;
@@ -35,7 +35,9 @@ export default function FinalOTPStep({
 
   useEffect(() => {
     // Send OTP automatically when component mounts
-    onSendOtp({ mobileNumber, type: 'final_submission' });
+    if (mobileNumber) {
+      onSendOtp({ mobile: mobileNumber, type: 'final' });
+    }
   }, [mobileNumber, onSendOtp]);
 
   useEffect(() => {
@@ -49,9 +51,9 @@ export default function FinalOTPStep({
 
   const onSubmit = async (data: { otp: string }) => {
     const verified = await onVerifyOtp({
-      mobileNumber,
+      mobile: mobileNumber,
       otp: data.otp,
-      type: 'final_submission'
+      type: 'final'
     });
     
     if (verified) {
@@ -60,7 +62,7 @@ export default function FinalOTPStep({
   };
 
   const handleResend = () => {
-    onSendOtp({ mobileNumber, type: 'final_submission' });
+    onSendOtp({ mobile: mobileNumber, type: 'final' });
     setTimeLeft(102);
     setCanResend(false);
   };

@@ -34,6 +34,20 @@ const initialState: EnrollmentState = {
     engagedWithCalling: false,
     engagedWithEmployment: false,
   },
+  establishmentType: {
+    engagementTypes: [],
+  },
+  detailedInfo: {
+    dateOfCommencement: '',
+    periodOfStanding: '',
+    registeredUnderVAT: '',
+    registeredUnderCST: '',
+    registeredUnderGST: '',
+    employerName: '',
+    employerAddress: '',
+    applicantSalary: '',
+    simultaneousEmployment: false,
+  },
   professionalDetails: {
     commencementDate: '',
     periodOfStanding: '',
@@ -83,46 +97,101 @@ export function useEnrollment() {
   const { data: masterData } = useQuery({
     queryKey: ['/api/master-data/all'],
     queryFn: api.getAllMasterData,
-    select: (response) => response.data,
+    select: (response) => {
+      const { data } = response;
+      if (response.data) {
+        data.districts = data.districts?.map(d => ({
+          district_lgd_code: d.districtLgdCode,
+          district_name: d.districtName,
+          local_code: d.localCode
+        }));
+        data.categories = data.categories?.map(c => ({
+          cat_id: c.catId,
+          cat_description: c.catDescription
+        }));
+      }
+      return data;
+    },
   });
 
-  const { data: districts } = useQuery({
+  const { data: districts, isLoading: isLoadingDistricts, error: districtError } = useQuery({
     queryKey: ['/api/master-data/districts'],
     queryFn: api.getDistricts,
-    select: (response) => response.data,
+    select: (response) => {
+      console.log('Districts API response:', response);
+      return response.data?.map(d => ({
+        district_lgd_code: d.districtLgdCode,
+        district_name: d.districtName,
+        local_code: d.localCode
+      })) || [];
+    },
+    staleTime: 0,
+    refetchOnMount: true,
   });
 
   const { data: areas } = useQuery({
     queryKey: ['/api/master-data/areas', enrollmentState.establishmentInfo.district],
     queryFn: () => api.getAreasByDistrict(enrollmentState.establishmentInfo.district),
     enabled: !!enrollmentState.establishmentInfo.district,
-    select: (response) => response.data,
+    select: (response) => {
+      return response.data?.map(a => ({
+        code: a.code,
+        name_en: a.nameEn,
+        name_bn: a.nameBn
+      })) || [];
+    },
   });
 
   const { data: charges } = useQuery({
     queryKey: ['/api/master-data/charges', enrollmentState.establishmentInfo.jurisdictionArea],
     queryFn: () => api.getChargesByArea(enrollmentState.establishmentInfo.jurisdictionArea),
     enabled: !!enrollmentState.establishmentInfo.jurisdictionArea,
-    select: (response) => response.data,
+    select: (response) => {
+      return response.data?.map(c => ({
+        code: c.code,
+        charge: c.charge,
+        area_code: c.areaCode,
+        charge_sn: c.chargeSn
+      })) || [];
+    },
   });
 
   const { data: categories } = useQuery({
     queryKey: ['/api/master-data/categories'],
     queryFn: api.getCategories,
-    select: (response) => response.data,
+    select: (response) => {
+      return response.data?.map(c => ({
+        cat_id: c.catId,
+        cat_description: c.catDescription
+      })) || [];
+    },
   });
 
   const { data: subcategories } = useQuery({
     queryKey: ['/api/master-data/subcategories', enrollmentState.establishmentInfo.category],
     queryFn: () => api.getSubcategoriesByCategory(parseInt(enrollmentState.establishmentInfo.category)),
     enabled: !!enrollmentState.establishmentInfo.category,
-    select: (response) => response.data,
+    select: (response) => {
+      return response.data?.map(s => ({
+        subcat_code: s.subcatCode,
+        subcat_description: s.subcatDescription,
+        cat_code: s.catCode,
+        is_visible: s.isVisible
+      })) || [];
+    },
   });
 
   const { data: periodOptions } = useQuery({
     queryKey: ['/api/master-data/period-of-standing'],
     queryFn: api.getPeriodOfStandingOptions,
-    select: (response) => response.data,
+    select: (response) => {
+      console.log('Period options API response:', response);
+      return response.data?.map((option: string, index: number) => ({
+        id: index + 1,
+        code: option,
+        name: option
+      })) || [];
+    },
   });
 
   // OTP mutations
@@ -233,6 +302,20 @@ export function useEnrollment() {
     }));
   }, []);
 
+  const updateEstablishmentType = useCallback((data: Partial<EnrollmentState['establishmentType']>) => {
+    setEnrollmentState(prev => ({
+      ...prev,
+      establishmentType: { ...prev.establishmentType, ...data }
+    }));
+  }, []);
+
+  const updateDetailedInfo = useCallback((data: Partial<EnrollmentState['detailedInfo']>) => {
+    setEnrollmentState(prev => ({
+      ...prev,
+      detailedInfo: { ...prev.detailedInfo, ...data }
+    }));
+  }, []);
+
   const updateProfessionalDetails = useCallback((data: Partial<EnrollmentState['professionalDetails']>) => {
     setEnrollmentState(prev => ({
       ...prev,
@@ -320,6 +403,8 @@ export function useEnrollment() {
       updatePersonalInfo,
       updateEstablishmentInfo,
       updateEngagementFlags,
+      updateEstablishmentType,
+      updateDetailedInfo,
       updateProfessionalDetails,
       updateTaxRegistrations,
       updateVehicleDetails,
