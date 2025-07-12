@@ -27,18 +27,15 @@ export default function FinalOTPStep({
 }: FinalOTPStepProps) {
   const [timeLeft, setTimeLeft] = useState(102); // 1 min 42 sec
   const [canResend, setCanResend] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
   
   const form = useForm<{ otp: string }>({
     resolver: zodResolver(otpVerificationSchema.pick({ otp: true })),
     defaultValues: { otp: '' },
   });
 
-  useEffect(() => {
-    // Send OTP automatically when component mounts
-    if (mobileNumber) {
-      onSendOtp({ mobile: mobileNumber, type: 'final' });
-    }
-  }, [mobileNumber, onSendOtp]);
+  // Remove automatic OTP sending to prevent infinite loops
+  // OTP will be sent manually when user clicks send button
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -59,6 +56,13 @@ export default function FinalOTPStep({
     if (verified) {
       onNext();
     }
+  };
+
+  const handleSendOtp = () => {
+    onSendOtp({ mobile: mobileNumber, type: 'final' });
+    setOtpSent(true);
+    setTimeLeft(102);
+    setCanResend(false);
   };
 
   const handleResend = () => {
@@ -83,70 +87,90 @@ export default function FinalOTPStep({
         <div className="text-center mb-6">
           <Shield className="mx-auto text-primary text-4xl mb-4" />
           <h3 className="text-lg font-semibold text-gray-800 mb-2">Final OTP Verification</h3>
-          <p className="text-green-600 mb-4">
-            We have sent an OTP on your Mobile Number <span className="font-medium">{mobileNumber}</span>.
-          </p>
-          <p className="text-blue-600 mb-4">
-            You must enter the OTP to finally submit the Enrolment Form.
-          </p>
+          {otpSent ? (
+            <>
+              <p className="text-green-600 mb-4">
+                We have sent an OTP on your Mobile Number <span className="font-medium">{mobileNumber}</span>.
+              </p>
+              <p className="text-blue-600 mb-4">
+                You must enter the OTP to finally submit the Enrolment Form.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="text-gray-600 mb-4">
+                Click the button below to send an OTP to your Mobile Number <span className="font-medium">{mobileNumber}</span>.
+              </p>
+              <Button
+                onClick={handleSendOtp}
+                disabled={isSending}
+                className="gov-button-primary mb-4"
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                {isSending ? "Sending..." : "Send OTP"}
+              </Button>
+            </>
+          )}
         </div>
         
-        <div className="max-w-md mx-auto">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="otp"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        placeholder="58394"
-                        {...field}
-                        onChange={(e) => field.onChange(e.target.value.replace(/\D/g, '').substring(0, 6))}
-                        className="w-full text-center text-lg font-mono py-3"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+        {otpSent && (
+          <div className="max-w-md mx-auto">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="otp"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="58394"
+                          {...field}
+                          onChange={(e) => field.onChange(e.target.value.replace(/\D/g, '').substring(0, 6))}
+                          className="w-full text-center text-lg font-mono py-3"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="text-center mb-6">
+                  <Button 
+                    type="submit" 
+                    disabled={isVerifying}
+                    className="gov-button-primary"
+                  >
+                    <Check className="w-4 h-4 mr-2" />
+                    {isVerifying ? "Verifying..." : "Submit"}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+            
+            <div className="text-center">
+              <p className="text-sm text-gray-600">
+                {canResend ? (
+                  "You can now resend the OTP"
+                ) : (
+                  <>
+                    If you don't receive OTP in <span className="text-red-500">{formatTime(timeLeft)}</span> you may click on Resend Button.
+                  </>
                 )}
-              />
-              
-              <div className="text-center mb-6">
-                <Button 
-                  type="submit" 
-                  disabled={isVerifying}
-                  className="gov-button-primary"
-                >
-                  <Check className="w-4 h-4 mr-2" />
-                  {isVerifying ? "Verifying..." : "Submit"}
-                </Button>
-              </div>
-            </form>
-          </Form>
-          
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              {canResend ? (
-                "You can now resend the OTP"
-              ) : (
-                <>
-                  If you don't receive OTP in <span className="text-red-500">{formatTime(timeLeft)}</span> you may click on Resend Button.
-                </>
-              )}
-            </p>
-            <Button
-              type="button"
-              onClick={handleResend}
-              disabled={!canResend || isSending}
-              className="mt-2"
-              variant="outline"
-            >
-              <RotateCcw className="w-4 h-4 mr-2" />
-              {isSending ? "Sending..." : "Resend"}
-            </Button>
+              </p>
+              <Button
+                type="button"
+                onClick={handleResend}
+                disabled={!canResend || isSending}
+                className="mt-2"
+                variant="outline"
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                {isSending ? "Sending..." : "Resend"}
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ package io.example.professionaltaxportal.service;
 
 import io.example.professionaltaxportal.dto.ApiResponse;
 import io.example.professionaltaxportal.dto.EnrolmentSubmissionDTO;
+import io.example.professionaltaxportal.dto.TempEnrolmentSubmissionDTO;
 import io.example.professionaltaxportal.entity.*;
 import io.example.professionaltaxportal.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -274,7 +275,68 @@ public class EnrolmentService {
     }
     
     @Transactional
+    public ApiResponse<String> saveTemporaryEnrolment(TempEnrolmentSubmissionDTO enrolmentData) {
+        return saveTemporaryEnrolmentData(enrolmentData);
+    }
+    
+    @Transactional
     public ApiResponse<String> saveTemporaryEnrolment(EnrolmentSubmissionDTO enrolmentData) {
+        // Convert to TempEnrolmentSubmissionDTO
+        TempEnrolmentSubmissionDTO tempData = convertToTempDTO(enrolmentData);
+        return saveTemporaryEnrolmentData(tempData);
+    }
+    
+    private TempEnrolmentSubmissionDTO convertToTempDTO(EnrolmentSubmissionDTO source) {
+        TempEnrolmentSubmissionDTO temp = new TempEnrolmentSubmissionDTO();
+        temp.setApplicantType(source.getApplicantType());
+        temp.setName(source.getName());
+        temp.setGender(source.getGender());
+        temp.setFatherName(source.getFatherName());
+        temp.setPan(source.getPan());
+        temp.setMobile(source.getMobile());
+        temp.setEmail(source.getEmail());
+        temp.setEstablishmentName(source.getEstablishmentName());
+        temp.setJurisdictionArea(source.getJurisdictionArea());
+        temp.setCharge(source.getCharge());
+        temp.setDistrict(source.getDistrict());
+        temp.setPincode(source.getPincode());
+        temp.setEstablishmentAddress(source.getEstablishmentAddress());
+        temp.setCategory(source.getCategory());
+        temp.setSubcategory(source.getSubcategory());
+        temp.setEngagedWithProfession(source.getEngagedWithProfession());
+        temp.setEngagedWithTrade(source.getEngagedWithTrade());
+        temp.setEngagedWithCalling(source.getEngagedWithCalling());
+        temp.setEngagedWithEmployment(source.getEngagedWithEmployment());
+        temp.setCommencementDate(source.getCommencementDate());
+        temp.setPeriodOfStanding(source.getPeriodOfStanding());
+        temp.setPanTan(source.getPanTan());
+        temp.setAnnualGrossBusiness(source.getAnnualGrossBusiness());
+        temp.setAnnualTurnover(source.getAnnualTurnover());
+        temp.setMonthlyAvgWorkers(source.getMonthlyAvgWorkers());
+        temp.setMonthlyAvgEmployees(source.getMonthlyAvgEmployees());
+        temp.setVatRegistered(source.getVatRegistered());
+        temp.setVatNumber(source.getVatNumber());
+        temp.setCstRegistered(source.getCstRegistered());
+        temp.setCstNumber(source.getCstNumber());
+        temp.setGstRegistered(source.getGstRegistered());
+        temp.setGstNumber(source.getGstNumber());
+        temp.setTaxis(source.getTaxis());
+        temp.setThreeWheelers(source.getThreeWheelers());
+        temp.setLightMotorVehicles(source.getLightMotorVehicles());
+        temp.setGoodVehicles(source.getGoodVehicles());
+        temp.setTrucks(source.getTrucks());
+        temp.setBuses(source.getBuses());
+        temp.setEmployerName(source.getEmployerName());
+        temp.setEmployerAddress(source.getEmployerAddress());
+        temp.setMonthlySalary(source.getMonthlySalary());
+        temp.setMultipleEmployers(source.getMultipleEmployers());
+        temp.setStateLevelSociety(source.getStateLevelSociety());
+        temp.setDistrictLevelSociety(source.getDistrictLevelSociety());
+        temp.setCaptchaValue(source.getCaptchaValue());
+        return temp;
+    }
+    
+    private ApiResponse<String> saveTemporaryEnrolmentData(TempEnrolmentSubmissionDTO enrolmentData) {
         try {
             // Validate required fields for temporary save
             if (enrolmentData.getName() == null || enrolmentData.getName().trim().isEmpty()) {
@@ -359,21 +421,21 @@ public class EnrolmentService {
             
             enrolmentDetailsRepository.save(tempEnrolment);
             
-            // Save specific engagement details if provided
-            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithProfession()) && hasValidProfessionData(enrolmentData)) {
-                saveProfessionDetails(enrolmentData, applicationId);
+            // Save specific engagement details if provided (simplified for temp save)
+            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithProfession()) && hasValidProfessionDataTemp(enrolmentData)) {
+                saveProfessionDetailsTemp(enrolmentData, applicationId);
             }
             
-            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithTrade()) && hasValidTradeData(enrolmentData)) {
-                saveTradeDetails(enrolmentData, applicationId);
+            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithTrade()) && hasValidTradeDataTemp(enrolmentData)) {
+                saveTradeDetailsTemp(enrolmentData, applicationId);
             }
             
-            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithCalling()) && hasValidCallingData(enrolmentData)) {
-                saveCallingDetails(enrolmentData, applicationId);
+            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithCalling()) && hasValidCallingDataTemp(enrolmentData)) {
+                saveCallingDetailsTemp(enrolmentData, applicationId);
             }
             
-            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithEmployment()) && hasValidEmploymentData(enrolmentData)) {
-                saveEmploymentDetails(enrolmentData, applicationId);
+            if (Boolean.TRUE.equals(enrolmentData.getEngagedWithEmployment()) && hasValidEmploymentDataTemp(enrolmentData)) {
+                saveEmploymentDetailsTemp(enrolmentData, applicationId);
             }
             
             return ApiResponse.success("Application saved temporarily", applicationId);
@@ -397,5 +459,118 @@ public class EnrolmentService {
     
     private boolean hasValidEmploymentData(EnrolmentSubmissionDTO data) {
         return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getEmployerName() != null || data.getEmployerAddress() != null || data.getMonthlySalary() != null;
+    }
+    
+    // Temp methods for TempEnrolmentSubmissionDTO
+    private boolean hasValidProfessionDataTemp(TempEnrolmentSubmissionDTO data) {
+        return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getAnnualGrossBusiness() != null;
+    }
+    
+    private boolean hasValidTradeDataTemp(TempEnrolmentSubmissionDTO data) {
+        return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getAnnualGrossBusiness() != null || data.getAnnualTurnover() != null;
+    }
+    
+    private boolean hasValidCallingDataTemp(TempEnrolmentSubmissionDTO data) {
+        return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getAnnualGrossBusiness() != null;
+    }
+    
+    private boolean hasValidEmploymentDataTemp(TempEnrolmentSubmissionDTO data) {
+        return data.getCommencementDate() != null || data.getPeriodOfStanding() != null || data.getEmployerName() != null || data.getEmployerAddress() != null || data.getMonthlySalary() != null;
+    }
+    
+    private void saveProfessionDetailsTemp(TempEnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantProfessionDetails profession = new TempApplicantProfessionDetails();
+        profession.setApplicationId(applicationId);
+        profession.setCommencementDate(data.getCommencementDate());
+        profession.setPeriodOfStanding(data.getPeriodOfStanding());
+        profession.setPan(data.getPanTan());
+        profession.setAnnualGrossBusiness(convertToBigDecimal(data.getAnnualGrossBusiness()));
+        profession.setAvgWorkersMonthly(data.getMonthlyAvgWorkers());
+        profession.setAvgEmployeesMonthly(data.getMonthlyAvgEmployees());
+        profession.setVatNumber(data.getVatNumber());
+        profession.setCstNumber(data.getCstNumber());
+        profession.setGstNumber(data.getGstNumber());
+        profession.setTaxiCount(data.getTaxis());
+        profession.setThreeWheelerCount(data.getThreeWheelers());
+        profession.setLmvCount(data.getLightMotorVehicles());
+        profession.setGoodVehicleCount(data.getGoodVehicles());
+        profession.setTruckCount(data.getTrucks());
+        profession.setBusCount(data.getBuses());
+        profession.setEngagedWithStateSociety(data.getStateLevelSociety());
+        profession.setEngagedWithDistrictSociety(data.getDistrictLevelSociety());
+        
+        professionalDetailsRepository.save(profession);
+    }
+    
+    private void saveTradeDetailsTemp(TempEnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantTradeDetails trade = new TempApplicantTradeDetails();
+        trade.setApplicationId(applicationId);
+        trade.setCommencementDate(data.getCommencementDate());
+        trade.setPeriodOfStanding(data.getPeriodOfStanding());
+        trade.setPan(data.getPanTan());
+        trade.setAnnualGrossBusiness(convertToBigDecimal(data.getAnnualGrossBusiness()));
+        trade.setAnnualTurnOver(convertToBigDecimal(data.getAnnualTurnover()));
+        trade.setAvgWorkersMonthly(data.getMonthlyAvgWorkers());
+        trade.setAvgEmployeesMonthly(data.getMonthlyAvgEmployees());
+        trade.setVatNumber(data.getVatNumber());
+        trade.setCstNumber(data.getCstNumber());
+        trade.setGstNumber(data.getGstNumber());
+        trade.setTaxiCount(data.getTaxis());
+        trade.setThreeWheelerCount(data.getThreeWheelers());
+        trade.setLmvCount(data.getLightMotorVehicles());
+        trade.setGoodVehicleCount(data.getGoodVehicles());
+        trade.setTruckCount(data.getTrucks());
+        trade.setBusCount(data.getBuses());
+        trade.setEngagedWithStateSociety(data.getStateLevelSociety());
+        trade.setEngagedWithDistrictSociety(data.getDistrictLevelSociety());
+        
+        tradeDetailsRepository.save(trade);
+    }
+    
+    private void saveCallingDetailsTemp(TempEnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantCallingDetails calling = new TempApplicantCallingDetails();
+        calling.setApplicationId(applicationId);
+        calling.setCommencementDate(data.getCommencementDate());
+        calling.setPeriodOfStanding(data.getPeriodOfStanding());
+        calling.setPan(data.getPanTan());
+        calling.setAnnualGrossBusiness(convertToBigDecimal(data.getAnnualGrossBusiness()));
+        calling.setAvgWorkersMonthly(data.getMonthlyAvgWorkers());
+        calling.setAvgEmployeesMonthly(data.getMonthlyAvgEmployees());
+        calling.setVatNumber(data.getVatNumber());
+        calling.setCstNumber(data.getCstNumber());
+        calling.setGstNumber(data.getGstNumber());
+        calling.setEngagedWithStateSociety(data.getStateLevelSociety());
+        calling.setEngagedWithDistrictSociety(data.getDistrictLevelSociety());
+        
+        callingDetailsRepository.save(calling);
+    }
+    
+    private void saveEmploymentDetailsTemp(TempEnrolmentSubmissionDTO data, String applicationId) {
+        TempApplicantEmploymentDetails employment = new TempApplicantEmploymentDetails();
+        employment.setApplicationId(applicationId);
+        employment.setCommencementDate(data.getCommencementDate());
+        employment.setPeriodOfStanding(data.getPeriodOfStanding());
+        employment.setPan(data.getPanTan());
+        employment.setVatNumber(data.getVatNumber());
+        employment.setCstNumber(data.getCstNumber());
+        employment.setGstNumber(data.getGstNumber());
+        employment.setEmployerName(data.getEmployerName());
+        employment.setEmployerAddress(data.getEmployerAddress());
+        employment.setMonthlySalary(convertToBigDecimal(data.getMonthlySalary()));
+        employment.setEngagedWithMultipleEmployer(data.getMultipleEmployers());
+        
+        employmentDetailsRepository.save(employment);
+        
+        // Save additional employers if any
+        if (data.getAdditionalEmployers() != null && !data.getAdditionalEmployers().isEmpty()) {
+            data.getAdditionalEmployers().forEach(employer -> {
+                TempApplicantEmploymentEmployers empEmployer = new TempApplicantEmploymentEmployers();
+                empEmployer.setApplicationId(applicationId);
+                empEmployer.setEmployerName(employer.getName());
+                empEmployer.setEmployerAddress(employer.getAddress());
+                empEmployer.setMonthlySalary(employer.getMonthlySalary() != null ? employer.getMonthlySalary().doubleValue() : null);
+                employmentEmployersRepository.save(empEmployer);
+            });
+        }
     }
 }

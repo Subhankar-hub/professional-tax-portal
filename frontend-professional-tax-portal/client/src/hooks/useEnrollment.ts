@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { useToast } from '@/hooks/use-toast';
+import { transformEnrollmentData } from '@/lib/dataTransform';
 import type { EnrollmentState, MasterDataItem } from '@/types/enrollment';
 
 const initialState: EnrollmentState = {
@@ -377,7 +378,6 @@ export function useEnrollment() {
   const autoSave = useCallback(() => {
     if (enrollmentState.currentStep > 1 && enrollmentState.personalInfo.mobile && enrollmentState.personalInfo.name) {
       // Only auto-save if we have basic required data
-      const { transformEnrollmentData } = require('@/lib/dataTransform');
       const transformedData = transformEnrollmentData(enrollmentState);
       saveTemporaryMutation.mutate(transformedData);
     }

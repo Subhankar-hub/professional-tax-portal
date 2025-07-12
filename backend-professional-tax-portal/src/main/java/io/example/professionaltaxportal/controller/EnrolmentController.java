@@ -2,6 +2,7 @@ package io.example.professionaltaxportal.controller;
 
 import io.example.professionaltaxportal.dto.ApiResponse;
 import io.example.professionaltaxportal.dto.EnrolmentSubmissionDTO;
+import io.example.professionaltaxportal.dto.TempEnrolmentSubmissionDTO;
 import io.example.professionaltaxportal.dto.OTPRequestDTO;
 import io.example.professionaltaxportal.dto.OTPVerificationDTO;
 import io.example.professionaltaxportal.service.EnrolmentService;
@@ -45,7 +46,7 @@ public class EnrolmentController {
     }
 
     @PostMapping("/enrolment/temp-save")
-    public ResponseEntity<ApiResponse<String>> saveTemporaryEnrolment(@Valid @RequestBody EnrolmentSubmissionDTO request) {
+    public ResponseEntity<ApiResponse<String>> saveTemporaryEnrolment(@RequestBody TempEnrolmentSubmissionDTO request) {
         ApiResponse<String> response = enrolmentService.saveTemporaryEnrolment(request);
         return ResponseEntity.ok(response);
     }

@@ -18,16 +18,17 @@ export default function EnrollmentPage() {
   const { enrollmentState, masterData, mutations, actions } = useEnrollment();
   const { toast } = useToast();
 
-  // Auto-save every 30 seconds (temporarily disabled)
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     if (enrollmentState.currentStep > 1 && enrollmentState.currentStep < 8) {
-  //       actions.autoSave();
-  //     }
-  //   }, 30000);
+  // Auto-save every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (enrollmentState.currentStep > 1 && enrollmentState.currentStep < 8 && enrollmentState.personalInfo.mobile && enrollmentState.personalInfo.name) {
+        console.log('Auto-saving data for step:', enrollmentState.currentStep);
+        actions.autoSave();
+      }
+    }, 10000); // Reduced to 10 seconds for testing
 
-  //   return () => clearInterval(interval);
-  // }, [enrollmentState.currentStep, actions]);
+    return () => clearInterval(interval);
+  }, [enrollmentState.currentStep, actions]);
 
   // Handle page unload warning
   useEffect(() => {
@@ -70,6 +71,8 @@ export default function EnrollmentPage() {
   // Step 3: Establishment Information
   const handleEstablishmentInfoNext = (data: EstablishmentInfo) => {
     actions.updateEstablishmentInfo(data);
+    // Save progress after completing establishment info
+    setTimeout(() => actions.autoSave(), 500);
     actions.nextStep();
   };
 
@@ -98,12 +101,16 @@ export default function EnrollmentPage() {
   // Step 4: Establishment Type
   const handleEstablishmentTypeNext = (data: EstablishmentType) => {
     actions.updateEstablishmentType(data);
+    // Save progress after selecting establishment type
+    setTimeout(() => actions.autoSave(), 500);
     actions.nextStep();
   };
 
   // Step 5: Detailed Information
   const handleDetailedInfoNext = (data: DetailedInfo) => {
     actions.updateDetailedInfo(data);
+    // Save progress after completing detailed info
+    setTimeout(() => actions.autoSave(), 500);
     actions.nextStep();
   };
 
