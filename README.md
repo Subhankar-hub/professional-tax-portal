@@ -1,90 +1,105 @@
-# Professional Tax Portal - In-Depth Project Guide
 
-Welcome! This guide explains what the Professional Tax Portal project does, how it's organized, and what each part is for, using simple language but with more technical detail and references to the actual code and files.
+# Professional Tax Portal - Comprehensive Documentation
 
-## What is this project?
-This is a full-stack web application for managing professional tax registration. It allows users to enter, update, and view their tax-related details. The backend is built with Java (Spring Boot), and the frontend is built with React (JavaScript).
+## Overview
+The Professional Tax Portal is a full-stack web application for managing professional tax registration for Tripura State, India. It enables users to enroll, update, and view tax-related details through a secure, multi-step process. The backend is built with Java (Spring Boot), and the frontend uses React (TypeScript) with Vite and Tailwind CSS.
+
+## Architecture
+- **Frontend**: React.js (TypeScript), Vite, Tailwind CSS, Radix UI, shadcn/ui
+- **Backend**: Spring Boot (Java 17+), PostgreSQL, RESTful APIs
+- **Database**: PostgreSQL with automatic schema and master data initialization
+- **Deployment**: Docker, Vercel (frontend), local and cloud support
+
+## Key Features
+- 8-step enrollment process with OTP verification
+- Multi-step wizard UI with real-time validation and progress indicator
+- Responsive, government-standard design
+- Automatic database setup and master data population
+- REST API endpoints for all major operations
+- Secure session management and input validation
+- Admin endpoints for database management
 
 ## Project Structure
-The project is split into two main parts:
-- **Backend** (`professionaltaxportal`): Handles all data, business logic, and database operations.
-- **Frontend** (`EmploymentDetails-frontend`, `nic_project`): The user interface that people interact with in their web browser.
+- **api/**: Node.js/Express serverless functions for backend endpoints
+- **backend-professional-tax-portal/**: Spring Boot backend, database schema, and resources
+- **frontend-professional-tax-portal/**: React frontend, UI components, pages, hooks, and types
 
----
+## Database Schema
+Master tables:
+- `mas_district`: Districts of Tripura
+- `mtbl_area`: Administrative areas
+- `mtbl_charge`: Charge offices
+- `mtbl_role`: User roles
+- `mtbl_ptax_category`: Professional tax categories
+- `mtbl_ptax_category_subcategory`: Subcategories for detailed classification
+Application tables:
+- `mtbl_users_taxpayers`: User accounts
+- `ttbl_applicant_enrolment_details`: Enrollment applications
+- `ttbl_applicant_profession_details`, `ttbl_applicant_trade_details`, `ttbl_applicant_calling_details`, `ttbl_applicant_employment_details`: Detailed applicant info
+Temporary tables for draft applications and OTP verification
 
-## Backend: professionaltaxportal
+## API Endpoints
+### Master Data
+- `GET /api/master-data/all` - All master data
+- `GET /api/master-data/districts` - Districts
+- `GET /api/master-data/areas/{districtId}` - Areas by district
+- `GET /api/master-data/charges/{areaId}` - Charges by area
+- `GET /api/master-data/categories` - Categories
+- `GET /api/master-data/subcategories/{categoryId}` - Subcategories
+### Enrollment
+- `POST /api/enrollment/submit` - Submit application
+- `POST /api/enrollment/verify-otp` - Verify OTP
+- `GET /api/enrollment/status/{applicationId}` - Application status
+### OTP
+- `POST /api/otp/send` - Send OTP
+- `POST /api/otp/verify` - Verify OTP
+### Admin
+- `GET /api/admin/database/status` - Check DB status
+- `POST /api/admin/database/initialize` - Manual DB init
+- `POST /api/admin/database/reset` - Reset DB
+- `GET /api/admin/database/verify` - Verify DB setup
 
-### Main Application
-- **ProfessionaltaxportalApplication.java**: The entry point for the backend. It starts the Spring Boot server and loads all configurations.
+## Setup & Deployment
+### Prerequisites
+- Java 17+, Node.js 18+, PostgreSQL 12+, Docker, Git
 
-### Configuration (`config/`)
-- **CorsConfig.java**: Sets up CORS so the frontend can communicate with the backend from a different address (like `localhost:3000`).
-- **ModelMapperConfig.java**: Provides a ModelMapper bean for converting between entities and DTOs.
+### Quick Setup
+1. Clone repo: `git clone <repository-url>`
+2. Database: `./setup_postgres.sh` or manual SQL scripts
+3. Backend: `cd backend-professional-tax-portal && ./mvnw spring-boot:run`
+4. Frontend: `cd frontend-professional-tax-portal && npm install && npm start`
 
-### Data Transfer Objects (`dto/`)
-- **ApiResponse.java**: Standardizes API responses with fields for success, message, data, and applicationId.
-- **EstablishmentDetailsDTO.java**: Used to transfer establishment details, including a list of establishments.
-- **EstablishmentTypeDTO.java**: Transfers establishment type and category info.
-- **PersonalDetailsDTO.java**: Transfers personal details, with validation for fields like name, gender, mobile, and email.
-- **ProfessionDetailsDTO.java**: Transfers professional details, including business info, PAN, and vehicle counts.
-- **TradeDetailsDTO.java**: Transfers trade-specific details, similar to professional details.
+### Docker Deployment
+- Full stack: `docker-compose up --build -d`
+- Backend only: `docker build -t ptax-backend . && docker run ...`
+- Database: `docker run -d --name ptax_postgres ...`
 
-### Entities (`entity/`)
-- **Area.java, District.java, Charge.java**: Represent master data tables for areas, districts, and charges.
-- **PTaxCategory.java, PTaxCategorySubcategory.java**: Represent tax categories and subcategories.
-- **TempApplicantEnrolmentDetails.java**: Stores temporary applicant registration info (name, gender, contact, etc.).
-- **TempApplicantEmploymentDetails.java, TempApplicantProfessionDetails.java, TempApplicantTradeDetails.java, TempApplicantCallingDetails.java**: Store detailed info for each applicant's employment, profession, trade, and calling.
+### Vercel Deployment (Frontend)
+1. Install Vercel CLI: `npm install -g vercel`
+2. Deploy: `vercel --prod`
+3. Configure environment variables in Vercel dashboard
 
-### Repositories (`repository/`)
-- **TempApplicantEnrolmentDetailsRepository.java**: Provides methods to find and check applicants by applicationId or mobile.
-- **TempApplicantProfessionalDetailsRepository.java**: Provides methods to find and delete professional details by applicationId.
+## Security & Performance
+- OTP-based verification, CSRF/session protection
+- Input validation (Zod, server-side)
+- HTTPS, security headers, CORS
+- Database connection pooling, query optimization
+- Static asset caching, bundle optimization
 
-### Resources (`resources/`)
-- **application.properties / application.yml**: Configure server port, database connection, JPA settings, CORS, and file upload limits.
-- **static/** and **templates/**: Reserved for static files and templates (currently empty).
-
-### Tests (`test/`)
-- **ProfessionaltaxportalApplicationTests.java**: Basic test to ensure the Spring context loads.
-
----
-
-## Frontend: EmploymentDetails-frontend & nic_project
-
-### Main Files
-- **public/index.html**: The HTML template loaded in the browser.
-- **src/index.js**: Entry point for the React app; renders the main `App` component.
-- **src/App.js**: The root React component; sets up the main structure and routing.
-- **src/Component/PTAXEnrollmentForm.jsx**: Handles the main tax enrollment form, collecting user data and sending it to the backend.
-- **src/Step3Establishment.js, src/Step4OtherDetails.js**: Handle specific steps in the multi-step registration process.
-- **App.css, Establishment.css, index.css**: Style the user interface.
-
-### How the Frontend Works
-- Components are organized by steps or features (e.g., establishment details, other details, enrollment form).
-- Each form or step collects user input and, on submit, sends the data to the backend using HTTP requests (usually with `fetch` or `axios`).
-- The frontend expects JSON responses, which are handled and displayed to the user (success messages, errors, or data).
-
----
-
-## Integration: How Frontend and Backend Work Together
-1. **User fills out forms** in the React frontend (e.g., PTAXEnrollmentForm.jsx).
-2. **Frontend sends data** to the backend API (Spring Boot) using HTTP POST/GET requests (URLs like `/api/...`).
-3. **Backend receives the request**, validates and processes the data using DTOs and entities, and saves it in the database.
-4. **Backend responds** with a JSON object (often using ApiResponse.java), indicating success or failure and returning any requested data.
-5. **Frontend updates the UI** based on the backend response (showing confirmation, errors, or next steps).
-
----
+## Troubleshooting
+- Check logs: `docker-compose logs -f backend` / `frontend`
+- Database issues: verify connection string, credentials, container status
+- CORS errors: check allowed origins
+- Frontend build: clear npm cache, reinstall modules
+- Use admin endpoints for DB reset/verify
 
 ## Example Flow
-- User enters their personal and business details in the React form.
-- On submit, the frontend sends a POST request to `/api/enrolment`.
-- The backend receives the request, maps the data to a DTO, validates it, and saves it as an entity in the database.
-- The backend responds with a success message and application ID.
-- The frontend displays the confirmation and may allow the user to proceed to the next step.
+1. User fills out multi-step form in frontend
+2. Frontend sends data to backend via REST API
+3. Backend validates, saves, and responds with status
+4. Frontend displays confirmation and next steps
 
----
-
-## Why is this useful?
-- Makes tax registration easier and more organized for users and administrators.
-- Keeps all information in one place, safely stored in a database.
-- The code is modular and easy to maintain or extend.
-- Clear separation between frontend and backend makes updates and debugging easier.
+## License & Support
+- MIT License
+- Developed for Government of Tripura, Commissionerate of Taxes & Excise
+- For issues: check logs, use admin endpoints, review troubleshooting section
