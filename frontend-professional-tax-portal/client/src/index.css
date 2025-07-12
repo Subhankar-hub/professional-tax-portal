@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(222, 84%, 4.9%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 84%, 4.9%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222, 84%, 4.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 40%, 96%);
+  --secondary-foreground: hsl(222, 47%, 11%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 16%, 46%);
+  --accent: hsl(210, 40%, 96%);
+  --accent-foreground: hsl(222, 47%, 11%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --ring: hsl(222, 84%, 4.9%);
+  --radius: 0.5rem;
+  --gov-blue: hsl(207, 90%, 54%);
+  --gov-blue-dark: hsl(207, 90%, 44%);
+  --gov-yellow: hsl(45, 100%, 51%);
+  --gov-success: hsl(122, 39%, 49%);
+  --gov-error: hsl(0, 84%, 60%);
+  --gov-text: hsl(0, 0%, 20%);
+  --gov-bg: hsl(0, 0%, 98%);
+  --gov-card: hsl(0, 0%, 100%);
+}
+
+.dark {
+  --background: hsl(222, 84%, 4.9%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 84%, 4.9%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(222, 84%, 4.9%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(222, 47%, 11%);
+  --secondary: hsl(217, 32%, 17%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(217, 32%, 17%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --accent: hsl(217, 32%, 17%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62%, 30%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(217, 32%, 17%);
+  --input: hsl(217, 32%, 17%);
+  --ring: hsl(212, 72%, 59%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  .gov-header {
+    background: var(--gov-blue);
+    color: white;
+  }
+  
+  .gov-button-primary {
+    background: var(--gov-yellow);
+    color: var(--gov-text);
+  }
+  
+  .gov-button-primary:hover {
+    background: hsl(45, 100%, 41%);
+  }
+  
+  .gov-button-secondary {
+    background: var(--gov-blue);
+    color: white;
+  }
+  
+  .gov-button-secondary:hover {
+    background: var(--gov-blue-dark);
+  }
+  
+  .step-indicator {
+    position: relative;
+  }
+  
+  .step-indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    width: 100%;
+    height: 2px;
+    background: hsl(214, 32%, 91%);
+    transform: translateY(-50%);
+  }
+  
+  .step-indicator.completed::after {
+    background: var(--gov-blue);
+  }
+  
+  .step-indicator:last-child::after {
+    display: none;
+  }
+  
+  .captcha-container {
+    background: hsl(210, 40%, 98%);
+    border: 1px solid hsl(214, 32%, 91%);
+    border-radius: 4px;
+    padding: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .captcha-text {
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--gov-text);
+    background: linear-gradient(45deg, hsl(0, 0%, 94%), hsl(0, 0%, 88%));
+    padding: 4px 8px;
+    border-radius: 4px;
+    letter-spacing: 2px;
+  }
+  
+  .form-section {
+    background: var(--gov-card);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .form-section-header {
+    background: var(--gov-blue);
+    color: white;
+    padding: 1rem 1.5rem;
+  }
+  
+  .form-section-content {
+    padding: 1.5rem;
+  }
+  
+  .form-section-footer {
+    background: hsl(210, 40%, 96%);
+    padding: 1rem 1.5rem;
+  }
+  
+  .info-box {
+    background: hsl(213, 100%, 97%);
+    border: 1px solid hsl(213, 100%, 87%);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  
+  .info-box.warning {
+    background: hsl(38, 100%, 97%);
+    border-color: hsl(38, 100%, 87%);
+  }
+  
+  .info-box.success {
+    background: hsl(122, 100%, 97%);
+    border-color: hsl(122, 100%, 87%);
+  }
+  
+  .review-section {
+    background: hsl(213, 100%, 97%);
+    border: 1px solid hsl(213, 100%, 87%);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .review-section.establishment {
+    background: hsl(213, 100%, 97%);
+    border-color: hsl(213, 100%, 87%);
+  }
+  
+  .review-section.employment {
+    background: hsl(122, 100%, 97%);
+    border-color: hsl(122, 100%, 87%);
+  }
+}

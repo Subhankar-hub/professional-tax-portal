@@ -119,6 +119,36 @@ public class EnrolmentService {
         enrolment.setEngagedWithCalling(data.getEngagedWithCalling());
         enrolment.setEngagedWithEmployement(data.getEngagedWithEmployment());
         
+        // Save additional establishments (up to 5)
+        if (data.getAdditionalEstablishments() != null && !data.getAdditionalEstablishments().isEmpty()) {
+            var establishments = data.getAdditionalEstablishments();
+            for (int i = 0; i < Math.min(establishments.size(), 5); i++) {
+                var establishment = establishments.get(i);
+                switch (i) {
+                    case 0:
+                        enrolment.setEstablishment1Name(establishment.getName());
+                        enrolment.setEstablishment1Address(establishment.getAddress());
+                        break;
+                    case 1:
+                        enrolment.setEstablishment2Name(establishment.getName());
+                        enrolment.setEstablishment2Address(establishment.getAddress());
+                        break;
+                    case 2:
+                        enrolment.setEstablishment3Name(establishment.getName());
+                        enrolment.setEstablishment3Address(establishment.getAddress());
+                        break;
+                    case 3:
+                        enrolment.setEstablishment4Name(establishment.getName());
+                        enrolment.setEstablishment4Address(establishment.getAddress());
+                        break;
+                    case 4:
+                        enrolment.setEstablishment5Name(establishment.getName());
+                        enrolment.setEstablishment5Address(establishment.getAddress());
+                        break;
+                }
+            }
+        }
+        
         return enrolment;
     }
     
@@ -294,6 +324,37 @@ public class EnrolmentService {
             tempEnrolment.setEngagedWithTrade(enrolmentData.getEngagedWithTrade());
             tempEnrolment.setEngagedWithCalling(enrolmentData.getEngagedWithCalling());
             tempEnrolment.setEngagedWithEmployement(enrolmentData.getEngagedWithEmployment());
+            
+            // Save additional establishments (up to 5) for temporary save as well
+            if (enrolmentData.getAdditionalEstablishments() != null && !enrolmentData.getAdditionalEstablishments().isEmpty()) {
+                var establishments = enrolmentData.getAdditionalEstablishments();
+                for (int i = 0; i < Math.min(establishments.size(), 5); i++) {
+                    var establishment = establishments.get(i);
+                    switch (i) {
+                        case 0:
+                            tempEnrolment.setEstablishment1Name(establishment.getName());
+                            tempEnrolment.setEstablishment1Address(establishment.getAddress());
+                            break;
+                        case 1:
+                            tempEnrolment.setEstablishment2Name(establishment.getName());
+                            tempEnrolment.setEstablishment2Address(establishment.getAddress());
+                            break;
+                        case 2:
+                            tempEnrolment.setEstablishment3Name(establishment.getName());
+                            tempEnrolment.setEstablishment3Address(establishment.getAddress());
+                            break;
+                        case 3:
+                            tempEnrolment.setEstablishment4Name(establishment.getName());
+                            tempEnrolment.setEstablishment4Address(establishment.getAddress());
+                            break;
+                        case 4:
+                            tempEnrolment.setEstablishment5Name(establishment.getName());
+                            tempEnrolment.setEstablishment5Address(establishment.getAddress());
+                            break;
+                    }
+                }
+            }
+            
             tempEnrolment.setStatus(false); // Mark as temporary/incomplete
             
             enrolmentDetailsRepository.save(tempEnrolment);

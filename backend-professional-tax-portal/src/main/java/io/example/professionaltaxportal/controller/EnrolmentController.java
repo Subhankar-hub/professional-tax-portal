@@ -14,7 +14,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000", "http://0.0.0.0:3000", "https://*.replit.dev"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5000", "http://0.0.0.0:3000", "https://*.replit.dev"})
 public class EnrolmentController {
 
     private final EnrolmentService enrolmentService;

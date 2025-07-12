@@ -34,47 +34,140 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.2.1)
 
-2025-07-04T21:50:06.309+05:30  INFO 284119 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Starting ProfessionaltaxportalApplication using Java 17.0.15 with PID 284119 (/home/smith/Documents/projectprofessionaltax/backend-professional-tax-portal/target/classes started by smith in /home/smith/Documents/projectprofessionaltax/backend-professional-tax-portal)
-2025-07-04T21:50:06.311+05:30 DEBUG 284119 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Running with Spring Boot v3.2.1, Spring v6.1.2
-2025-07-04T21:50:06.312+05:30  INFO 284119 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : No active profile set, falling back to 1 default profile: "default"
-2025-07-04T21:50:07.520+05:30  INFO 284119 --- [professionaltaxportal] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-07-04T21:50:07.629+05:30  INFO 284119 --- [professionaltaxportal] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 99 ms. Found 11 JPA repository interfaces.
-2025-07-04T21:50:08.694+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2025-07-04T21:50:08.709+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-07-04T21:50:08.710+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
-2025-07-04T21:50:08.778+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-07-04T21:50:08.780+05:30  INFO 284119 --- [professionaltaxportal] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2401 ms
-2025-07-04T21:50:09.066+05:30 DEBUG 284119 --- [professionaltaxportal] [           main] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
-2025-07-04T21:50:09.244+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-07-04T21:50:09.307+05:30  INFO 284119 --- [professionaltaxportal] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
-2025-07-04T21:50:09.345+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-07-04T21:50:09.626+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-07-04T21:50:09.657+05:30  INFO 284119 --- [professionaltaxportal] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-07-04T21:50:10.007+05:30  INFO 284119 --- [professionaltaxportal] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@67e4928c
-2025-07-04T21:50:10.008+05:30  INFO 284119 --- [professionaltaxportal] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-07-04T21:50:10.044+05:30  WARN 284119 --- [professionaltaxportal] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-07-04T21:50:11.678+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-07-04T21:50:11.681+05:30  INFO 284119 --- [professionaltaxportal] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-07-04T21:50:12.942+05:30  WARN 284119 --- [professionaltaxportal] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-07-04T21:50:13.117+05:30 DEBUG 284119 --- [professionaltaxportal] [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : 15 mappings in 'requestMappingHandlerMapping'
-2025-07-04T21:50:13.316+05:30 DEBUG 284119 --- [professionaltaxportal] [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
-2025-07-04T21:50:13.384+05:30 DEBUG 284119 --- [professionaltaxportal] [           main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
-2025-07-04T21:50:13.439+05:30 DEBUG 284119 --- [professionaltaxportal] [           main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
-2025-07-04T21:50:14.026+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
-2025-07-04T21:50:14.137+05:30  INFO 284119 --- [professionaltaxportal] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
-2025-07-04T21:50:14.165+05:30  INFO 284119 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Started ProfessionaltaxportalApplication in 8.439 seconds (process running for 8.84)
-2025-07-04T21:50:58.358+05:30  INFO 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-07-04T21:50:58.359+05:30  INFO 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2025-07-04T21:50:58.359+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
-2025-07-04T21:50:58.360+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
-2025-07-04T21:50:58.360+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
-2025-07-04T21:50:58.362+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@4d7a4317
-2025-07-04T21:50:58.363+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@5d9639bb
-2025-07-04T21:50:58.363+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
-2025-07-04T21:50:58.364+05:30  INFO 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
-2025-07-04T21:50:58.383+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/master-data/categories", parameters={}
-2025-07-04T21:50:58.392+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.MasterDataController#getCategories()
-2025-07-04T21:50:58.530+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] org.hibernate.SQL                        : 
+2025-07-12T13:52:37.262+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Starting ProfessionaltaxportalApplication using Java 17.0.15 with PID 108263 (/home/smith/Documents/projectprofessionaltax/backend-professional-tax-portal/target/classes started by smith in /home/smith/Documents/projectprofessionaltax/backend-professional-tax-portal)
+2025-07-12T13:52:37.265+05:30 DEBUG 108263 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Running with Spring Boot v3.2.1, Spring v6.1.2
+2025-07-12T13:52:37.266+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-07-12T13:52:38.601+05:30  INFO 108263 --- [professionaltaxportal] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-07-12T13:52:38.717+05:30  INFO 108263 --- [professionaltaxportal] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 104 ms. Found 12 JPA repository interfaces.
+2025-07-12T13:52:39.901+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-07-12T13:52:39.919+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-07-12T13:52:39.919+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.17]
+2025-07-12T13:52:39.988+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-07-12T13:52:39.990+05:30  INFO 108263 --- [professionaltaxportal] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2654 ms
+2025-07-12T13:52:40.288+05:30 DEBUG 108263 --- [professionaltaxportal] [           main] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
+2025-07-12T13:52:40.501+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-07-12T13:52:40.576+05:30  INFO 108263 --- [professionaltaxportal] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.4.1.Final
+2025-07-12T13:52:40.622+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-07-12T13:52:40.955+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-07-12T13:52:40.988+05:30  INFO 108263 --- [professionaltaxportal] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-07-12T13:52:41.218+05:30  INFO 108263 --- [professionaltaxportal] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@74830d73
+2025-07-12T13:52:41.220+05:30  INFO 108263 --- [professionaltaxportal] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-07-12T13:52:41.262+05:30  WARN 108263 --- [professionaltaxportal] [           main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-07-12T13:52:43.008+05:30  INFO 108263 --- [professionaltaxportal] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T13:52:44.431+05:30  WARN 108263 --- [professionaltaxportal] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-07-12T13:52:44.646+05:30 DEBUG 108263 --- [professionaltaxportal] [           main] s.w.s.m.m.a.RequestMappingHandlerMapping : 19 mappings in 'requestMappingHandlerMapping'
+2025-07-12T13:52:44.893+05:30 DEBUG 108263 --- [professionaltaxportal] [           main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2025-07-12T13:52:44.967+05:30 DEBUG 108263 --- [professionaltaxportal] [           main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-07-12T13:52:45.031+05:30 DEBUG 108263 --- [professionaltaxportal] [           main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-07-12T13:52:45.623+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint(s) beneath base path '/actuator'
+2025-07-12T13:52:45.736+05:30  INFO 108263 --- [professionaltaxportal] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
+2025-07-12T13:52:45.765+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.ProfessionaltaxportalApplication   : Started ProfessionaltaxportalApplication in 9.134 seconds (process running for 9.567)
+2025-07-12T13:52:45.837+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.s.DatabaseInitializationService    : Starting database initialization...
+2025-07-12T13:52:45.838+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.s.DatabaseInitializationService    : Creating ptax schema if it doesn't exist...
+2025-07-12T13:52:45.843+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.s.DatabaseInitializationService    : Schema creation completed
+2025-07-12T13:52:45.843+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.s.DatabaseInitializationService    : Initializing database tables...
+2025-07-12T13:52:45.845+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.s.DatabaseInitializationService    : Schema tables initialized successfully
+2025-07-12T13:52:45.846+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.s.DatabaseInitializationService    : Initializing master data...
+2025-07-12T13:52:45.852+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.s.DatabaseInitializationService    : Master data already exists, skipping initialization
+2025-07-12T13:52:45.852+05:30  INFO 108263 --- [professionaltaxportal] [           main] i.e.p.s.DatabaseInitializationService    : Database initialization completed successfully
+2025-07-12T13:52:51.252+05:30  INFO 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-07-12T13:52:51.253+05:30  INFO 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-07-12T13:52:51.253+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected StandardServletMultipartResolver
+2025-07-12T13:52:51.253+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected AcceptHeaderLocaleResolver
+2025-07-12T13:52:51.254+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected FixedThemeResolver
+2025-07-12T13:52:51.255+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator@7597ae32
+2025-07-12T13:52:51.256+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Detected org.springframework.web.servlet.support.SessionFlashMapManager@3793896e
+2025-07-12T13:52:51.256+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : enableLoggingRequestDetails='false': request parameters and headers will be masked to prevent unsafe logging of potentially sensitive data
+2025-07-12T13:52:51.257+05:30  INFO 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-07-12T13:52:51.276+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : GET "/api/master-data/districts", parameters={}
+2025-07-12T13:52:51.285+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.MasterDataController#getDistricts()
+2025-07-12T13:52:51.442+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] org.hibernate.SQL                        : 
+    select
+        d1_0.district_lgd_code,
+        d1_0.district_name,
+        d1_0.local_code 
+    from
+        ptax.mas_district d1_0 
+    order by
+        d1_0.district_name
+Hibernate: 
+    select
+        d1_0.district_lgd_code,
+        d1_0.district_name,
+        d1_0.local_code 
+    from
+        ptax.mas_district d1_0 
+    order by
+        d1_0.district_name
+2025-07-12T13:52:51.516+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-12T13:52:51.522+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=Districts retrieved successfully, data=[District(districtLgdCode=2 (truncated)...]
+2025-07-12T13:52:51.547+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-12T13:54:55.121+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/master-data/all", parameters={}
+2025-07-12T13:54:55.121+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-3] o.s.web.servlet.DispatcherServlet        : GET "/api/master-data/districts", parameters={}
+2025-07-12T13:54:55.123+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.MasterDataController#getAllMasterData()
+2025-07-12T13:54:55.123+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-4] o.s.web.servlet.DispatcherServlet        : GET "/api/master-data/categories", parameters={}
+2025-07-12T13:54:55.124+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-4] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.MasterDataController#getCategories()
+2025-07-12T13:54:55.124+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/api/master-data/period-of-standing", parameters={}
+2025-07-12T13:54:55.125+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-3] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.MasterDataController#getDistricts()
+2025-07-12T13:54:55.125+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.MasterDataController#getPeriodOfStandingOptions()
+2025-07-12T13:54:55.135+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-12T13:54:55.136+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=Period of standing options retrieved successfully, data=[0 Year 0  (truncated)...]
+2025-07-12T13:54:55.136+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-2] org.hibernate.SQL                        : 
+    select
+        d1_0.district_lgd_code,
+        d1_0.district_name,
+        d1_0.local_code 
+    from
+        ptax.mas_district d1_0 
+    order by
+        d1_0.district_name
+2025-07-12T13:54:55.137+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-4] org.hibernate.SQL                        : 
+    select
+        pc1_0.cat_rsn,
+        pc1_0.cat_description,
+        pc1_0.cat_id 
+    from
+        ptax.mtbl_ptax_category pc1_0 
+    order by
+        pc1_0.cat_id
+Hibernate: 
+    select
+        d1_0.district_lgd_code,
+        d1_0.district_name,
+        d1_0.local_code 
+    from
+        ptax.mas_district d1_0 
+    order by
+        d1_0.district_name
+2025-07-12T13:54:55.137+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-3] org.hibernate.SQL                        : 
+    select
+        d1_0.district_lgd_code,
+        d1_0.district_name,
+        d1_0.local_code 
+    from
+        ptax.mas_district d1_0 
+    order by
+        d1_0.district_name
+Hibernate: 
+    select
+        d1_0.district_lgd_code,
+        d1_0.district_name,
+        d1_0.local_code 
+    from
+        ptax.mas_district d1_0 
+    order by
+        d1_0.district_name
+Hibernate: 
+    select
+        pc1_0.cat_rsn,
+        pc1_0.cat_description,
+        pc1_0.cat_id 
+    from
+        ptax.mtbl_ptax_category pc1_0 
+    order by
+        pc1_0.cat_id
+2025-07-12T13:54:55.140+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-12T13:54:55.145+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-2] org.hibernate.SQL                        : 
     select
         pc1_0.cat_rsn,
         pc1_0.cat_description,
@@ -92,42 +185,23 @@ Hibernate:
         ptax.mtbl_ptax_category pc1_0 
     order by
         pc1_0.cat_id
-2025-07-04T21:50:58.608+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2025-07-04T21:50:58.613+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=Categories retrieved successfully, data=[PTaxCategory(catRsn=1, ca (truncated)...]
-2025-07-04T21:50:58.640+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
-2025-07-04T21:51:40.797+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : GET "/api/master-data/subcategories/1", parameters={}
-2025-07-04T21:51:40.800+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-2] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.MasterDataController#getSubcategoriesByCategory(Long)
-2025-07-04T21:51:40.852+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-2] org.hibernate.SQL                        : 
-    select
-        pcs1_0.record_rsn,
-        pcs1_0.cat_code,
-        pcs1_0.cat_description,
-        pcs1_0.is_visible,
-        pcs1_0.subcat_code,
-        pcs1_0.subcat_description 
-    from
-        ptax.mtbl_ptax_category_subcategory pcs1_0 
-    where
-        pcs1_0.cat_code=? 
-    order by
-        pcs1_0.subcat_description
-Hibernate: 
-    select
-        pcs1_0.record_rsn,
-        pcs1_0.cat_code,
-        pcs1_0.cat_description,
-        pcs1_0.is_visible,
-        pcs1_0.subcat_code,
-        pcs1_0.subcat_description 
-    from
-        ptax.mtbl_ptax_category_subcategory pcs1_0 
-    where
-        pcs1_0.cat_code=? 
-    order by
-        pcs1_0.subcat_description
-2025-07-04T21:51:40.868+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
-2025-07-04T21:51:40.870+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=Subcategories retrieved successfully, data=[PTaxCategorySubcategor (truncated)...]
-2025-07-04T21:51:40.876+05:30 DEBUG 284119 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
-2025-07-04T21:59:15.143+05:30  INFO 284119 --- [professionaltaxportal] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-07-04T21:59:15.148+05:30  INFO 284119 --- [professionaltaxportal] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2025-07-04T21:59:15.194+05:30  INFO 284119 --- [professionaltaxportal] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-07-12T13:54:55.145+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-12T13:54:55.145+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-3] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=Districts retrieved successfully, data=[District(districtLgdCode=2 (truncated)...]
+2025-07-12T13:54:55.149+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-12T13:54:55.172+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-12T13:54:55.172+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-12T13:54:55.173+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-4] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=Categories retrieved successfully, data=[PTaxCategory(catRsn=64, c (truncated)...]
+2025-07-12T13:54:55.173+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [ApiResponse(success=true, message=Master data retrieved successfully, data={applicantTypes=[Individu (truncated)...]
+2025-07-12T13:54:55.179+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-4] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-12T13:54:55.188+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-12T13:55:34.474+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-6] o.s.web.servlet.DispatcherServlet        : GET "/health", parameters={}
+2025-07-12T13:55:34.475+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-6] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.HealthController#healthCheck()
+2025-07-12T13:55:34.476+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Using 'application/json', given [*/*] and supported [application/json, application/*+json]
+2025-07-12T13:55:34.476+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-6] o.s.w.s.m.m.a.HttpEntityMethodProcessor  : Writing [{message=Professional Tax Portal API is running, status=UP, timestamp=1752308734476}]
+2025-07-12T13:55:34.478+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-6] o.s.web.servlet.DispatcherServlet        : Completed 200 OK
+2025-07-12T13:57:04.706+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-5] o.s.web.servlet.DispatcherServlet        : GET "/health", parameters={}
+2025-07-12T13:57:04.707+05:30 DEBUG 108263 --- [professionaltaxportal] [0.0-8080-exec-5] s.w.s.m.m.a.RequestMappingHandlerMapping : Mapped to io.example.professionaltaxportal.controller.HealthController#healthCheck()
+2025-07-12T13:57:04.708+05:2025-07-12T13:58:13.262+05:30  INFO 108263 --- [professionaltaxportal] [ionShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-07-12T13:58:13.265+05:30  INFO 108263 --- [professionaltaxportal] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-07-12T13:58:13.269+05:30  INFO 108263 --- [professionaltaxportal] [ionShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+atcherServlet        : Completed 200 OK
