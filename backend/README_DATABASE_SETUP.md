@@ -66,7 +66,7 @@ The backend will automatically create the database schema and populate master da
 
 3. **Run the Application**:
    ```bash
-   cd backend-professional-tax-portal
+   cd backend
    mvn spring-boot:run
    ```
 
@@ -92,7 +92,7 @@ If you prefer to set up the database manually:
 
 1. **Start the Backend**:
    ```bash
-   cd backend-professional-tax-portal
+   cd backend
    mvn spring-boot:run
    ```
 
