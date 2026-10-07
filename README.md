@@ -8,7 +8,7 @@ The Professional Tax Portal is a full-stack web application for managing profess
 - **Frontend**: React.js (TypeScript), Vite, Tailwind CSS, Radix UI, shadcn/ui
 - **Backend**: Spring Boot (Java 17+), PostgreSQL, RESTful APIs
 - **Database**: PostgreSQL with automatic schema and master data initialization
-- **Deployment**: Docker, Vercel (frontend), local and cloud support
+- **Deployment**: Docker, local and cloud support
 
 ## Key Features
 - 8-step enrollment process with OTP verification
@@ -20,10 +20,9 @@ The Professional Tax Portal is a full-stack web application for managing profess
 - Admin endpoints for database management
 
 ## Project Structure
-- **api/**: Node.js/Express serverless functions for backend endpoints
-- **backend-professional-tax-portal/**: Spring Boot backend, database schema, and resources
-- **frontend-professional-tax-portal/**: React frontend, UI components, pages, hooks, and types
-- **database/**: PostgreSQL setup script and SQL schema files
+- **backend/**: Spring Boot backend, database schema, and resources
+  - **backend/database/**: PostgreSQL setup script and manual SQL schema/migration files (not run automatically)
+- **frontend/**: React frontend, UI components, pages, hooks, and types
 - **scripts/**: Helper scripts for API smoke tests and database monitoring
 
 ## Database Schema
@@ -67,19 +66,14 @@ Temporary tables for draft applications and OTP verification
 
 ### Quick Setup
 1. Clone repo: `git clone <repository-url>`
-2. Database: `./database/setup_postgres.sh` or manual SQL scripts in `database/`
-3. Backend: `cd backend-professional-tax-portal && ./mvnw spring-boot:run`
-4. Frontend: `cd frontend-professional-tax-portal && npm install && npm start`
+2. Database: `./backend/database/setup_postgres.sh` or manual SQL scripts in `backend/database/`
+3. Backend: `cd backend && ./mvnw spring-boot:run`
+4. Frontend: `cd frontend && npm install && npm start`
 
 ### Docker Deployment
 - Full stack: `docker-compose up --build -d`
 - Backend only: `docker build -t ptax-backend . && docker run ...`
 - Database: `docker run -d --name ptax_postgres ...`
-
-### Vercel Deployment (Frontend)
-1. Install Vercel CLI: `npm install -g vercel`
-2. Deploy: `vercel --prod`
-3. Configure environment variables in Vercel dashboard
 
 ## Security & Performance
 - OTP-based verification, CSRF/session protection

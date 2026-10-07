@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:3000", "http://0.0.0.0:3000", "https://*.vercel.app"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://0.0.0.0:3000"})
 public class AdminController {
 
     private final DatabaseInitializationService databaseInitializationService;

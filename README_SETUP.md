@@ -28,7 +28,7 @@ cd projectprofessionaltax
 
 #### Option A: Automated Setup (Linux/macOS)
 ```bash
-./database/setup_postgres.sh
+./backend/database/setup_postgres.sh
 ```
 
 #### Option B: Manual Setup
@@ -42,12 +42,12 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
 # Run database setup
-sudo -u postgres psql -f database/setup_database.sql
+sudo -u postgres psql -f backend/database/setup_database.sql
 ```
 
 ### 3. Backend Setup
 ```bash
-cd backend-professional-tax-portal
+cd backend
 
 # Add PostgreSQL dependency to pom.xml if not present
 # <dependency>
@@ -65,7 +65,7 @@ Backend will be available at: `http://localhost:8080`
 
 ### 4. Frontend Setup
 ```bash
-cd frontend-professional-tax-portal
+cd frontend
 
 # Install dependencies
 npm install
@@ -207,7 +207,7 @@ The frontend follows the design specifications from the provided screenshots:
 3. **Frontend Build Issues**
    ```bash
    # Clear npm cache and reinstall
-   cd frontend-professional-tax-portal
+   cd frontend
    rm -rf node_modules package-lock.json
    npm cache clean --force
    npm install
@@ -237,11 +237,11 @@ export FRONTEND_URL=https://your-domain.com
 ### Docker Deployment (Optional)
 ```bash
 # Build backend
-cd backend-professional-tax-portal
+cd backend
 docker build -t ptax-backend .
 
 # Build frontend
-cd frontend-professional-tax-portal
+cd frontend
 docker build -t ptax-frontend .
 
 # Run with docker-compose
@@ -252,7 +252,7 @@ docker-compose up -d
 
 For issues and questions:
 1. Check the troubleshooting section above
-2. Review application logs in `backend-professional-tax-portal/logs/`
+2. Review application logs in `backend/logs/`
 3. Check browser console for frontend issues
 4. Verify database connectivity
 
