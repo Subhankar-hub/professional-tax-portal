@@ -28,7 +28,7 @@ cd projectprofessionaltax
 
 #### Option A: Automated Setup (Linux/macOS)
 ```bash
-./setup_postgres.sh
+./database/setup_postgres.sh
 ```
 
 #### Option B: Manual Setup
@@ -42,7 +42,7 @@ sudo systemctl start postgresql
 sudo systemctl enable postgresql
 
 # Run database setup
-sudo -u postgres psql -f setup_database.sql
+sudo -u postgres psql -f database/setup_database.sql
 ```
 
 ### 3. Backend Setup

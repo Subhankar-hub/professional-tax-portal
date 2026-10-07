@@ -23,6 +23,8 @@ The Professional Tax Portal is a full-stack web application for managing profess
 - **api/**: Node.js/Express serverless functions for backend endpoints
 - **backend-professional-tax-portal/**: Spring Boot backend, database schema, and resources
 - **frontend-professional-tax-portal/**: React frontend, UI components, pages, hooks, and types
+- **database/**: PostgreSQL setup script and SQL schema files
+- **scripts/**: Helper scripts for API smoke tests and database monitoring
 
 ## Database Schema
 Master tables:
@@ -65,7 +67,7 @@ Temporary tables for draft applications and OTP verification
 
 ### Quick Setup
 1. Clone repo: `git clone <repository-url>`
-2. Database: `./setup_postgres.sh` or manual SQL scripts
+2. Database: `./database/setup_postgres.sh` or manual SQL scripts in `database/`
 3. Backend: `cd backend-professional-tax-portal && ./mvnw spring-boot:run`
 4. Frontend: `cd frontend-professional-tax-portal && npm install && npm start`
 

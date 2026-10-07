@@ -183,7 +183,7 @@ spring.sql.init.data-locations=classpath:data.sql
 Use the provided test script to verify the setup:
 
 ```bash
-./test_database_setup.sh
+../scripts/test_database_setup.sh
 ```
 
 This script will:

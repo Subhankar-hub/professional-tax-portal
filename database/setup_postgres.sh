@@ -23,7 +23,7 @@ fi
 echo "Creating database and user..."
 
 # Run the SQL setup script as postgres user
-sudo -u postgres psql -f setup_database.sql
+sudo -u postgres psql -f "$(dirname "$0")/setup_database.sql"
 
 if [ $? -eq 0 ]; then
     echo "Database setup completed successfully!"
